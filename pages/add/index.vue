@@ -43,11 +43,6 @@ addDataToDBError((error) => {
 
 
 
-
-
-
-
-
 const onSubmit = handleSubmit(() => {
 
         let input = {
