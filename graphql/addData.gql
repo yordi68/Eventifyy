@@ -1,6 +1,6 @@
 mutation addData($input: [random_insert_input!]!){
         insert_random(objects: $input){
-                returing{
+                returning{
                         id
                         title
                         desc

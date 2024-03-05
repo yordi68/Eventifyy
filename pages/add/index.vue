@@ -1,6 +1,9 @@
 <script setup>
 import { useField, useForm } from "vee-validate"
+import addData from "~/graphql/addData.gql"
+import { toast } from "vue3-toastify";
 const { handleSubmit } = useForm();
+
 
 const { errorMessage: titleError, value: title } = useField("title", "required", {
         initialValue: "",
@@ -15,14 +18,30 @@ const { errorMessage: valueError, value: value } = useField("value", "required",
         initialValue: "",
 });
 // connection with the back
-import useMutation from "~/composables/useMutation";
-import addData from "~/graphql/addData.gql"
+// import useMutation from "~/composables/useMutation";
 
 const {
         mutate: addDataToDB,
         onDone: addDataToDBDone,
         onError: addDataToDBError,
-} = useMutation(addData)
+} = anonymousMutation(addData)
+
+addDataToDBDone((response) => {
+        toast.success("Recipe successfully added", {
+                transition: toast.TRANSITIONS.FLIP,
+                position: toast.POSITION.TOP_RIGHT,
+
+        });
+
+        // navigateTo(`/recipe/${response?.data?.insert_recipes?.returning[0].id}`);
+});
+
+addDataToDBError((error) => {
+        toast.error("Something went wrong");
+        console.log(error.message);;
+});
+
+
 
 
 
@@ -30,31 +49,15 @@ const {
 
 
 const onSubmit = handleSubmit(() => {
-        console.log("form is entered successfully")
-        console.log(title)
-        console.log(desc)
-        console.log(value)
 
         let input = {
-                title: title,
-                desc: desc,
-                value: value
+                title: title.value,
+                desc: desc.value,
+                value: value.value
         }
         addDataToDB({ input })
 
-        addDataToDBDone((response) => {
-                toast.success("Recipe successfully added", {
-                        transition: toast.TRANSITIONS.FLIP,
-                        position: toast.POSITION.TOP_RIGHT,
-                });
 
-                navigateTo(`/recipe/${response?.data?.insert_recipes?.returning[0].id}`);
-        });
-
-        addDataToDBError((error) => {
-                toast.error("Something went wrong");
-                alert(error);
-        });
 })
 
 

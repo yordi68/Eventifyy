@@ -38,7 +38,7 @@ export default defineNuxtConfig({
     proxyCookies: true,
     clients: {
       default: "./apollo/anonymous.js",
-      central_auth: "./apollo/authorized-client.js",
+      auth: "./apollo/authorized-client.js",
     },
   },
 });
