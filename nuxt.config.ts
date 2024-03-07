@@ -3,6 +3,7 @@ export default defineNuxtConfig({
   devtools: { enabled: true },
   modules: [
     "@nuxtjs/tailwindcss",
+    "@ant-design-vue/nuxt",
     // "@nuxtjs/color-mode",
     "@vee-validate/nuxt",
     // "@vueuse/nuxt",
@@ -11,7 +12,7 @@ export default defineNuxtConfig({
     "nuxt-headlessui",
     // "@nuxt/content",
     "@pinia/nuxt",
-    // "nuxt-primevue",
+    "nuxt-primevue",
     // "nuxt-lodash",
     "@pinia-plugin-persistedstate/nuxt",
   ],
@@ -29,7 +30,10 @@ export default defineNuxtConfig({
   headlessui: {
     prefix: "Headless",
   },
-  css: ["@/assets/css/main.css"],
+  css: [
+    "@/assets/css/main.css",
+    "primevue/resources/themes/lara-light-green/theme.css",
+  ],
   apollo: {
     autoImports: true,
     authType: "Bearer",
@@ -40,5 +44,10 @@ export default defineNuxtConfig({
       default: "./apollo/anonymous.js",
       auth: "./apollo/authorized-client.js",
     },
+  },
+  primevue: {
+    usePrimeVue: true,
+    importPT: { as: "Tailwind", from: "primevue/passthrough/tailwind" },
+    cssLayerOrder: "tailwind-base, primevue, tailwind-utilities",
   },
 });
