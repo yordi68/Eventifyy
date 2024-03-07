@@ -1,0 +1,8 @@
+mutation addEvent($input: [events_insert_input!]!) {
+  insert_events(objects: $input) {
+    returning {
+      id
+    }
+    affected_rows
+  }
+}
