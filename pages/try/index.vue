@@ -1,5 +1,5 @@
 <template>
-        <EventFormThree />
+        <EventForm />
 </template>
 
 <script setup>
