@@ -1,76 +1,76 @@
 <script setup>
-import { useField, useForm } from "vee-validate"
-const { handleSubmit } = useForm();
-import { toast } from "vue3-toastify";
+// import { useField, useForm } from "vee-validate"
+// const { handleSubmit } = useForm();
+// import { toast } from "vue3-toastify";
 
 
 
 
-const { errorMessage: firstNameError,
-        value: firstName,
-} = useField("firstName", "required", {
-        initialValue: "",
-})
+// const { errorMessage: firstNameError,
+//         value: firstName,
+// } = useField("firstName", "required", {
+//         initialValue: "",
+// })
 
-const { errorMessage: lastNameError,
-        value: lastName,
-} = useField("lastName", "required", {
-        initialValue: "",
-})
+// const { errorMessage: lastNameError,
+//         value: lastName,
+// } = useField("lastName", "required", {
+//         initialValue: "",
+// })
 
-const {
-        errorMessage: emailError,
-        value: email,
-} = useField("email", "email|required", {
-        initialValue: "",
-});
+// const {
+//         errorMessage: emailError,
+//         value: email,
+// } = useField("email", "email|required", {
+//         initialValue: "",
+// });
 
-const { errorMessage: phoneNumberError,
-        value: phoneNumber,
-} = useField("phoneNumber", "ethio_phone|required", {
-        initialValue: "",
-})
+// const { errorMessage: phoneNumberError,
+//         value: phoneNumber,
+// } = useField("phoneNumber", "ethio_phone|required", {
+//         initialValue: "",
+// })
 
-const {
-        mutate: userUpdate,
-        onDone: userUpdateDone,
-        onError: userUpdateError,
+// // const {
+// //         mutate: userUpdate,
+// //         onDone: userUpdateDone,
+// //         onError: userUpdateError,
 
-} = anonymousMutation(updateUser)
-
-
-
-userUpdateDone((response) => {
-        toast.success("Recipe successfully added", {
-                transition: toast.TRANSITIONS.FLIP,
-                position: toast.POSITION.TOP_RIGHT,
-
-        });
-
-        // navigateTo(`/recipe/${response?.data?.insert_recipes?.returning[0].id}`);
-});
-
-userUpdateError((error) => {
-        toast.error("Something went wrong");
-        console.log(error.message);;
-});
+// // } = anonymousMutation(updateUser)
 
 
 
-const onSubmit = handleSubmit(() => {
-        console.log("submitted");
-        console.log(firstName, lastName, email, phoneNumber)
-        let input = {
-                // gender is remaining
-                first_name: firstName,
-                last_name: lastName,
-                email: email,
-                phone_number: phoneNumber
-        }
+// userUpdateDone((response) => {
+//         toast.success("Recipe successfully added", {
+//                 transition: toast.TRANSITIONS.FLIP,
+//                 position: toast.POSITION.TOP_RIGHT,
 
-        userUpdate({ id: 1, input: input })
+//         });
 
-})
+//         // navigateTo(`/recipe/${response?.data?.insert_recipes?.returning[0].id}`);
+// });
+
+// userUpdateError((error) => {
+//         toast.error("Something went wrong");
+//         console.log(error.message);;
+// });
+
+
+
+// const onSubmit = handleSubmit(() => {
+//         console.log("submitted");
+//         console.log(firstName, lastName, email, phoneNumber)
+//         let input = {
+//                 // gender is remaining
+//                 first_name: firstName,
+//                 last_name: lastName,
+//                 email: email,
+//                 phone_number: phoneNumber
+//         }
+
+//         userUpdate({ id: 1, input: input })
+
+// })
 
 
 

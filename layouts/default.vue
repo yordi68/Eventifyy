@@ -1,6 +1,6 @@
 <template>
         <main>
-                <!-- <Navbar /> -->
+                <Navbar />
                 <div>
                         <slot />
                         <ScrollToTop />

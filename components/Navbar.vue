@@ -6,7 +6,7 @@
 
                                         <div class="flex items-center justify-between w-full">
                                                 <div>
-                                                        <NuxtLink to="/home">
+                                                        <NuxtLink to="#">
                                                                 <img src="/logo.png" alt="">
                                                         </NuxtLink>
                                                 </div>
@@ -16,7 +16,8 @@
                                                         <NuxtLink v-for="item in navigation" :key="item.name"
                                                                 :to="item.to"
                                                                 exact-active-class="text-extrabold text-[#20c05c] w-20">
-                                                                {{ item.name }}</NuxtLink>
+                                                                {{ item.name }}
+                                                        </NuxtLink>
                                                 </div>
                                         </div>
                                         <div class="-mr-2 flex md:hidden">
@@ -25,9 +26,8 @@
                                                         class="relative inline-flex items-center justify-center rounded-md bg-gray-800 p-2 text-gray-400 hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
                                                         <span class="absolute -inset-0.5" />
                                                         <span class="sr-only">Open main menu</span>
-                                                        <Bars3Icon v-if="!open" class="block h-6 w-6"
-                                                                aria-hidden="true" />
-                                                        <XMarkIcon v-else class="block h-6 w-6" aria-hidden="true" />
+                                                        <IconifyIcon :icon="open ? 'ic:round-close' : 'ic:round-menu'"
+                                                                class="block h-6 w-6" aria-hidden="true" />
                                                 </DisclosureButton>
                                         </div>
                                 </div>
@@ -44,22 +44,19 @@
                                         </NuxtLink>
                                 </div>
                         </DisclosurePanel>
-
                 </Disclosure>
-
-
         </div>
 </template>
-        
-      <script setup>
-import { Disclosure, DisclosureButton, DisclosurePanel, Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/vue'
-import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/vue/24/outline'
 
+<script setup>
+import { Disclosure, DisclosureButton, DisclosurePanel, Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/vue'
+import { Icon as IconifyIcon } from '@iconify/vue';
 
 const navigation = [
-        { name: 'Home', to: '/home', current: true },
-        { name: 'About', to: '/about', current: false },
-        { name: 'Events', to: '/events', current: false },
-        { name: 'Gallery', to: '/gallery', current: false },
+        { name: 'Home', to: '#', current: true },
+        { name: 'About', to: '#', current: false },
+        { name: 'Events', to: '#', current: false },
+        { name: 'Gallery', to: '#', current: false },
         // { name: 'Reports', to: '#', current: false },
 ]
+</script>
