@@ -5,7 +5,7 @@ export default defineNuxtPlugin((vueApp) => {
     return !!value || value?.length || "At least one selection required";
   }),
     defineRule("required", (value, [], ctx) => {
-      return !!value || value?.length || "Field Required";
+      return !!value || value?.length || "Please fill this field";
     }),
     defineRule("boolReq", (value, [], ctx) => {
       return typeof value == "boolean" || "Field Required";

@@ -1,5 +1,99 @@
 <script setup>
-import Sidebar from '@/components/Sidebar.vue';
+import { useField, useForm } from "vee-validate"
+const { handleSubmit } = useForm();
+import { toast } from "vue3-toastify";
+
+
+
+
+const { errorMessage: firstNameError,
+        value: firstName,
+} = useField("firstName", "required", {
+        initialValue: "",
+})
+
+const { errorMessage: lastNameError,
+        value: lastName,
+} = useField("lastName", "required", {
+        initialValue: "",
+})
+
+const {
+        errorMessage: emailError,
+        value: email,
+} = useField("email", "email|required", {
+        initialValue: "",
+});
+
+const { errorMessage: phoneNumberError,
+        value: phoneNumber,
+} = useField("phoneNumber", "ethio_phone|required", {
+        initialValue: "",
+})
+
+const {
+        mutate: userUpdate,
+        onDone: userUpdateDone,
+        onError: userUpdateError,
+
+} = anonymousMutation(updateUser)
+
+
+
+userUpdateDone((response) => {
+        toast.success("Recipe successfully added", {
+                transition: toast.TRANSITIONS.FLIP,
+                position: toast.POSITION.TOP_RIGHT,
+
+        });
+
+        // navigateTo(`/recipe/${response?.data?.insert_recipes?.returning[0].id}`);
+});
+
+userUpdateError((error) => {
+        toast.error("Something went wrong");
+        console.log(error.message);;
+});
+
+
+
+const onSubmit = handleSubmit(() => {
+        console.log("submitted");
+        console.log(firstName, lastName, email, phoneNumber)
+        let input = {
+                // gender is remaining
+                first_name: firstName,
+                last_name: lastName,
+                email: email,
+                phone_number: phoneNumber
+        }
+
+        userUpdate({ id: 1, input: input })
+
+})
+
+
+
+/*
+
+const onSubmit = handleSubmit((values, { setFieldError }) => {
+        const input = {
+                first_name: values.firstName || store.user?.first_name,
+                last_name: values.lastName || store.user?.last_name,
+                email: values.email || store.user?.email,
+                bio: values.bio || store.user?.bio,
+        };
+        mutate({ input, id: store.id });
+});
+
+
+
+
+
+
+
+*/
+
 
 const user = reactive({
         firstName: 'John',
@@ -85,19 +179,21 @@ definePageMeta({
                                         <div class="flex mt-10">
                                                 <!-- First Name -->
                                                 <div class="mb-4 mr-4">
-                                                        <label for="first-name"
+                                                        <label for="firstName"
                                                                 class="block text-sm font-medium text-gray-700 mb-2">First
                                                                 Name</label>
-                                                        <input type="text" id="first-name" v-model="user.firstName"
+                                                        <span class="error-style">{{ firstNameError }}</span>
+                                                        <input type="text" id="firstName" v-model="firstName"
                                                                 class="mt-1 p-2 block w-72 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500">
                                                 </div>
 
                                                 <!-- Last Name -->
                                                 <div class="mb-4">
-                                                        <label for="last-name"
+                                                        <label for="lastName"
                                                                 class="block text-sm font-medium text-gray-700 mb-2">Last
                                                                 Name</label>
-                                                        <input type="text" id="last-name" v-model="user.lastName"
+                                                        <span class="error-style">{{ lastNameError }}</span>
+                                                        <input type="text" id="lastName" v-model="lastName"
                                                                 class="mt-1 p-2 block w-72 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500">
                                                 </div>
                                         </div>
@@ -108,16 +204,18 @@ definePageMeta({
                                                 <div class="mr-4">
                                                         <label for="email"
                                                                 class="block text-sm font-medium text-gray-700 mb-2">Email</label>
-                                                        <input type="email" id="email" v-model="user.email"
+                                                        <span class="error-style">{{ emailError }}</span>
+                                                        <input type="email" id="email" v-model="email"
                                                                 class="mt-1 p-2 block w-72 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500">
                                                 </div>
 
                                                 <!-- Phone Number -->
                                                 <div>
-                                                        <label for="phone-number"
+                                                        <label for="phoneNumber"
                                                                 class="block text-sm font-medium text-gray-700 mb-2">Phone
                                                                 Number</label>
-                                                        <input type="tel" id="phone-number" v-model="user.phoneNumber"
+                                                        <span class="error-style">{{ phoneNumberError }}</span>
+                                                        <input type="tel" id="phoneNumber" v-model="phoneNumber"
                                                                 class="mt-1 p-2 block w-72 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500">
                                                 </div>
                                         </div>
@@ -137,7 +235,7 @@ definePageMeta({
                         </div>
 
                         <!-- Save Button -->
-                        <button @click="saveChanges"
+                        <button @click="onSubmit" type="submit"
                                 class="bg-indigo-500 text-white py-2 px-4 rounded-md hover:bg-indigo-600">Save
                                 Changes</button>
                 </div>

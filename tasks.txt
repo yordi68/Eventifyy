@@ -1,1 +1,7 @@
 Trying to add a recipe to the siso's database 
+
+Adding event 
+        1.Ui 
+        2.Tags and Category
+        3.Area and city selecter
+        4.Permission

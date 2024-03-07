@@ -1,0 +1,11 @@
+mutation editProfile($id: uuid!, $input:users_set_input){
+        update_users_by_pk(pk_columns: {id: $id}, _set: $input){
+                id
+                email
+                first_name
+                last_name
+                gender
+                phone_number
+        }
+}
+                # image_url
