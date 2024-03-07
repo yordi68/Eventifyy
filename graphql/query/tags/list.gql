@@ -1,0 +1,7 @@
+query getTags($filter:tags_bool_exp, $sort: [tags_order_by!], $offset:Int, $limit:Int){
+  tags(where:$filter, order_by:$sort, limit:$limit, offset:$offset){
+    id
+    name
+    
+  }
+}

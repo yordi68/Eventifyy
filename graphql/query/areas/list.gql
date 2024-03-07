@@ -1,0 +1,7 @@
+query getAreas($filter:areas_bool_exp, $sort: [areas_order_by!], $offset:Int, $limit:Int){
+  areas(where:$filter, order_by:$sort, limit:$limit, offset:$offset){
+    id
+    name
+    
+  }
+}

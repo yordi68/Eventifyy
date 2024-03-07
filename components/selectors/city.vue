@@ -1,6 +1,6 @@
 <script setup>
 
-import categoryListQuery from '~/graphql/query/categories/list.gql'
+import cityListQuery from '~/graphql/query/cities/list.gql'
 import { useField } from "vee-validate";
 // import { useDebounceFn } from "@vueuse/core";
 
@@ -14,14 +14,14 @@ const props = defineProps({
 })
 
 
-/**----------------Categories data fetch------------------ */
-const categories = ref([])
+/**----------------cities data fetch------------------ */
+const cities = ref([])
 const sort = ref([{ name: "ASC" }])
 const filter = ref({})
 const limit = ref(10)
 const offset = ref(0)
 
-const { onResult, onError, loading } = queryList(categoryListQuery, {
+const { onResult, onError, loading } = queryList(cityListQuery, {
         filter,
         order: sort,
         limit,
@@ -30,7 +30,7 @@ const { onResult, onError, loading } = queryList(categoryListQuery, {
 })
 
 onResult(({ data }) => {
-        categories.value = data.categories
+        cities.value = data.cities
 })
 
 /**-------------------------Handle select-------------------- */
@@ -39,7 +39,7 @@ const {
         errorMessage,
         value: inputValue,
         meta,
-} = useField("category", "required", {
+} = useField("city", "required", {
         initialValue: props.modelValue,
 });
 
@@ -60,7 +60,7 @@ const clear = () => {
 }
 
 
-// onClickOutside(categorySelect, (e) => (show.value = false));
+// onClickOutside(citySelect, (e) => (show.value = false));
 
 
 
@@ -69,13 +69,13 @@ const clear = () => {
 
 <template>
 
-        <div class="relative w-full" ref="categorySelect">
+        <div class="relative w-full" ref="citySelect">
 
 
                 <div class="flex gap-x-2">
                         <!-- -----------------Label----------------- -->
-                        <label class="text-sheger-gray-returnedObject100 pb-2" for="category">
-                                Category</label>
+                        <label class="text-sheger-gray-returnedObject100 pb-2" for="city">
+                                City</label>
 
                 </div>
 
@@ -114,7 +114,7 @@ const clear = () => {
                 <!-------------------------Body------------------------  -->
                 <ul v-show="show"
                         class="absolute z-50 overflow-y-scroll overflow-x-hidden w-full bg-white border shadow max-h-56 h-auto rounded-md text-base">
-                        <li v-for="           item            in            categories           " :key="item.id"
+                        <li v-for="           item            in            cities           " :key="item.id"
                                 @click="setItem(item)">
 
                                 <div

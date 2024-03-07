@@ -1,6 +1,6 @@
 <script setup>
 
-import categoryListQuery from '~/graphql/query/categories/list.gql'
+import cityListQuery from '~/graphql/query/areas/list.gql'
 import { useField } from "vee-validate";
 // import { useDebounceFn } from "@vueuse/core";
 
@@ -11,17 +11,40 @@ const props = defineProps({
         modelValue: {
                 type: String,
         },
+        cityId: {
+                type: String,
+        }
 })
 
 
-/**----------------Categories data fetch------------------ */
-const categories = ref([])
+/**----------------areas data fetch------------------ */
+const areas = ref([])
 const sort = ref([{ name: "ASC" }])
-const filter = ref({})
 const limit = ref(10)
 const offset = ref(0)
+const filter = computed(() => {
+        let query = {
+                // name: {
+                //         _ilike: `%${}%`
+                // }
+        }
 
-const { onResult, onError, loading } = queryList(categoryListQuery, {
+        query._and = [
+
+        ]
+        if (props.cityId && props.cityId != "") {
+                query._and.push({
+                        city_id: {
+                                _eq: props.cityId
+                        }
+                })
+        }
+
+        return query
+
+})
+
+const { onResult, onError, loading } = queryList(cityListQuery, {
         filter,
         order: sort,
         limit,
@@ -30,7 +53,7 @@ const { onResult, onError, loading } = queryList(categoryListQuery, {
 })
 
 onResult(({ data }) => {
-        categories.value = data.categories
+        areas.value = data.areas
 })
 
 /**-------------------------Handle select-------------------- */
@@ -39,7 +62,7 @@ const {
         errorMessage,
         value: inputValue,
         meta,
-} = useField("category", "required", {
+} = useField("area", "required", {
         initialValue: props.modelValue,
 });
 
@@ -60,22 +83,20 @@ const clear = () => {
 }
 
 
-// onClickOutside(categorySelect, (e) => (show.value = false));
-
-
+// onClickOutside(citySelect, (e) => (show.value = false));
 
 
 </script>
 
 <template>
 
-        <div class="relative w-full" ref="categorySelect">
+        <div class="relative w-full" ref="citySelect">
 
 
                 <div class="flex gap-x-2">
                         <!-- -----------------Label----------------- -->
-                        <label class="text-sheger-gray-returnedObject100 pb-2" for="category">
-                                Category</label>
+                        <label class="text-sheger-gray-returnedObject100 pb-2" for="area">
+                                Area</label>
 
                 </div>
 
@@ -114,7 +135,7 @@ const clear = () => {
                 <!-------------------------Body------------------------  -->
                 <ul v-show="show"
                         class="absolute z-50 overflow-y-scroll overflow-x-hidden w-full bg-white border shadow max-h-56 h-auto rounded-md text-base">
-                        <li v-for="           item            in            categories           " :key="item.id"
+                        <li v-for="           item            in            areas           " :key="item.id"
                                 @click="setItem(item)">
 
                                 <div
