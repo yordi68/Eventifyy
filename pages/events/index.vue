@@ -7,6 +7,7 @@
 
                                 <main>
                                         <div class="mx-auto  py-6 sm:px-6 lg:px-8">
+                                                <UiCard />
                                         </div>
                                 </main>
 
