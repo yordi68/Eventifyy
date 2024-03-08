@@ -1,5 +1,5 @@
 <template>
-        <div class="h-screen bg-[#2B293D] flex flex-col items-center justify-center space-y-10">
+        <div class="h-96 bg-[#2B293D] flex flex-col items-center justify-center space-y-10">
                 <h2 class="text-white font-bold text-center text-5xl">
                         Explore a world of events. Find what excites you!
                 </h2>

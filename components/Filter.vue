@@ -1,5 +1,5 @@
 <template>
-        <div class="flex flex-col items-start pl-20 justify-center border-r-2">
+        <div class="flex flex-col items-start pl-20 justify-center border-gray-200 border-r-1 ">
 
                 <div class="flex flex-col space-y-2">
                         <h4 class="my-4 font-bold">Price</h4>
