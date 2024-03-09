@@ -1,4 +1,6 @@
 Trying to add a recipe to the siso's database 
+Colors
+        -> text-[#FFE047]
 
 Adding event 
         1.Ui 

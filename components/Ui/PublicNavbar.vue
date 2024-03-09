@@ -2,7 +2,7 @@
         <div class="sticky top-0 z-10">
                 <Disclosure as="nav" class="bg-[#2D2C3C]" v-slot="{ open }">
                         <div class="mx-auto w-full  md:h-20 px-4 sm:px-6 lg:px-32">
-                                <div class="flex h-full  items-center justify-between ">
+                                <div class="flex h-full  items-center justify-evenly ">
 
                                         <div class="flex items-center justify-between w-full">
                                                 <div>
@@ -19,7 +19,23 @@
                                                                 {{ item.name }}
                                                         </NuxtLink>
                                                 </div>
+
+                                                <div class="flex justify-between items-center space-x-3">
+                                                        <NuxtLink to="/login" class="text-white"
+                                                                exact-active-class="text-extrabold text-[#FFE047] w-20">
+                                                                <span>Login</span>
+                                                        </NuxtLink>
+
+                                                        <NuxtLink to="/sign-up">
+                                                                <button
+                                                                        class="bg-[#FFE047] !w-30 whitespace-nowrap px-4 py-2 rounded-md cursor-pointer">
+                                                                        Sign Up
+                                                                </button>
+                                                        </NuxtLink>
+                                                </div>
                                         </div>
+
+
                                         <div class="-mr-2 flex md:hidden">
                                                 <!-- Mobile menu button -->
                                                 <DisclosureButton
@@ -57,8 +73,5 @@ const navigation = [
         { name: 'Events', to: '/events', current: false },
         { name: 'About', to: '#', current: false },
         { name: 'Contact', to: '#', current: false },
-        { name: 'login', to: '/login', current: false },
-        { name: 'sign-up', to: '/sign-up', current: false },
-
 ]
 </script>

@@ -22,6 +22,7 @@
                         </span>
                 </div>
         </div>
+
 </template>
 <!-- bg-[#2B293D] -->
 <script setup>

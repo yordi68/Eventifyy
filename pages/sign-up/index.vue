@@ -34,7 +34,9 @@ const onSubmit = handleSubmit(() => {
         console.log(firstName, lastName, email, password)
 })
 
-
+definePageMeta({
+        layout: 'none'
+})
 </script>
 
 
@@ -109,7 +111,7 @@ const onSubmit = handleSubmit(() => {
 
                                 <div>
                                         <button type="submit" @click.prevent="onSubmit"
-                                                class="flex w-full justify-center rounded-md bg-[#20c05c] px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-[#1a9e4e] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Sign
+                                                class="flex w-full justify-center rounded-md bg-[#E0C700] px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-[#FFE047] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Sign
                                                 up</button>
                                 </div>
                         </form>
@@ -118,10 +120,10 @@ const onSubmit = handleSubmit(() => {
                                 Already a member?
                                 {{ ' ' }}
                                 <NuxtLink to="/login"
-                                        class="font-semibold leading-6 text-[#20c05c] hover:text-[#1a9e4e]">
+                                        class="font-semibold leading-6 text-[#E0C700] hover:text-[#FFE047]">
                                         Login
                                 </NuxtLink>
-                                <!-- <a href="#" >Sign in</a> -->
+                                <!-- <a href="#" >Sign in</a> bg-[#E0C700] hover:bg-[#FFE047] -->
                         </p>
                 </div>
         </div>
