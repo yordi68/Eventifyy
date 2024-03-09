@@ -7,9 +7,10 @@
                                         class="w-full h-full object-cover " />
                         </div>
                         <div class="flex flex-col py-3 space-y-2 justify-start items-start w-1/2">
-                                <h4 class="text-wrap text-bold text-xl"> Delhi 6 - Traditional Food from Delhi Street
+                                <h4 class="text-wrap text-bold  text-md md:text-xl"> Delhi 6 - Traditional Food from
+                                        Delhi Street
                                 </h4>
-                                <div class="flex space-x-3 text-md">
+                                <div class="flex space-x-3 text-sm  md:text-md">
                                         <p>Nov 23 - 29 </p>
                                         <div class="h-full bg-gray-400 w-px"></div>
                                         <p>Chengapattu, India</p>

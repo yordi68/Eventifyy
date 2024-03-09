@@ -1,6 +1,6 @@
 <template>
         <main>
-                <UiPrivateNavbar />
+                <UiPublicNavbar />
                 <div>
                         <slot />
                         <ScrollToTop />

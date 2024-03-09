@@ -1,8 +1,9 @@
 <template>
-        <div class="h-96 bg-[#2B293D] flex flex-col items-center justify-center space-y-10">
-                <h2 class="text-white font-bold text-center text-5xl">
+        <div class="h-96 bg-[#2D2C3C] flex flex-col items-center justify-center space-y-10">
+                <h2 class="text-white font-bold text-center text-2xl md:text-5xl">
                         Explore a world of events. Find what excites you!
                 </h2>
+
                 <div class="relative">
                         <!-- Search icon -->
                         <span class="absolute left-3 top-3 text-gray-400">
