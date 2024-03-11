@@ -7,3 +7,49 @@ Adding event
         2.Tags and Category
         3.Area and city selecter
         4.Permission
+
+
+Today's Task during the day
+        1. Every page should be responsive
+        2. Data fetching
+        3. Bookmark 
+        4. Booked Events(....optional...)
+
+
+
+
+
+
+
+
+
+
+<---------------------------------Functionality of the website--------------------------------------->
+
+Anonymous User:
+        1.  browse/filter by map/location
+        2.  browse/filter by date
+        3.  browse/filter by category
+        4.  browse/filter by price
+        5.  search by title, description and tags of events
+        6.  any user can signup and create an account
+
+
+
+LoggedIn User:
+        1. create/edit/delete an event (which the user own)
+        2. follow event
+        3. bookmark event
+        4. buy tickets
+        5. create and manage events
+
+
+When adding an event:
+        1. upload multiple image (must choose featured image to use for thumbnail)
+        2. set location (use map)
+        3. venue and address
+        4. price (free or set specific amount)
+        5. set date it takes to prepare
+        6. set category food category
+        7. set title and description
+        8. set multiple tags

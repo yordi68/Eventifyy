@@ -1,0 +1,23 @@
+query getEvents($sort: [events_order_by!], $offset:Int, $limit:Int){
+  events(order_by:$sort, limit:$limit, offset:$offset){
+    id
+    thumbnail
+    title
+    time
+    price
+    location_id
+    user{
+      first_name
+      last_name
+    }
+    description
+    tags{
+      tag_id
+      tag{
+        name
+      }
+    }
+    
+  }
+}
+

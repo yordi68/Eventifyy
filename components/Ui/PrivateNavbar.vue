@@ -1,8 +1,8 @@
 <template>
         <div class="sticky top-0 z-10">
-                <Disclosure as="nav" class="bg-[#1e1d26]" v-slot="{ open }">
+                <Disclosure as="nav" class="bg-[#2D2C3C]" v-slot="{ open }">
                         <div class="mx-auto w-full  md:h-20 px-4 sm:px-6 lg:px-32">
-                                <div class="flex h-full  items-center justify-between ">
+                                <div class="flex h-full  items-center justify-evenly ">
 
                                         <div class="flex items-center justify-between w-full">
                                                 <div>
@@ -15,11 +15,36 @@
                                                 <div class="hidden md:block  items-center space-x-12 text-white">
                                                         <NuxtLink v-for="item in navigation" :key="item.name"
                                                                 :to="item.to"
-                                                                exact-active-class="text-extrabold text-[#20c05c] w-20">
+                                                                exact-active-class="text-extrabold text-[#FFE047] w-20">
                                                                 {{ item.name }}
                                                         </NuxtLink>
                                                 </div>
+
+                                                <div class="flex justify-between items-center space-x-3">
+                                                        <!-- <NuxtLink to="/login" class="text-white"
+                                                                exact-active-class="text-extrabold text-[#FFE047] w-20">
+                                                                <span>Login</span>
+                                                        </NuxtLink> -->
+
+                                                        <NuxtLink to="/user">
+                                                                <!-- <button
+                                                                        class="bg-[#FFE047] !w-30 whitespace-nowrap px-4 py-2 rounded-md cursor-pointer">
+                                                                        Sign Up
+                                                                </button> -->
+                                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none"
+                                                                        viewBox="0 0 24 24" stroke-width="1.5"
+                                                                        stroke="currentColor"
+                                                                        class="w-12 h-12 text-gray-200">
+                                                                        <path stroke-linecap="round"
+                                                                                stroke-linejoin="round"
+                                                                                d="M17.982 18.725A7.488 7.488 0 0 0 12 15.75a7.488 7.488 0 0 0-5.982 2.975m11.963 0a9 9 0 1 0-11.963 0m11.963 0A8.966 8.966 0 0 1 12 21a8.966 8.966 0 0 1-5.982-2.275M15 9.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+                                                                </svg>
+
+                                                        </NuxtLink>
+                                                </div>
                                         </div>
+
+
                                         <div class="-mr-2 flex md:hidden">
                                                 <!-- Mobile menu button -->
                                                 <DisclosureButton
@@ -38,7 +63,7 @@
                                         <NuxtLink v-for="item in navigation" :key="item.name" :to="item.to">
                                                 <DisclosureButton :key="item.name"
                                                         class="block rounded-md px-3 py-2 text-base font-medium text-gray-300 hover:bg-gray-700 hover:text-white"
-                                                        exact-active-class="text-extrabold text-[#20c05c]">
+                                                        exact-active-class="text-extrabold text-[#FFE047]">
                                                         {{ item.name }}
                                                 </DisclosureButton>
                                         </NuxtLink>
@@ -53,10 +78,9 @@ import { Disclosure, DisclosureButton, DisclosurePanel, Menu, MenuButton, MenuIt
 import { Icon as IconifyIcon } from '@iconify/vue';
 
 const navigation = [
-        { name: 'Home', to: '#', current: true },
+        { name: 'Home', to: '/', current: true },
+        { name: 'Events', to: '/events', current: false },
         { name: 'About', to: '#', current: false },
-        { name: 'Events', to: '#', current: false },
-        { name: 'Gallery', to: '#', current: false },
-        // { name: 'Reports', to: '#', current: false },
+        { name: 'Contact', to: '#', current: false },
 ]
 </script>
