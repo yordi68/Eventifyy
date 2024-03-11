@@ -55,9 +55,24 @@ const set = (event) => {
 watch(
         () => props.modelValue,
         (newVal) => {
-                inputValue.value = props.type == "number" ? Number(newVal) : newVal;
+                if (props.type == "datetime-local") {
+                        const parsedDate = new Date(newVal);
+                        // Format the date without time zone information
+                        const formattedDate = `${parsedDate.getFullYear()}-${String(
+                                parsedDate.getMonth() + 1
+                        ).padStart(2, "0")}-${String(parsedDate.getDate()).padStart(
+                                2,
+                                "0"
+                        )}T${String(parsedDate.getHours()).padStart(2, "0")}:${String(
+                                parsedDate.getMinutes()
+                        ).padStart(2, "0")}`;
+
+                        inputValue.value = formattedDate;
+                } else {
+                        inputValue.value = props.type == "number" ? Number(newVal) : newVal
+                };
         }
-);
+        , { immediate: true });
 </script>
 <template>
         <div class="w-full">
@@ -67,7 +82,6 @@ watch(
                 </label>
                 <span v-if="props.showStar" class="text-red-500">*</span>
                 <div class="relative rounded-md shadow-sm overflow-clip font-body group" :class="props.bodyClass">
-
                         <input v-model="inputValue" @input="set($event)" @change="set($event)" :type="type"
                                 :name="props.name" step="any" :id="id" :class="[
 

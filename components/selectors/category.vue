@@ -31,6 +31,10 @@ const { onResult, onError, loading } = queryList(categoryListQuery, {
 
 onResult(({ data }) => {
         categories.value = data.categories
+        inputValue.value = props.modelValue
+        selectedItem.value = categories.value.find(category =>
+                category.id == props.modelValue
+        )
 })
 
 /**-------------------------Handle select-------------------- */
@@ -58,6 +62,20 @@ const clear = () => {
         show.value = false;
         emit("update:modelValue", null);
 }
+
+watch(() => props.modelValue, (newValue) => {
+        inputValue.value = props.modelValue
+        selectedItem.value = categories.value.find(category => {
+                category.id == props.modelValue
+        })
+},
+        {
+                immediate: true,
+                deep: true
+        }
+)
+
+
 
 
 // onClickOutside(categorySelect, (e) => (show.value = false));

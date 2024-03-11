@@ -29,8 +29,14 @@ const { onResult, onError, loading } = queryList(cityListQuery, {
 
 })
 
+const selectedItem = ref(null);
+
+
 onResult(({ data }) => {
         cities.value = data.cities
+        inputValue.value = props.modelValue
+        selectedItem.value = cities.value.find(city => city.id == props.modelValue)
+
 })
 
 /**-------------------------Handle select-------------------- */
@@ -44,7 +50,6 @@ const {
 });
 
 
-const selectedItem = ref(null);
 const setItem = (item) => {
         inputValue.value = item["id"];
         selectedItem.value = item;

@@ -25,7 +25,7 @@ export default function (
     () => ({
       limit: limit && limit?.value ? limit.value : undefined,
       filter: filter && filter.value ? filter.value : {},
-      order: order && order?.value.length ? order.value : undefined,
+      order: order && order?.value ? order.value : undefined,
       offset: offset && offset?.value ? offset.value : undefined,
     }),
     () => ({

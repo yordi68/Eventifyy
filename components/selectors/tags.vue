@@ -41,7 +41,15 @@ const { onResult, onError, loading } = queryList(tagListQuery, {
 })
 
 onResult(({ data }) => {
-        tags.value = data.tags
+        if (data.tags) {
+                tags.value = data.tags
+                inputValue.value = props.modelValue
+                selectedTags.value = tags.value.filter(tag => props.modelValue.some(id => id === tag.id))
+
+
+
+        }
+
 })
 
 
@@ -82,12 +90,25 @@ const removeTag = (index) => {
 };
 
 
+console.log(props.modelValue, tags.value);
 
 
 
 
 
 
+
+
+watch(() => props.modelValue, (newValue) => {
+        inputValue.value = props.modelValue
+        selectedTags.value = tags.value.filter(tag => props.modelValue.some(id => id === tag.id))
+
+},
+        {
+                immediate: true,
+                deep: true
+        }
+)
 
 
 
@@ -101,6 +122,7 @@ const removeTag = (index) => {
 
 <template>
         <div class="relative w-full">
+
                 <div class="flex gap-x-2">
                         <!-- -----------------Label----------------- -->
 

@@ -1,21 +1,72 @@
+<script setup>
+const props = defineProps({
+        event: {
+                type: Object,
+                required: true
+        },
+        hasIcon: {
+                type: Boolean,
+                default: false
+        }
+})
+
+
+/*
+
+    id
+    thumbnail
+    title
+    time
+    price
+    location_id
+    user{
+      first_name
+      last_name
+    }
+    description
+    tags{
+      tag_id
+      tag{
+        name
+      }
+    }
+    location{
+      id
+      x_coordinate
+      y_coordinate
+      
+    }
+
+
+
+
+
+
+
+
+
+*/
+
+</script>
+
+
 <template>
         <div class=" flex justify-between space-x-6 items-center px-4 ">
 
                 <div class="flex h-48 w-full  space-x-4">
                         <div class="h-full w-1/2">
-                                <img src="/event-details-1.jpg" alt="random image"
-                                        class="w-full h-full object-cover " />
+                                <img :src="event.thumbnail" alt="random image" class="w-full h-full object-cover " />
                         </div>
                         <div class="flex flex-col py-3 space-y-2 justify-start items-start w-1/2">
-                                <h4 class="text-wrap text-bold  text-md md:text-xl"> Delhi 6 - Traditional Food from
-                                        Delhi Street
+                                <h4 class="text-wrap text-bold  text-md md:text-xl">
+                                        {{ event.title }}
                                 </h4>
-                                <div class="flex space-x-3 text-sm  md:text-md">
-                                        <p>Nov 23 - 29 </p>
-                                        <div class="h-full bg-gray-400 w-px"></div>
-                                        <p>Chengapattu, India</p>
+                                <div class="flex-col  md:flex md:space-x-3 text-sm  md:text-md">
+                                        <p>{{ event.time }}</p>
+                                        <div class="hidden md:inline-block h-full bg-gray-400 w-px"></div>
+                                        <p>{{ event.location.x_coordinate }} {{ event.location.y_coordinate }}</p>
                                 </div>
-                                <p>7pm - 11pm</p>
+                                <p>{{ event.date }}</p>
                                 <span class="flex items-center  space-x-4 ">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="3em" height="2em"
                                                 viewBox="0 0 36 36">
@@ -27,15 +78,15 @@
                                                 <path fill="none" d="M0 0h36v36H0z" />
                                         </svg>
 
-                                        1200
+                                        {{ event.price }}
+                                        {{ event.user.first_name }}
+                                        {{ event.user.last_name }}
 
                                 </span>
                         </div>
+                        <Icon @click="$router.push(`/user/event/edit/${event.id}`)" v-if="hasIcon"
+                                class="text-xl cursor-pointer" name="uil:edit" />
                 </div>
 
         </div>
 </template>
-
-<script setup>
-
-</script>

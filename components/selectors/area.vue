@@ -43,6 +43,8 @@ const filter = computed(() => {
         return query
 
 })
+const selectedItem = ref(null);
+
 
 const { onResult, onError, loading } = queryList(cityListQuery, {
         filter,
@@ -54,6 +56,10 @@ const { onResult, onError, loading } = queryList(cityListQuery, {
 
 onResult(({ data }) => {
         areas.value = data.areas
+        inputValue.value = props.modelValue
+        selectedItem.value = areas.value.find(area => area.id == props.modelValue)
+
+        console.log(area.value, props.modelValue, selectedItem.value);
 })
 
 /**-------------------------Handle select-------------------- */
@@ -67,7 +73,6 @@ const {
 });
 
 
-const selectedItem = ref(null);
 const setItem = (item) => {
         inputValue.value = item["id"];
         selectedItem.value = item;
@@ -81,6 +86,16 @@ const clear = () => {
         show.value = false;
         emit("update:modelValue", null);
 }
+watch(() => props.modelValue, (newValue) => {
+        inputValue.value = props.modelValue
+        selectedItem.value = areas.value.find(area => area.id == props.modelValue)
+
+},
+        {
+                immediate: true,
+                deep: true
+        }
+)
 
 
 // onClickOutside(citySelect, (e) => (show.value = false));

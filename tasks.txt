@@ -10,8 +10,8 @@ Adding event
 
 
 Today's Task during the day
-        1. Every page should be responsive
-        2. Data fetching
+        1. Every page should be responsive ( the filter on events is not responsive )
+        2. Data fetching ( Done )
         3. Bookmark 
         4. Booked Events(....optional...)
 

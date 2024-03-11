@@ -1,0 +1,38 @@
+query getEvent($id:uuid!) {
+  events_by_pk(id:$id) {
+    id
+    thumbnail
+    title
+    time
+    price
+    location_id
+    category_id
+  
+    user {
+      first_name
+      last_name
+      __typename
+    }
+    
+    description
+    venue
+    tags {
+      tag_id
+      tag {
+        id
+        name
+        __typename
+      }
+      __typename
+    }
+    location {
+         area_id
+      city_id
+      id
+      x_coordinate
+      y_coordinate
+      __typename
+    }
+    __typename
+  }
+}

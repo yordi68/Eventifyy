@@ -12,7 +12,7 @@
 
                         <!-- Input field -->
                         <input type="text" v-model="searchQuery" @input="handleInput"
-                                class="w-96 h-12 pl-10 pr-12 text-lg border-2 border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
+                                class="w-80 md:w-96 h-12 pl-10 pr-12 text-lg border-2 border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
                                 placeholder="Search..." />
 
                         <!-- Clear button -->

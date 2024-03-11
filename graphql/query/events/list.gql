@@ -1,5 +1,5 @@
-query getEvents($sort: [events_order_by!], $offset:Int, $limit:Int){
-  events(order_by:$sort, limit:$limit, offset:$offset){
+query getEvents($filter:events_bool_exp, $sort: [events_order_by!], $offset:Int, $limit:Int){
+  events(where:$filter, order_by:$sort, limit:$limit, offset:$offset){
     id
     thumbnail
     title
@@ -17,7 +17,12 @@ query getEvents($sort: [events_order_by!], $offset:Int, $limit:Int){
         name
       }
     }
+    location{
+      id
+      x_coordinate
+      y_coordinate
+      
+    }
     
   }
 }
-
