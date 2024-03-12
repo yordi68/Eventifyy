@@ -53,6 +53,7 @@ insertLocationDone((response) => {
         id: event.value.id
     })
 
+
 });
 
 /*----------------------Edit Event---------------------------*/

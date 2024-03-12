@@ -1,7 +1,9 @@
 <script setup>
-import { useField, useForm } from "vee-validate"
+import login from "~/graphql/auth/login.gql";
+import { useField, useForm } from "vee-validate";
+import { toast } from "vue3-toastify";
 const { handleSubmit } = useForm();
-
+const { onLogin } = useApollo()
 
 const {
         errorMessage: emailError,
@@ -17,10 +19,43 @@ const {
         initialValue: "",
 });
 
+const {
+        mutate: loginMutation,
+        onDone: loginonDone,
+        onError: loginonError,
+        loading } = authentication(login)
+
 const onSubmit = handleSubmit(() => {
-        console.log("submitted")
-        console.log(email, password)
-})
+        const input = {
+                email: email.value,
+                password: password.value,
+        };
+        loginMutation({ input });
+});
+
+
+loginonDone(({ data }) => {
+        onLogin(data.login.token, "auth")
+        toast.success("user succesfully logged in", {
+                transition: toast.TRANSITIONS.FLIP,
+                position: toast.POSITION.TOP_RIGHT,
+        });
+        navigateTo("/")
+});
+
+
+
+
+
+loginonError((error) => {
+        toast.error("Something went wrong while logging in", {
+                transition: toast.TRANSITIONS.FLIP,
+                position: toast.POSITION.TOP_RIGHT,
+        });
+        // console.log("error", error)
+
+});
+
 definePageMeta({
         layout: 'none'
 })
