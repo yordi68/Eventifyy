@@ -1,0 +1,8 @@
+mutation addEventLocation($locationObject: [locations_insert_input!]!) {
+  insert_locations(objects: $locationObject) {
+    returning {
+      id
+    }
+    affected_rows
+  }
+}

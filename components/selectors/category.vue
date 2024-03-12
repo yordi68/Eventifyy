@@ -65,9 +65,7 @@ const clear = () => {
 
 watch(() => props.modelValue, (newValue) => {
         inputValue.value = props.modelValue
-        selectedItem.value = categories.value.find(category => {
-                category.id == props.modelValue
-        })
+        selectedItem.value = categories.value.find(category => category.id == props.modelValue)
 },
         {
                 immediate: true,

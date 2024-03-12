@@ -3,6 +3,8 @@
 import { useField, useForm } from "vee-validate"
 import getEventData from "~/graphql/query/events/item.gql"
 import updateEventQuery from "~/graphql/mutations/events/edit.gql"
+import insertLocationMutation from "~/graphql/mutations/events/add-event-location.gql"
+
 
 import { toast } from "vue3-toastify";
 const { handleSubmit } = useForm();
@@ -29,23 +31,62 @@ eventOnResult(({ data }) => {
     area.value = data.events_by_pk.location.area_id
 })
 
+
+/**-------------------Insret location------------------ */
+
+const { mutate: insertLocation, loading: insertLocationLoading, onDone: insertLocationDone, onError: insertLocationError } = anonymousMutation(insertLocationMutation)
+insertLocationDone((response) => {
+    const tagObject = selectedTags.value.map(tag => ({ tag_id: tag, event_id: event.value.id }))
+    const eventObject = {
+        title: event.value.title,
+        description: event.value.description,
+        price: event.value.price,
+        time: event.value.time,
+        venue: event.value.venue,
+        category_id: event.value.category_id,
+        location_id: response.data?.insert_locations?.returning[0]?.id
+
+    }
+    editMutate({
+        eventObject: eventObject,
+        tagObject: tagObject,
+        id: event.value.id
+    })
+
+});
+
 /*----------------------Edit Event---------------------------*/
 const { mutate: editMutate, loading: editLoading, onDone: editDone, onError: editError } = anonymousMutation(updateEventQuery)
 
+editDone((response) => {
+    toast.success("Event updated successfully", {
+        transition: toast.TRANSITIONS.FLIP,
+        position: toast.POSITION.TOP_RIGHT,
+
+    });
+    eventRefetch()
+
+});
+
+editError((error) => {
+    toast.error("Something went wrong while editing. Try again");
+});
+
+
 
 const onSubmit = handleSubmit(() => {
-    event.value.location = {
+    const locationObject = {
         city_id: city.value,
-        area_id: area.value
+        area_id: area.value,
+        x_coordinate: "1238732598",
+        y_coordinate: "1238732598"
     }
 
-    editMutate({
-        _set: event.value,
-        pk_columns: {
-            id: event.value.id
-        }
+    insertLocation({
+        locationObject: locationObject,
     })
 })
+
 
 definePageMeta({
     layout: 'admin'

@@ -59,7 +59,6 @@ onResult(({ data }) => {
         inputValue.value = props.modelValue
         selectedItem.value = areas.value.find(area => area.id == props.modelValue)
 
-        console.log(area.value, props.modelValue, selectedItem.value);
 })
 
 /**-------------------------Handle select-------------------- */

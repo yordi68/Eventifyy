@@ -1,8 +1,14 @@
-  mutation editEvent($_set: events_set_input = {}, $id:uuid!, ) {
-    update_events_by_pk(_set: $_set, pk_columns: {id:$id}){
-      id
-    }
+  mutation editEvent($eventObject: events_set_input, $tagObject:[event_tags_insert_input!]!, $id:uuid! ) {
+
     delete_event_tags(where:{event_id:{_eq:$id}}){
       affected_rows
     }
+    update_events_by_pk(_set: $eventObject, pk_columns: {id:$id}){
+      id
+    }
+
+    insert_event_tags(objects: $tagObject){
+      affected_rows
+    }
+  
   }

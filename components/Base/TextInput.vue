@@ -27,15 +27,13 @@ const props = defineProps({
                 default: undefined,
                 required: false,
         },
-
-
         rules: {
                 type: [String, Object],
                 default: "",
                 required: false,
         },
-
 });
+
 const emit = defineEmits(["update:modelValue"]);
 
 const {

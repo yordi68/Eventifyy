@@ -79,18 +79,17 @@ const addTag = (tag) => {
         show.value = false;
 
         selectedTags.value.push(tag)
-        emit("update:modelValue", selectedTags.value);
+        emit("update:modelValue", selectedTags.value.map(tag => tag.id));
 
 };
 
 const removeTag = (index) => {
         selectedTags.value.splice(index, 1)
-        emit("update:modelValue", selectedTags.value);
+        emit("update:modelValue", selectedTags.value.map(tag => tag.id));
 
 };
 
 
-console.log(props.modelValue, tags.value);
 
 
 
@@ -101,7 +100,7 @@ console.log(props.modelValue, tags.value);
 
 watch(() => props.modelValue, (newValue) => {
         inputValue.value = props.modelValue
-        selectedTags.value = tags.value.filter(tag => props.modelValue.some(id => id === tag.id))
+        // selectedTags.value = tags.value.filter(tag => props.modelValue.some(id => id === tag.id))
 
 },
         {
@@ -159,8 +158,8 @@ watch(() => props.modelValue, (newValue) => {
                 <ul ref="tagSelect" v-show="show"
                         class="absolute z-10 w-full overflow-auto text-base bg-white border shadow border-primary max-h-56 rounded-b-md">
                         <li class="h-1">
-                                <h-progress v-if="loading" class="w-full rounded-xl" color1="bg-primary-lite"
-                                        color2="bg-primary" color3="bg-primary-dark" height="h-1"></h-progress>
+                                <!-- <h-progress v-if="loading" class="w-full rounded-xl" color1="bg-primary-lite"
+                                        color2="bg-primary" color3="bg-primary-dark" height="h-1"></h-progress> -->
                         </li>
                         <li v-for="(tag, index) in tags" @click="addTag(tag)"
                                 class="relative px-3 py-3 text-gray-600 border-b cursor-pointer select-none hover:bg-primary/30"
