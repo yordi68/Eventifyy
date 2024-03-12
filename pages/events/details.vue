@@ -1,3 +1,17 @@
+<script setup>
+
+
+</script>
+
+
+
+
+
+
+
+
+
+
 <template>
         <div class="px-32">
                 <div class="w-full mt-5">
@@ -189,8 +203,3 @@
         </div>
 
 </template>
-
-<script setup>
-
-
-</script>

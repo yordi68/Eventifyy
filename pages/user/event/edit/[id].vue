@@ -13,6 +13,7 @@ const route = useRoute()
 const event = ref(null)
 const city = ref(null)
 const selectedTags = ref([])
+const selectedImages = ref(['https://images.pexels.com/photos/674010/pexels-photo-674010.jpeg?auto=compress&cs=tinysrgb&w=600', 'https://images.pexels.com/photos/674010/pexels-photo-674010.jpeg?auto=compress&cs=tinysrgb&w=600', 'https://images.pexels.com/photos/674010/pexels-photo-674010.jpeg?auto=compress&cs=tinysrgb&w=600'])
 const area = ref(null)
 
 const {
@@ -37,6 +38,14 @@ eventOnResult(({ data }) => {
 const { mutate: insertLocation, loading: insertLocationLoading, onDone: insertLocationDone, onError: insertLocationError } = anonymousMutation(insertLocationMutation)
 insertLocationDone((response) => {
     const tagObject = selectedTags.value.map(tag => ({ tag_id: tag, event_id: event.value.id }))
+    // const mediaObject = selectedImages.value(image => ({
+    //     media_id: image,
+    //     event_id: event.value.id
+    // }))
+    const mediaObject = {
+        data: selectedImages.value.map(url => ({ media: { url }, event_id: event.value.id }))
+    }
+
     const eventObject = {
         title: event.value.title,
         description: event.value.description,
@@ -50,6 +59,7 @@ insertLocationDone((response) => {
     editMutate({
         eventObject: eventObject,
         tagObject: tagObject,
+        mediaObject: mediaObject,
         id: event.value.id
     })
 

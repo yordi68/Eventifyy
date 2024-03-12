@@ -79,7 +79,7 @@ onError((error) => {
 // ]
 
 definePageMeta({
-        layout: 'public'
+        layout: 'default'
 })
 </script>
 

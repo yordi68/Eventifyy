@@ -7,8 +7,23 @@ export const useAuthStore = defineStore("auth", {
     role: null,
     user: null,
   }),
+  getters: {
+    isAuthenticated: (state) => !!state.token,
+  },
   actions: {
-    setUser(id) {},
+    setUser(id) {
+      const { onResult, onError, refetch } = anonymousMutation(getUser, {
+        id,
+      });
+
+      onResult((result) => {
+        this.user = { ...result.data.users_by_pk };
+      });
+
+      onError((error) => {
+        console.log(error);
+      });
+    },
     setToken(token) {
       this.token = token;
     },
@@ -22,8 +37,10 @@ export const useAuthStore = defineStore("auth", {
       this.token = null;
       this.user = null;
       this.id = null;
-      // Cookies.remove("auth_token")
     },
+    // autoLogin(){
+    //   let decoded = {};
+    // }
   },
 });
 //yonas@99
