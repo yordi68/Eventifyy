@@ -2,8 +2,12 @@
 import { useAuthStore } from "~/stores/auth";
 
 const authStore = useAuthStore()
-
-
+console.log(authStore)
+console.log(authStore.isAuthenticated)
+console.log(authStore.$id)
+// console.log(authStore.user.id)
+// console.log(authStore.user.role)
+// console.log(authStore.user.token)
 </script>
 
 

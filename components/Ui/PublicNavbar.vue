@@ -1,3 +1,17 @@
+<script setup>
+import { Disclosure, DisclosureButton, DisclosurePanel, Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/vue'
+import { Icon as IconifyIcon } from '@iconify/vue';
+
+const navigation = [
+        { name: 'Home', to: '/', current: true },
+        { name: 'Events', to: '/events', current: false },
+        { name: 'About', to: '#', current: false },
+        { name: 'Contact', to: '#', current: false },
+]
+</script>
+
+
+
 <template>
         <div class="sticky top-0 z-10">
                 <Disclosure as="nav" class="bg-[#2D2C3C]" v-slot="{ open }">
@@ -63,15 +77,3 @@
                 </Disclosure>
         </div>
 </template>
-
-<script setup>
-import { Disclosure, DisclosureButton, DisclosurePanel, Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/vue'
-import { Icon as IconifyIcon } from '@iconify/vue';
-
-const navigation = [
-        { name: 'Home', to: '/', current: true },
-        { name: 'Events', to: '/events', current: false },
-        { name: 'About', to: '#', current: false },
-        { name: 'Contact', to: '#', current: false },
-]
-</script>

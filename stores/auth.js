@@ -1,4 +1,7 @@
 import { defineStore } from "pinia";
+import authQuery from "~/composables/authQuery";
+import getUser from "~/graphql/query/users/item.gql";
+// import singleQuryTest from "~/composables/singleQueryTest";
 
 export const useAuthStore = defineStore("auth", {
   state: () => ({
@@ -12,16 +15,18 @@ export const useAuthStore = defineStore("auth", {
   },
   actions: {
     setUser(id) {
-      const { onResult, onError, refetch } = anonymousMutation(getUser, {
+      console.log("objectdasd", id);
+      const { onResult, onError, refetch } = singleQuery(getUser, {
         id,
       });
 
       onResult((result) => {
+        console.log(result, "result");
         this.user = { ...result.data.users_by_pk };
       });
 
       onError((error) => {
-        console.log(error);
+        console.log(error, "error");
       });
     },
     setToken(token) {
@@ -42,5 +47,6 @@ export const useAuthStore = defineStore("auth", {
     //   let decoded = {};
     // }
   },
+  persist: true,
 });
 //yonas@99

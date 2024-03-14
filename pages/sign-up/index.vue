@@ -4,6 +4,11 @@ import { toast } from "vue3-toastify";
 import { useField, useForm } from "vee-validate"
 const { handleSubmit } = useForm();
 const { onLogin } = useApollo()
+import { useAuthStore } from "~/stores/auth";
+
+const authStore = useAuthStore();
+
+
 
 const { errorMessage: firstNameError,
         value: firstName,
@@ -55,6 +60,11 @@ signuponDone(({ data }) => {
                 transition: toast.TRANSITIONS.FLIP,
                 position: toast.POSITION.TOP_RIGHT,
         });
+        // console.log("")
+        authStore.setToken(result.data.signup.token);
+        authStore.setId(result.data.signup.id);
+        authStore.setUser(result.data.signup.id);
+        authStore.setRole(result.data.signup.role);
         navigateTo("/")
 
 });

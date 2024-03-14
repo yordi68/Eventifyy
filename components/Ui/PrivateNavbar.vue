@@ -1,3 +1,22 @@
+<script setup>
+import { Disclosure, DisclosureButton, DisclosurePanel, Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/vue'
+import { Icon as IconifyIcon } from '@iconify/vue';
+import { useAuthStore } from "~/stores/auth";
+const authStore = useAuthStore();
+const navigation = [
+        { name: 'Home', to: '/', current: true },
+        { name: 'Events', to: '/events', current: false },
+        { name: 'About', to: '#', current: false },
+        { name: 'Contact', to: '#', current: false },
+]
+</script>
+
+
+
+
+
+
+
 <template>
         <div class="sticky top-0 z-10">
                 <Disclosure as="nav" class="bg-[#2D2C3C]" v-slot="{ open }">
@@ -31,6 +50,7 @@
                                                                         class="bg-[#FFE047] !w-30 whitespace-nowrap px-4 py-2 rounded-md cursor-pointer">
                                                                         Sign Up
                                                                 </button> -->
+
                                                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none"
                                                                         viewBox="0 0 24 24" stroke-width="1.5"
                                                                         stroke="currentColor"
@@ -72,15 +92,3 @@
                 </Disclosure>
         </div>
 </template>
-
-<script setup>
-import { Disclosure, DisclosureButton, DisclosurePanel, Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/vue'
-import { Icon as IconifyIcon } from '@iconify/vue';
-
-const navigation = [
-        { name: 'Home', to: '/', current: true },
-        { name: 'Events', to: '/events', current: false },
-        { name: 'About', to: '#', current: false },
-        { name: 'Contact', to: '#', current: false },
-]
-</script>

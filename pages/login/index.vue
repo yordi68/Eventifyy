@@ -2,6 +2,11 @@
 import login from "~/graphql/auth/login.gql";
 import { useField, useForm } from "vee-validate";
 import { toast } from "vue3-toastify";
+import { useAuthStore } from "~/stores/auth";
+
+
+
+const authStore = useAuthStore();
 const { handleSubmit } = useForm();
 const { onLogin } = useApollo()
 
@@ -40,6 +45,14 @@ loginonDone(({ data }) => {
                 transition: toast.TRANSITIONS.FLIP,
                 position: toast.POSITION.TOP_RIGHT,
         });
+        console.log("logged in")
+        authStore.setToken(data.login.token);
+        authStore.setId(data.login.id);
+        authStore.setUser(data.login.id);
+        authStore.setRole(data.login.role);
+        console.log("logged in 2")
+
+
         navigateTo("/")
 });
 
@@ -52,7 +65,7 @@ loginonError((error) => {
                 transition: toast.TRANSITIONS.FLIP,
                 position: toast.POSITION.TOP_RIGHT,
         });
-        // console.log("error", error)
+        console.log("error", error)
 
 });
 
