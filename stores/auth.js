@@ -1,7 +1,5 @@
 import { defineStore } from "pinia";
-import authQuery from "~/composables/authQuery";
 import getUser from "~/graphql/query/users/item.gql";
-// import singleQuryTest from "~/composables/singleQueryTest";
 
 export const useAuthStore = defineStore("auth", {
   state: () => ({
