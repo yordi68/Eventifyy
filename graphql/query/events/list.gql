@@ -7,6 +7,7 @@ query getEvents($filter:events_bool_exp, $sort: [events_order_by!], $offset:Int,
     price
     location_id
     user{
+      id
       first_name
       last_name
     }

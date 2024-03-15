@@ -6,16 +6,22 @@ const limit = ref(10);
 const offset = ref(1);
 const search = ref("");
 const order = ref(null);
-const filter = ref(null);
 
+const filter = computed(() => {
+        let query = {};
+        // query.user = {
+        //         id: {
+        //                 _eq: user.id
+        //         }
+        // }
+
+        return query;
+
+});
 const { onResult, onError, refetch } = queryList(
         getEvents,
         {
-                filter,
-                order,
-                limit,
-                offset,
-
+                filter: filter,
         }
 );
 
@@ -89,8 +95,9 @@ definePageMeta({
                 <div class="grid grid-cols-12 h-screen overflow-hidden">
                         <Filter class="hidden md:block md:col-span-2 h-full overflow-y-scroll " />
                         <div class="overflow-y-scroll col-span-12 lg:col-span-10 h-full  border-l-2 border-gray-200">
-                                <div class="grid grid-cols-1 md:grid-cols-2 space-y-8 mx-auto py-6 sm:px-6 lg:px-8">
-                                        <UiCard v-for="event in events" :key="event.price" :event="event" />
+                                <div
+                                        class="grid grid-cols-1 md:grid-cols-3 md:gap-x-4 space-y-8 mx-auto py-6 sm:px-6 lg:px-8">
+                                        <UiVerticalCard v-for="event in events" :key="event.price" :event="event" />
                                 </div>
                         </div>
                 </div>

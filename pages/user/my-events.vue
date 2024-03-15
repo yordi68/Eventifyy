@@ -43,7 +43,8 @@ definePageMeta({
 </script>
 <template>
         <div class="grid grid-cols-3 gap-6">
-                <UiCard has-icon v-for="event in events" :key="event.price" :event="event" />
+                <!-- <UiCard has-icon v-for="event in events" :key="event.price" :event="event" /> -->
+                <UiVerticalCard v-for="event in events" :key="event.price" :event="event" />
 
         </div>
 </template>

@@ -25,7 +25,7 @@ const { user, logout } = useAuthStore()
                 <div class=" flex flex-col justify-between h-[92%]  divide-y dark:divide-gray-700">
                         <ul class="pt-2 pb-4 space-y-1 text-sm">
 
-                                <li class="dark:bg-gray-800 dark:text-gray-50">
+                                <li class="dark:bg-gray-800 dark:text-gray-50 hover:text-[#FFE047]">
                                         <NuxtLink to="/user/create-events"
                                                 class="flex items-center p-2 space-x-3 rounded-md"
                                                 exact-active-class="text-extrabold text-[#FFE047]">
@@ -41,7 +41,7 @@ const { user, logout } = useAuthStore()
                                         </NuxtLink>
                                 </li>
 
-                                <li class="dark:bg-gray-800 dark:text-gray-50">
+                                <li class="dark:bg-gray-800 dark:text-gray-50 hover:text-[#FFE047]">
                                         <NuxtLink to="/user/my-events"
                                                 class="flex items-center p-2 space-x-3 rounded-md"
                                                 exact-active-class="text-extrabold text-[#FFE047]">
@@ -57,7 +57,7 @@ const { user, logout } = useAuthStore()
                                         </NuxtLink>
                                 </li>
 
-                                <li class="dark:bg-gray-800 dark:text-gray-50">
+                                <li class="dark:bg-gray-800 dark:text-gray-50 hover:text-[#FFE047]">
                                         <NuxtLink to="/user/booked-events"
                                                 class="flex items-center p-2 space-x-3 rounded-md"
                                                 exact-active-class="text-extrabold text-[#FFE047]">
@@ -74,7 +74,7 @@ const { user, logout } = useAuthStore()
                                 </li>
 
 
-                                <li class="dark:bg-gray-800 dark:text-gray-50">
+                                <li class="dark:bg-gray-800 dark:text-gray-50 hover:text-[#FFE047]">
                                         <NuxtLink to="/user/bookmarks"
                                                 class="flex items-center p-2 space-x-3 rounded-md"
                                                 exact-active-class="text-extrabold text-[#FFE047]">
@@ -156,7 +156,7 @@ const { user, logout } = useAuthStore()
                                 </li> -->
                                 <li>
                                         <button @click="[logout(), navigateTo('/')]"
-                                                class="flex items-center p-2 space-x-3 rounded-md">
+                                                class="flex items-center p-2 space-x-3 rounded-md hover:text-[#FFE047]">
                                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"
                                                         class="w-5 h-5 fill-current dark:text-gray-400">
                                                         <path

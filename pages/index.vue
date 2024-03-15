@@ -1,10 +1,8 @@
 <script setup>
 import tags from '~/components/selectors/tags.vue';
+import getEvents from '~/graphql/query/events/list.gql';
 
-definePageMeta({
-        layout: "default"
-})
-
+const events = ref([]);
 const tagList = [
         {
                 name: 'All'
@@ -20,52 +18,31 @@ const tagList = [
         },
 ]
 
+const filter = computed(() => {
+        let query = {};
+        // query.user = {
+        //         id: {
+        //                 _eq: user.id
+        //         }
+        // }
 
-const events = [
-        {
-                thumbnail: '/event-details-1.jpg',
-                title: 'Noteworthy technology',
-                date: 'Nov 23 - 29',
-                place: 'Chengapattu, India',
-                price: 1200,
-        },
-        {
-                thumbnail: '/event-details-1.jpg',
-                title: 'Noteworthy technology',
-                date: 'Nov 23 - 29',
-                place: 'Chengapattu, India',
-                price: 1200,
-        },
-        {
-                thumbnail: '/event-details-1.jpg',
-                title: 'Noteworthy technology',
-                date: 'Nov 23 - 29',
-                place: 'Chengapattu, India',
-                price: 1200,
-        },
-        {
-                thumbnail: '/event-details-1.jpg',
-                title: 'Noteworthy technology',
-                date: 'Nov 23 - 29',
-                place: 'Chengapattu, India',
-                price: 1200,
-        },
-        {
-                thumbnail: '/event-details-1.jpg',
-                title: 'Noteworthy technology',
-                date: 'Nov 23 - 29',
-                place: 'Chengapattu, India',
-                price: 1200,
-        },
-        {
-                thumbnail: '/event-details-1.jpg',
-                title: 'Noteworthy technology',
-                date: 'Nov 23 - 29',
-                place: 'Chengapattu, India',
-                price: 1200,
-        },
-]
+        return query;
 
+});
+
+const { onResult, onError, refetch } = queryList(getEvents, {
+        filter: filter
+});
+
+onResult((result) => {
+        events.value = result.data.events;
+        console.log(events.value[0])
+})
+
+
+definePageMeta({
+        layout: "default"
+})
 </script>
 
 
