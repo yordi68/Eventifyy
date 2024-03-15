@@ -1,6 +1,7 @@
 <script setup>
 import getEvents from '@/graphql/query/events/list.gql';
-
+import { useAuthStore } from "~/stores/auth";
+const { user } = useAuthStore();
 const router = useRouter()
 
 const events = ref([]);
@@ -13,7 +14,7 @@ const filter = computed(() => {
         let query = {};
         query.user = {
                 id: {
-                        _eq: "44bd8495-7834-4ac5-aef2-69d6de8e1046"
+                        _eq: user.id
                 }
         }
 
@@ -22,12 +23,13 @@ const filter = computed(() => {
 });
 
 
-console.log(filter.value)
+// console.log(filter.value)
 
 
 const { onResult, onError, refetch } = queryList(
-        getEvents,
-        { filter: filter },
+        getEvents, {
+        filter: filter
+}
 );
 
 onResult((result) => {

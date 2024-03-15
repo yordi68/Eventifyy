@@ -6,6 +6,11 @@ const props = defineProps({
                 type: [String, Number, Boolean],
                 default: undefined,
         },
+
+        placeholder: {
+                type: String,
+                default: "Write here ..."
+        },
         name: {
                 type: String,
                 default: undefined,
@@ -81,7 +86,7 @@ watch(
                 <span v-if="props.showStar" class="text-red-500">*</span>
                 <div class="relative rounded-md shadow-sm overflow-clip font-body group" :class="props.bodyClass">
                         <input v-model="inputValue" @input="set($event)" @change="set($event)" :type="type"
-                                :name="props.name" step="any" :id="id" :class="[
+                                :placeholder="placeholder" :name="props.name" step="any" :id="id" :class="[
 
                         'border-[1px] p-3   border-gray-300 group-hover:border-new-tale focus:border-new-tale focus:ring-new-tale disabled:bg-gray-100 disabled:cursor-not-allowed',
 

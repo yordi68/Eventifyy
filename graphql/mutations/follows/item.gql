@@ -1,0 +1,7 @@
+mutation addFollows($input: follows_insert_input!){
+  insert_follows_one(object:$input){    
+      id
+      event_id
+      user_id
+  }
+}

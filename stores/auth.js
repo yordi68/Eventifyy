@@ -1,5 +1,6 @@
 import { defineStore } from "pinia";
 import getUser from "~/graphql/query/users/item.gql";
+const { onLogout } = useApollo();
 
 export const useAuthStore = defineStore("auth", {
   state: () => ({
@@ -40,6 +41,7 @@ export const useAuthStore = defineStore("auth", {
       this.token = null;
       this.user = null;
       this.id = null;
+      onLogout("auth");
     },
     // autoLogin(){
     //   let decoded = {};

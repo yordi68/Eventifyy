@@ -2,13 +2,14 @@
 import { Disclosure, DisclosureButton, DisclosurePanel, Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/vue'
 import { Icon as IconifyIcon } from '@iconify/vue';
 import { useAuthStore } from "~/stores/auth";
-const authStore = useAuthStore();
+const { user } = useAuthStore();
 const navigation = [
         { name: 'Home', to: '/', current: true },
         { name: 'Events', to: '/events', current: false },
         { name: 'About', to: '#', current: false },
         { name: 'Contact', to: '#', current: false },
 ]
+
 </script>
 
 
@@ -48,8 +49,8 @@ const navigation = [
                                                         <NuxtLink to="/user"
                                                                 class="flex text-white items-center space-x-2 ">
                                                                 <div class="space-x-2">
-                                                                        <span>{{ authStore.user.first_name }}</span>
-                                                                        <span>{{ authStore.user.last_name }}</span>
+                                                                        <span>{{ user?.first_name }}</span>
+                                                                        <span>{{ user?.last_name }}</span>
                                                                 </div>
                                                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none"
                                                                         viewBox="0 0 24 24" stroke-width="1.5"

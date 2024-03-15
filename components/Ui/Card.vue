@@ -11,41 +11,7 @@ const props = defineProps({
 })
 
 
-/*
 
-    id
-    thumbnail
-    title
-    time
-    price
-    location_id
-    user{
-      first_name
-      last_name
-    }
-    description
-    tags{
-      tag_id
-      tag{
-        name
-      }
-    }
-    location{
-      id
-      x_coordinate
-      y_coordinate
-      
-    }
-
-
-
-
-
-
-
-
-
-*/
 
 </script>
 
@@ -64,7 +30,7 @@ const props = defineProps({
                                 <div class="flex-col  md:flex md:space-x-3 text-sm  md:text-md">
                                         <p>{{ event.time }}</p>
                                         <div class="hidden md:inline-block h-full bg-gray-400 w-px"></div>
-                                        <p>{{ event.location.x_coordinate }} {{ event.location.y_coordinate }}</p>
+                                        <!-- <p>{{ event.location.x_coordinate }} {{ event.location.y_coordinate }}</p> -->
                                 </div>
                                 <p>{{ event.date }}</p>
                                 <span class="flex items-center  space-x-4 ">

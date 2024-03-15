@@ -24,7 +24,9 @@ const {
         mutate: addDataToDB,
         onDone: addDataToDBDone,
         onError: addDataToDBError,
-} = anonymousMutation(addData)
+} = anonymousMutation(addData, {
+        clientId: "auth"
+})
 
 addDataToDBDone((response) => {
         toast.success("Recipe successfully added", {

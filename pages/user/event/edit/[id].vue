@@ -14,7 +14,9 @@ const event = ref(null)
 const city = ref(null)
 const selectedTags = ref([])
 const selectedImages = ref(['https://images.pexels.com/photos/674010/pexels-photo-674010.jpeg?auto=compress&cs=tinysrgb&w=600', 'https://images.pexels.com/photos/674010/pexels-photo-674010.jpeg?auto=compress&cs=tinysrgb&w=600', 'https://images.pexels.com/photos/674010/pexels-photo-674010.jpeg?auto=compress&cs=tinysrgb&w=600'])
-const area = ref(null)
+const area = ref(null);
+const lat = ref(0);
+const long = ref(0);
 
 const {
     onResult: eventOnResult,
@@ -30,21 +32,21 @@ eventOnResult(({ data }) => {
     selectedTags.value = data.events_by_pk.tags.map(tag => tag?.tag?.id)
     city.value = data.events_by_pk.location.city_id
     area.value = data.events_by_pk.location.area_id
+    lat.value = data.events_by_pk.location?.location?.coordinates[0]
+    long.value = data.events_by_pk.location?.location?.coordinates[1]
 })
 
 
 /**-------------------Insret location------------------ */
 
-const { mutate: insertLocation, loading: insertLocationLoading, onDone: insertLocationDone, onError: insertLocationError } = anonymousMutation(insertLocationMutation)
+const { mutate: insertLocation, loading: insertLocationLoading, onDone: insertLocationDone, onError: insertLocationError } = anonymousMutation(insertLocationMutation, {
+    clientId: "auth"
+})
 insertLocationDone((response) => {
     const tagObject = selectedTags.value.map(tag => ({ tag_id: tag, event_id: event.value.id }))
-    // const mediaObject = selectedImages.value(image => ({
-    //     media_id: image,
-    //     event_id: event.value.id
-    // }))
-    const mediaObject = {
-        data: selectedImages.value.map(url => ({ media: { url }, event_id: event.value.id }))
-    }
+
+    const mediaObject = selectedImages.value.map(url => ({ media: { data: { url } }, event_id: event.value.id }))
+
 
     const eventObject = {
         title: event.value.title,
@@ -58,8 +60,8 @@ insertLocationDone((response) => {
     }
     editMutate({
         eventObject: eventObject,
-        tagObject: tagObject,
         mediaObject: mediaObject,
+        tagObject: tagObject,
         id: event.value.id
     })
 
@@ -67,7 +69,9 @@ insertLocationDone((response) => {
 });
 
 /*----------------------Edit Event---------------------------*/
-const { mutate: editMutate, loading: editLoading, onDone: editDone, onError: editError } = anonymousMutation(updateEventQuery)
+const { mutate: editMutate, loading: editLoading, onDone: editDone, onError: editError } = anonymousMutation(updateEventQuery, {
+    clientId: "auth"
+})
 
 editDone((response) => {
     toast.success("Event updated successfully", {
@@ -85,13 +89,18 @@ editError((error) => {
 
 
 
+
 const onSubmit = handleSubmit(() => {
     const locationObject = {
         city_id: city.value,
         area_id: area.value,
-        x_coordinate: "1238732598",
-        y_coordinate: "1238732598"
+        location: {
+            type: "Point",
+            coordinates: [parseFloat(lat.value), parseFloat(long.value)]
+        },
     }
+
+
 
     insertLocation({
         locationObject: locationObject,
@@ -115,6 +124,7 @@ definePageMeta({
 
             <BaseTextInput v-model="event.venue" label="Venue" name="venue" rules="required" />
 
+            <BaseTextInput v-model="event.price" type="number" label="Price" name="price" rules="required" />
 
             <div class=" w-full bg-white  rounded">
                 <h3 class="text-lg mb-4">Description</h3>
@@ -131,13 +141,19 @@ definePageMeta({
 
         <div class=" space-y-10   w-1/2 flex flex-col">
 
-            <BaseTextInput v-model="event.price" type="number" label="Price" name="price" rules="required" />
             <BaseTextInput v-model="event.time" type="datetime-local" label="Time" name="time" rules="required" />
 
 
             <LazySelectorsCity v-model="city"></LazySelectorsCity>
             <LazySelectorsArea v-model="area" :city-id="city"></LazySelectorsArea>
 
+            <div class="flex items-center justify-between w-full gap-x-6">
+                <BaseTextInput placeholder="9.014253" type="number" v-model="lat" label="Latitude" name="labelatitude"
+                    rules="required" />
+                <BaseTextInput placeholder="39.014253" type="number" v-model="long" label="Longitude" name="longitude"
+                    rules="required" />
+
+            </div>
 
 
 

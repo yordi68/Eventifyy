@@ -26,12 +26,9 @@ query getEvent($id:uuid!) {
       __typename
     }
     location {
-         area_id
+      area_id
       city_id
-      id
-      x_coordinate
-      y_coordinate
-      __typename
+       location
     }
     __typename
   }

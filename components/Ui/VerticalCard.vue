@@ -1,4 +1,51 @@
 <script setup>
+import addFollows from "~/graphql/mutations/follows/item.gql";
+import { useAuthStore } from "~/stores/auth";
+import { toast } from "vue3-toastify";
+
+const isFollowed = false;
+
+
+
+const store = useAuthStore();
+
+
+const { mutate: followMutate, onDone: followDone, onError: followError, loading } = anonymousMutation(addFollows, {
+        clientId: "auth"
+});
+
+const handleFollow = async () => {
+        const input = {
+                user_id: store.id,
+                // event_id: store
+        }
+        followMutate({ input });
+}
+
+followDone(() => {
+        toast.success("You followed an event", {
+                transition: toast.TRANSITIONS.FLIP,
+                position: toast.POSITION.TOP_RIGHT,
+        });
+})
+
+followError((error) => {
+        if (error.message.includes("duplicate")) {
+                toast.error("You already followed this event", {
+                        transition: toast.TRANSITIONS.FLIP,
+                        position: toast.POSITION.TOP_RIGHT,
+                });
+                return;
+        }
+
+        toast.error("Something went wrong", {
+                transition: toast.TRANSITIONS.FLIP,
+                position: toast.POSITION.TOP_RIGH
+        })
+})
+
+
+
 const props = defineProps({
         event: {
                 thumbnail: String,
@@ -54,6 +101,18 @@ const props = defineProps({
                                 {{ event.price }}
 
                         </span>
+                        <div>
+                                <div v-if="isFollowed">
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                                stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                                                <path stroke-linecap="round" stroke-linejoin="round"
+                                                        d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                                        </svg>
+                                </div>
+                                <div v-else>
+
+                                </div>
+                        </div>
                 </div>
         </div>
 </template>

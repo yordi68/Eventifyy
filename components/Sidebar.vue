@@ -1,17 +1,28 @@
+<script setup>
+import { useAuthStore } from "~/stores/auth";
+
+const { user, logout } = useAuthStore()
+// console.log(store.user.first_name)
+
+
+</script>
+
+
 <template>
         <div class="h-screen p-3 space-y-2  text-white bg-[#2D2C3C] dark:text-gray-100">
                 <div class="flex items-center  space-x-4">
                         <img src="https://source.unsplash.com/100x100/?portrait" alt=""
                                 class="w-12 h-12 rounded-full dark:bg-gray-500">
                         <div>
-                                <h2 class="text-lg font-semibold">Leroy Jenkins</h2>
+                                <h2 class="text-lg font-semibold">{{ user.first_name }} {{ user.last_name }}
+                                </h2>
                                 <span class="flex items-center space-x-1">
                                         <a rel="noopener noreferrer" href="#"
                                                 class="text-xs hover:underline dark:text-gray-400">View profile</a>
                                 </span>
                         </div>
                 </div>
-                <div class="divide-y dark:divide-gray-700">
+                <div class=" flex flex-col justify-between h-[92%]  divide-y dark:divide-gray-700">
                         <ul class="pt-2 pb-4 space-y-1 text-sm">
 
                                 <li class="dark:bg-gray-800 dark:text-gray-50">
@@ -128,7 +139,7 @@
 
                         </ul>
                         <ul class="pt-4 pb-2 space-y-1 text-sm">
-                                <li>
+                                <!-- <li>
                                         <a rel="noopener noreferrer" href="#"
                                                 class="flex items-center p-2 space-x-3 rounded-md">
                                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"
@@ -142,9 +153,9 @@
                                                 </svg>
                                                 <span>Settings</span>
                                         </a>
-                                </li>
+                                </li> -->
                                 <li>
-                                        <a rel="noopener noreferrer" href="#"
+                                        <button @click="[logout(), navigateTo('/')]"
                                                 class="flex items-center p-2 space-x-3 rounded-md">
                                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"
                                                         class="w-5 h-5 fill-current dark:text-gray-400">
@@ -154,7 +165,7 @@
                                                         <rect width="32" height="64" x="256" y="232"></rect>
                                                 </svg>
                                                 <span>Logout</span>
-                                        </a>
+                                        </button>
                                 </li>
                         </ul>
                 </div>

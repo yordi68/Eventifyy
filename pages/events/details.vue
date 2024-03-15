@@ -1,5 +1,34 @@
 <script setup>
 
+const eventLocation = ref(
+        {
+                "id": 12,
+                "location": {
+                        "type": "Point",
+                        "crs": {
+                                "type": "name",
+                                "properties": {
+                                        "name": "urn:ogc:def:crs:EPSG::4326"
+                                }
+                        },
+                        "coordinates": [
+                                9.014253,
+                                38.818221
+                        ]
+                },
+                "area": {
+                        "name": "Megenagna",
+                        "__typename": "BasicsAreas"
+                },
+                "city": {
+                        "name": "Addis Ababa",
+                        "__typename": "BasicsCities"
+                },
+        },
+
+)
+
+
 
 </script>
 
@@ -97,7 +126,7 @@
 
                                 </div>
                                 <div>
-                                        <img src="/Map.png" alt="">
+                                        <EventsLocation :event-location="eventLocation"></EventsLocation>
                                 </div>
                         </div>
 

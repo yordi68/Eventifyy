@@ -20,12 +20,19 @@ const venue = ref('')
 const thumbnail = ref('https://icon2.cleanpng.com/20240106/sxp/transparent-web-404-error-webpage-error-computer-screen-error-screenshot-of-a-404-error-webpage-with-icons65997670c34f92.8814632817045561448.jpg')
 
 
+const lat = ref(0);
+const long = ref(0);
+
+
+
 
 const {
 	mutate: addDataToDB,
 	onDone: addDataToDBDone,
 	onError: addDataToDBError,
-} = anonymousMutation(addData)
+} = anonymousMutation(addData, {
+	clientId: "auth"
+})
 
 addDataToDBDone((response) => {
 	toast.success("Event successfully added", {
@@ -55,20 +62,22 @@ const onSubmit = handleSubmit(() => {
 			data: {
 				city_id: city.value,
 				area_id: area.value,
-				x_coordinate: "1238732598",
-				y_coordinate: "1238732598"
+
+				location: {
+					type: "Point",
+					coordinates: [parseFloat(lat.value), parseFloat(long.value)]
+				},
 			},
 		},
 		category_id: category.value,
 		tags: {
 			data: tags.value.map((tag) => {
 				return {
-					tag_id: tag.id
+					tag_id: tag
 
 				}
 			}),
 		}
-
 
 	}
 	addDataToDB({ input })
@@ -104,6 +113,7 @@ definePageMeta({
 
 			<BaseTextInput v-model="venue" label="Venue" name="venue" rules="required" />
 
+			<BaseTextInput type="number" v-model="price" label="Price" name="price" rules="required" />
 
 			<div class=" w-full bg-white  rounded">
 				<h3 class="text-lg mb-4">Description</h3>
@@ -119,12 +129,18 @@ definePageMeta({
 
 
 		<div class=" space-y-10   w-1/2 flex flex-col">
-			<BaseTextInput type="number" v-model="price" label="Price" name="price" rules="required" />
 			<BaseTextInput type="datetime-local" v-model="time" label="Time" name="time" rules="required" />
-
 
 			<SelectorsCity v-model="city"></SelectorsCity>
 			<SelectorsArea :city-id="city" v-model="area"></SelectorsArea>
+
+			<div class="flex items-center justify-between w-full gap-x-6">
+				<BaseTextInput placeholder="9.014253" type="number" v-model="lat" label="Latitude" name="labelatitude"
+					rules="required" />
+				<BaseTextInput placeholder="39.014253" type="number" v-model="long" label="Longitude" name="longitude"
+					rules="required" />
+
+			</div>
 
 
 
@@ -133,21 +149,19 @@ definePageMeta({
 				<label class="block text-sm font-medium text-gray-700">
 					Image
 				</label>
-				<div
-					class="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md">
+				<div class="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md">
 					<div class="space-y-1 text-center">
-						<svg class="mx-auto h-12 w-12 text-gray-700" stroke="currentColor"
-							fill="none" viewBox="0 0 48 48" aria-hidden="true">
-							<path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02"
-								stroke-width="2" stroke-linecap="round"
-								stroke-linejoin="round" />
+						<svg class="mx-auto h-12 w-12 text-gray-700" stroke="currentColor" fill="none"
+							viewBox="0 0 48 48" aria-hidden="true">
+							<path
+								d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02"
+								stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
 						</svg>
 						<div class="flex text-sm text-gray-600">
 							<label for="file-upload"
 								class="relative cursor-pointer bg-white rounded-md font-medium text-indigo-600 hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500">
 								<span class="text-gray-700">Upload a file</span>
-								<input id="file-upload" name="file-upload" type="file"
-									class="sr-only">
+								<input id="file-upload" name="file-upload" type="file" class="sr-only">
 							</label>
 							<p class="pl-1 text-gray-700">or drag and drop</p>
 						</div>

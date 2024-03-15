@@ -3,7 +3,7 @@
     delete_event_tags(where:{event_id:{_eq:$id}}){
       affected_rows
     }
-    insert_event_medias(where:{event_id:{_eq:$id}}){
+    delete_event_medias(where:{event_id:{_eq:$id}}){
       affected_rows
     }
     update_events_by_pk(_set: $eventObject, pk_columns: {id:$id}){

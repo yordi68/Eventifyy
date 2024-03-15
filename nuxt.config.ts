@@ -5,6 +5,7 @@ export default defineNuxtConfig({
   modules: [
     "@nuxtjs/tailwindcss",
     "@ant-design-vue/nuxt",
+    "nuxt3-leaflet",
     // "@nuxtjs/color-mode",
     "@vee-validate/nuxt",
     // "@vueuse/nuxt",

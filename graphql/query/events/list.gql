@@ -19,8 +19,7 @@ query getEvents($filter:events_bool_exp, $sort: [events_order_by!], $offset:Int,
     }
     location{
       id
-      x_coordinate
-      y_coordinate
+      location
       
     }
     

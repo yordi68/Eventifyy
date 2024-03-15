@@ -3,7 +3,7 @@ import login from "~/graphql/auth/login.gql";
 import { useField, useForm } from "vee-validate";
 import { toast } from "vue3-toastify";
 import { useAuthStore } from "~/stores/auth";
-
+const router = useRouter()
 
 
 const authStore = useAuthStore();
@@ -52,8 +52,8 @@ loginonDone(({ data }) => {
         authStore.setRole(data.login.role);
         console.log("logged in 2")
 
+        router.replace('/')
 
-        navigateTo("/")
 });
 
 

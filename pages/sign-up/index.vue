@@ -2,10 +2,13 @@
 import signup from "~/graphql/auth/signup.gql"
 import { toast } from "vue3-toastify";
 import { useField, useForm } from "vee-validate"
-const { handleSubmit } = useForm();
-const { onLogin } = useApollo()
 import { useAuthStore } from "~/stores/auth";
 
+
+
+const { onLogin } = useApollo()
+const { handleSubmit } = useForm();
+const router = useRouter();
 const authStore = useAuthStore();
 
 
@@ -60,12 +63,14 @@ signuponDone(({ data }) => {
                 transition: toast.TRANSITIONS.FLIP,
                 position: toast.POSITION.TOP_RIGHT,
         });
-        // console.log("")
-        authStore.setToken(result.data.signup.token);
-        authStore.setId(result.data.signup.id);
-        authStore.setUser(result.data.signup.id);
-        authStore.setRole(result.data.signup.role);
-        navigateTo("/")
+        console.log("signed up")
+        authStore.setToken(data.signup.token);
+        authStore.setId(data.signup.id);
+        authStore.setUser(data.signup.id);
+        authStore.setRole(data.signup.role);
+        console.log("signed up 2")
+
+        router.replace('/')
 
 });
 
@@ -73,11 +78,11 @@ signuponDone(({ data }) => {
 
 
 signuponError((error) => {
-        toast.error("Something went wrong while siginin", {
+        toast.error("Something went wrong while siginup", {
                 transition: toast.TRANSITIONS.FLIP,
                 position: toast.POSITION.TOP_RIGHT,
         });
-        // console.log("error", error)
+        console.log("error", error)
 });
 
 
