@@ -1,0 +1,6 @@
+mutation editUser($userObject: users_set_input, $id: uuid!){
+    update_users_by_pk(_set: $userObject, pk_columns: {id: $id}){
+        id
+    }
+}
+

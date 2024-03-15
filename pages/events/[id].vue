@@ -1,5 +1,7 @@
 <script setup>
 import getEvent from "~/graphql/query/events/item.gql";
+import addFollows from "~/graphql/mutations/follows/item.gql";
+
 import { useAuthStore } from "~/stores/auth";
 import { toast } from "vue3-toastify";
 
@@ -24,22 +26,44 @@ onError((error) => {
 
 
 
-
-
-const datetime = ref(event.value.time);
-
-const formattedDateTime = computed(() => {
-    const dateOptions = { weekday: 'short', month: 'short', day: '2-digit', year: 'numeric' };
-    const timeOptions = { hour: 'numeric', minute: 'numeric', hour12: true };
-
-    const parsedDatetime = new Date(datetime.value);
-
-    const formattedDate = parsedDatetime.toLocaleString('en-US', dateOptions).replace(',', '/');
-    const formattedTime = parsedDatetime.toLocaleString('en-US', timeOptions);
-
-    return { formattedDate, formattedTime }
+const { mutate: followMutate, onDone: followDone, onError: followError, loading } = anonymousMutation(addFollows, {
+    clientId: "auth"
 });
 
+const handleFollow = async () => {
+    const input = {
+        user_id: store.user.id,
+        event_id: event.value.id
+    }
+    followMutate({ input });
+}
+
+followDone(() => {
+    toast.success("You followed an event", {
+        transition: toast.TRANSITIONS.FLIP,
+        position: toast.POSITION.TOP_RIGHT,
+    });
+})
+
+followError((error) => {
+    if (error.message.includes("duplicate")) {
+        toast.error("You already followed this event", {
+            transition: toast.TRANSITIONS.FLIP,
+            position: toast.POSITION.TOP_RIGHT,
+        });
+        return;
+    }
+
+    toast.error("Something went wrong", {
+        transition: toast.TRANSITIONS.FLIP,
+        position: toast.POSITION.TOP_RIGH
+    })
+})
+
+
+// const isFollowing = ref(
+//     event.likes.some((like) => like.user_id === store.id)
+// );
 
 
 
@@ -96,8 +120,14 @@ const eventLocation = ref(
         </div>
         <div class="flex justify-between my-6">
             <h3 class="font-bold text-4xl">{{ event.title }}</h3>
-            <div>
-                <Icon name="material-symbols-light:star-outline" size="48" />
+            <div class="flex space-x-4">
+                <Icon name="gala:add" size="32" v-if="!isFollowing" class="hover:text-[#FFE047] hover:cursor-pointer" />
+                <Icon name="zondicons:minus-outline" size="30" v-else="isFollowing"
+                    class="hover:text-[#FFE047] hover:cursor-pointer" />
+                <div
+                    class="focus:outline-none text-black text-bold bg-[#FFE047] hover:bg-yellow-500 focus:ring-4 focus:ring-yellow-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:focus:ring-yellow-900">
+                    Following
+                </div>
                 <Icon name="ic:baseline-share" size="32" />
             </div>
         </div>
@@ -190,7 +220,7 @@ const eventLocation = ref(
                         <div>
 
                             <h5 class="mb-1 text-xl font-medium text-gray-900 dark:text-white">
-                                {{ event.user.first_name }} {{ event.user.last_name }}
+                                <!-- {{ event.user.first_name }} {{ event.user.last_name }} -->
                             </h5>
                             <span class="text-sm text-gray-500 dark:text-gray-400">Visual
                                 Designer</span>

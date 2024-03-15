@@ -1,100 +1,67 @@
 <script setup>
-// import { useField, useForm } from "vee-validate"
-// const { handleSubmit } = useForm();
-// import { toast } from "vue3-toastify";
+import { useField, useForm } from "vee-validate"
+const { handleSubmit } = useForm();
+import { toast } from "vue3-toastify";
+import getUser from "~/graphql/query/users/item.gql";
+import { useAuthStore } from "~/stores/auth";
+import updateUser from "~/graphql/mutations/user/edit.gql";
 
+const store = useAuthStore();
+const singleUser = ref([]);
 
+const { onResult, onError, loading } = singleQuery(getUser, {
+        id: store.user.id
+})
 
+onResult(({ data }) => {
+        // console.log(data.users_by_pk)
+        // console.log(data.users_by_pk.first_name)
+        // console.log(data.users_by_pk.last_name)
 
-// const { errorMessage: firstNameError,
-//         value: firstName,
-// } = useField("firstName", "required", {
-//         initialValue: "",
-// })
+        singleUser.value = { ...data?.users_by_pk }
 
-// const { errorMessage: lastNameError,
-//         value: lastName,
-// } = useField("lastName", "required", {
-//         initialValue: "",
-// })
+        // console.log(singleUser.value)
+        // console.log(singleUser.value.email)
+})
 
-// const {
-//         errorMessage: emailError,
-//         value: email,
-// } = useField("email", "email|required", {
-//         initialValue: "",
-// });
+onError((error) => {
+        console.log("error", error.message)
+        console.log("error", error)
+})
 
-// const { errorMessage: phoneNumberError,
-//         value: phoneNumber,
-// } = useField("phoneNumber", "ethio_phone|required", {
-//         initialValue: "",
-// })
+const { mutate: userMutate, loading: userLoading, onError: userError, onDone: userDone } = anonymousMutation(updateUser, {
+        clientId: "auth"
+})
 
-// // const {
-// //         mutate: userUpdate,
-// //         onDone: userUpdateDone,
-// //         onError: userUpdateError,
+userDone((response) => {
+        toast.success("You have updated your profile", {
+                transition: toast.TRANSITIONS.FLIP,
+                position: toast.POSITION.TOP_RIGHT,
 
-// // } = anonymousMutation(updateUser, {
-// clientId: "auth"
-// })
+        });
+})
 
-
-
-// userUpdateDone((response) => {
-//         toast.success("Recipe successfully added", {
-//                 transition: toast.TRANSITIONS.FLIP,
-//                 position: toast.POSITION.TOP_RIGHT,
-
-//         });
-
-//         // navigateTo(`/recipe/${response?.data?.insert_recipes?.returning[0].id}`);
-// });
-
-// userUpdateError((error) => {
-//         toast.error("Something went wrong");
-//         console.log(error.message);;
-// });
-
-
-
-// const onSubmit = handleSubmit(() => {
-//         console.log("submitted");
-//         console.log(firstName, lastName, email, phoneNumber)
-//         let input = {
-//                 // gender is remaining
-//                 first_name: firstName,
-//                 last_name: lastName,
-//                 email: email,
-//                 phone_number: phoneNumber
-//         }
-
-//         userUpdate({ id: 1, input: input })
-
-// })
-
-
-
-/*
-
-const onSubmit = handleSubmit((values, { setFieldError }) => {
-        const input = {
-                first_name: values.firstName || store.user?.first_name,
-                last_name: values.lastName || store.user?.last_name,
-                email: values.email || store.user?.email,
-                bio: values.bio || store.user?.bio,
-        };
-        mutate({ input, id: store.id });
+userError((error) => {
+        toast.error("Something went wrong while updating profile");
+        console.log(error.message);;
 });
 
+const onSubmit = handleSubmit(() => {
+        let userObject = {
+                first_name: singleUser.value.first_name,
+                last_name: singleUser.value.last_name,
+                email: singleUser.value.email,
+                phone_number: singleUser.value.phone_number
+        }
+        userMutate({
+                userObject: userObject,
+                id: store.user.id
+        })
+})
 
 
 
 
-
-
-*/
 
 
 const user = reactive({
@@ -178,48 +145,24 @@ definePageMeta({
                                         </div>
 
                                         <!-- Profile Information -->
-                                        <div class="flex mt-10">
-                                                <!-- First Name -->
-                                                <div class="mb-4 mr-4">
-                                                        <label for="firstName"
-                                                                class="block text-sm font-medium text-gray-700 mb-2">First
-                                                                Name</label>
-                                                        <span class="error-style">{{ firstNameError }}</span>
-                                                        <input type="text" id="firstName" v-model="firstName"
-                                                                class="mt-1 p-2 block w-72 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500">
-                                                </div>
+                                        <div class="flex mt-10 space-x-8">
 
-                                                <!-- Last Name -->
-                                                <div class="mb-4">
-                                                        <label for="lastName"
-                                                                class="block text-sm font-medium text-gray-700 mb-2">Last
-                                                                Name</label>
-                                                        <span class="error-style">{{ lastNameError }}</span>
-                                                        <input type="text" id="lastName" v-model="lastName"
-                                                                class="mt-1 p-2 block w-72 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500">
-                                                </div>
+                                                <BaseTextInput v-model="singleUser.first_name" label="First Name"
+                                                        name="first_name" rules="required" />
+
+                                                <BaseTextInput v-model="singleUser.last_name" label="Last Name"
+                                                        name="last_name" rules="required" />
                                         </div>
 
                                         <!-- Email and Phone Number -->
-                                        <div class="flex mb-4">
-                                                <!-- Email -->
-                                                <div class="mr-4">
-                                                        <label for="email"
-                                                                class="block text-sm font-medium text-gray-700 mb-2">Email</label>
-                                                        <span class="error-style">{{ emailError }}</span>
-                                                        <input type="email" id="email" v-model="email"
-                                                                class="mt-1 p-2 block w-72 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500">
-                                                </div>
+                                        <div class="flex mb-4 space-x-8">
+
+                                                <BaseTextInput v-model="singleUser.email" label="Email" name="email"
+                                                        rules="required" type="email" />
 
                                                 <!-- Phone Number -->
-                                                <div>
-                                                        <label for="phoneNumber"
-                                                                class="block text-sm font-medium text-gray-700 mb-2">Phone
-                                                                Number</label>
-                                                        <span class="error-style">{{ phoneNumberError }}</span>
-                                                        <input type="tel" id="phoneNumber" v-model="phoneNumber"
-                                                                class="mt-1 p-2 block w-72 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500">
-                                                </div>
+                                                <BaseTextInput v-model="singleUser.phone_number" label="Phone Number"
+                                                        name="phone_number" rules="required" type="Number" />
                                         </div>
 
                                         <!-- Gender -->
@@ -237,7 +180,7 @@ definePageMeta({
                         </div>
 
                         <!-- Save Button -->
-                        <button @click="onSubmit" type="submit"
+                        <button @click.prevent="onSubmit" type="submit"
                                 class="bg-indigo-500 text-white py-2 px-4 rounded-md hover:bg-indigo-600">Save
                                 Changes</button>
                 </div>
