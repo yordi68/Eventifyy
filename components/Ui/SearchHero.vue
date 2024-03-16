@@ -1,13 +1,14 @@
 <template>
-        <div class="h-96 bg-[#2D2C3C] flex flex-col items-center justify-center space-y-10">
-                <h2 class="text-white font-bold text-center text-2xl md:text-5xl">
-                        Explore a world of events. Find what excites you!
+        <div class="h-96 pt-20 bg-[#2D2C3C] flex flex-col items-center justify-center space-y-10">
+                <h2 class="text-white font-bold text-center text-2xl md:text-5xl flex flex-col items-center gap-4">
+                        <span>Explore a world of events.</span>
+                        <span> Find what excites you!</span>
                 </h2>
 
                 <div class="relative">
                         <!-- Search icon -->
                         <span class="absolute left-3 top-3 text-gray-400">
-                                <i class="iconify" data-icon="bi:search" style="font-size: 1.5rem;"></i>
+                                <icon class="iconify" name="bi:search" style="font-size: 1.2rem;"></icon>
                         </span>
 
                         <!-- Input field -->
@@ -18,7 +19,7 @@
                         <!-- Clear button -->
                         <span v-if="searchQuery" class="absolute right-3 top-3 text-gray-400 cursor-pointer"
                                 @click="clearInput">
-                                <i class="iconify" data-icon="bi:x-circle-fill" style="font-size: 1.5rem;"></i>
+                                <icon class="iconify" name="bi:x-circle-fill" style="font-size: 1.2rem;"></icon>
                         </span>
                 </div>
         </div>
@@ -28,14 +29,18 @@
 <script setup>
 import { ref } from 'vue';
 
-const searchQuery = ref('');
+
+
+const searchQuery = ref(useRoute().query.search || '');
 
 function handleInput(event) {
         searchQuery.value = event.target.value;
+        useRouter().push({ query: { search: searchQuery.value } })
         // Perform other input-related operations here if needed
 }
 
 function clearInput() {
         searchQuery.value = '';
+        useRouter().push({ query: {} })
 }
 </script>

@@ -3,6 +3,7 @@ import { useField, useForm } from "vee-validate"
 const { handleSubmit } = useForm();
 import { toast } from "vue3-toastify";
 import getUser from "~/graphql/query/users/item.gql";
+import InfoUser from "~/graphql/query/users/info_aggregate.gql";
 import { useAuthStore } from "~/stores/auth";
 import updateUser from "~/graphql/mutations/user/edit.gql";
 
@@ -29,6 +30,15 @@ onError((error) => {
         console.log("error", error)
 })
 
+const aggregateFilter = computed(() => store.user.id)
+
+const { onResult: onAggregateResult } = queryList(InfoUser, { filter: aggregateFilter, clientId: ref('auth') })
+
+onAggregateResult(({ data }) => {
+        followers.value = data.followers?.aggregate?.count
+        following.value = data.followings?.aggregate?.count
+})
+
 const { mutate: userMutate, loading: userLoading, onError: userError, onDone: userDone } = anonymousMutation(updateUser, {
         clientId: "auth"
 })
@@ -39,12 +49,15 @@ userDone((response) => {
                 position: toast.POSITION.TOP_RIGHT,
 
         });
+        store.setUser(store.user.id);
 })
 
 userError((error) => {
         toast.error("Something went wrong while updating profile");
         console.log(error.message);;
 });
+
+
 
 const onSubmit = handleSubmit(() => {
         let userObject = {
@@ -53,10 +66,23 @@ const onSubmit = handleSubmit(() => {
                 email: singleUser.value.email,
                 phone_number: singleUser.value.phone_number
         }
+        // this commented code is causing me problems of order...before the user is updated, the users data is fetched from the
+        // userMutate({
+        //         userObject: userObject,
+        //         id: store.user.id
+        // })
+        // store.setUser(store.user.id);
+
+
         userMutate({
                 userObject: userObject,
                 id: store.user.id
-        })
+        });
+
+
+
+
+
 })
 
 
@@ -65,16 +91,12 @@ const onSubmit = handleSubmit(() => {
 
 
 const user = reactive({
-        firstName: 'John',
-        lastName: 'Doe',
-        email: 'johndoe@example.com',
         gender: 'male',
-        phoneNumber: '+1234567890',
         profilePicture: '' // Add profile picture URL here
 });
 
-const followers = ref(1000); // Sample followers count
-const following = ref(500); // Sample following count
+const followers = ref(0); // Sample followers count
+const following = ref(0); // Sample following count
 const likes = ref(2000); // Sample likes count
 
 function handleProfilePictureChange(event) {

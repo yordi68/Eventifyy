@@ -2,10 +2,13 @@
 import addFollows from "~/graphql/mutations/follows/item.gql";
 import { useAuthStore } from "~/stores/auth";
 import { toast } from "vue3-toastify";
+import { Menu, MenuButton, MenuItems, MenuItem } from '@headlessui/vue'
 
 let isOwner = false;
 const isFollowed = true;
 const store = useAuthStore();
+
+const emit = defineEmits("refetch")
 
 
 const props = defineProps({
@@ -37,6 +40,7 @@ followDone(() => {
                 transition: toast.TRANSITIONS.FLIP,
                 position: toast.POSITION.TOP_RIGHT,
         });
+        emit("refetch")
 })
 
 followError((error) => {
@@ -78,36 +82,94 @@ const formattedDateTime = computed(() => {
 
 </script>
 
-
-
-
-
-
-
-
-
-
-
 <template>
         <div
-                class="w-full h-96 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 hover:cursor-pointer">
+                class="w-full aspect-square h-full bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 hover:cursor-pointer">
                 <div @click="$router.push(`/events/${event.id}`)">
+                        <div class="relative">
+                                <div class="absolute top-1.5 right-1.5 z-30 ">
 
-                        <img class=" w-full h-1/2 rounded-t-lg object-fit" :src="event.thumbnail" alt="" />
+                                        <Menu>
+                                                <MenuButton @click="$event.stopPropagation()">
+                                                        <button
+                                                                class="w-6 h-6 flex items-center justify-center p-1.5 box-content rounded-full bg-white text-black">
+                                                                <Icon name="tabler:dots" class="rotate-90 text-xl" />
+                                                        </button>
+                                                </MenuButton>
+                                                <MenuItems
+                                                        class="absolute mt-1 overflow-hidden bg-white  rounded-md right-0">
+                                                        <MenuItem v-slot="{ active }">
+                                                        <button @click="$event.stopPropagation(); handleFollow()"
+                                                                class="text-sm hover:bg-sky-600 py-1.5 hover:text-white w-full px-3 cursor-pointer flex items-center gap-x-1.5">
+                                                                <icon name="lucide:plus" class="w-4 h-4" /> Follow
+                                                        </button>
+                                                        </MenuItem>
+                                                        <MenuItem v-slot="{ active }" :disabled="!isOwner">
+                                                        <button :disabled="!isOwner"
+                                                                :title="!isOwner ? 'Not the owner' : ''"
+                                                                :class="[!isOwner && '!cursor-not-allowed']"
+                                                                @click="$event.stopPropagation(); $router.push(`/user/event/edit/${event.id}`)"
+                                                                class="text-sm hover:bg-sky-600 py-1.5 hover:text-white w-full cursor-pointer flex items-center px-3 gap-x-1.5">
+                                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none"
+                                                                        viewBox="0 0 24 24" stroke-width="1.5"
+                                                                        stroke="currentColor" class="w-4 h-4">
+                                                                        <path stroke-linecap="round"
+                                                                                stroke-linejoin="round"
+                                                                                d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
+                                                                </svg> Edit
+                                                        </button>
+                                                        </MenuItem>
+                                                        <MenuItem v-slot="{ active }" :disabled="!isOwner">
+                                                        <button :disabled="!isOwner"
+                                                                :title="!isOwner ? 'Not the owner' : ''"
+                                                                :class="[!isOwner && '!cursor-not-allowed']"
+                                                                class="text-sm hover:bg-sky-600 py-1.5 hover:text-white w-full px-3 cursor-pointer flex items-center gap-x-1.5">
+                                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none"
+                                                                        viewBox="0 0 24 24" stroke-width="1.5"
+                                                                        stroke="currentColor" class="w-4 h-4">
+                                                                        <path stroke-linecap="round"
+                                                                                stroke-linejoin="round"
+                                                                                d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
+                                                                </svg> Delete
+                                                        </button>
+                                                        </MenuItem>
+
+                                                </MenuItems>
+                                        </Menu>
+                                </div>
+
+                                <img class="w-full aspect-square max-h-48 rounded-t-lg object-cover"
+                                        :src="event.thumbnail" alt="" />
+                        </div>
                         <div class="p-5 flex flex-col space-y-2">
+                                <div class="flex items-center justify-between whitespace-nowrap ">
+                                        <h5 class="text-wrap text-bold  text-md md:text-xl capitalize">
+                                                {{ event.title }}
+                                        </h5>
+                                        <p class="w-max bg-[#FFE047] px-3 py-1 rounded-md text-neutral-800">
+                                                {{ event.followers_count?.aggregate?.count }} Followers
+                                        </p>
+                                </div>
 
-                                <h5 class="text-wrap text-bold  text-md md:text-xl">
-                                        {{ event.title }}
-                                </h5>
-
-                                <div class="flex space-x-3 text-sm  md:text-md">
+                                <div class="flex items-center space-x-3 text-sm  md:text-md">
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                                stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                                                <path stroke-linecap="round" stroke-linejoin="round"
+                                                        d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5m-9-6h.008v.008H12v-.008ZM12 15h.008v.008H12V15Zm0 2.25h.008v.008H12v-.008ZM9.75 15h.008v.008H9.75V15Zm0 2.25h.008v.008H9.75v-.008ZM7.5 15h.008v.008H7.5V15Zm0 2.25h.008v.008H7.5v-.008Zm6.75-4.5h.008v.008h-.008v-.008Zm0 2.25h.008v.008h-.008V15Zm0 2.25h.008v.008h-.008v-.008Zm2.25-4.5h.008v.008H16.5v-.008Zm0 2.25h.008v.008H16.5V15Z" />
+                                        </svg>
                                         <p>{{ formattedDateTime.formattedDate }}</p>
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                                stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+                                                <path stroke-linecap="round" stroke-linejoin="round"
+                                                        d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                                        </svg>
+
                                         <p>{{ formattedDateTime.formattedTime }}</p>
                                         <div class="h-full bg-black w-px"></div>
                                         <p>{{ event.place }}</p>
                                 </div>
                                 <p>{{ event.date }}</p>
-                                <span class="flex flex-col items-start  space-x-4 ">
+                                <span class="flex flex-col items-start  gap-3 ">
                                         <div class="flex">
                                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
                                                         fill="#008000" class="w-6 h-6">
@@ -120,29 +182,19 @@ const formattedDateTime = computed(() => {
 
                                                 {{ event.price }}
                                         </div>
-                                        {{ event.user.first_name }}
-                                        {{ event.user.last_name }}
-
+                                        <p class="line-clamp-2 font-light text-neutral-800 text-sm">
+                                                {{ event.description }}
+                                        </p>
+                                        <div class="flex items-center gap-x-2 capitalize">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em"
+                                                        viewBox="0 0 24 24">
+                                                        <circle cx="12" cy="6" r="4" fill="currentColor" />
+                                                        <path fill="currentColor"
+                                                                d="M20 17.5c0 2.485 0 4.5-8 4.5s-8-2.015-8-4.5S7.582 13 12 13s8 2.015 8 4.5" />
+                                                </svg>
+                                                {{ event.user.first_name }} {{ event.user.last_name }}
+                                        </div>
                                 </span>
-
-
-                                <div class="flex items-start justify-start space-x-8" v-if="isOwner">
-                                        <div @click="$router.push(`/user/event/edit/${event.id}`)"
-                                                class="text-xl cursor-pointer">
-                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                                        stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-                                                        <path stroke-linecap="round" stroke-linejoin="round"
-                                                                d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
-                                                </svg>
-                                        </div>
-                                        <div>
-                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                                        stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-                                                        <path stroke-linecap="round" stroke-linejoin="round"
-                                                                d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
-                                                </svg>
-                                        </div>
-                                </div>
 
                         </div>
                 </div>

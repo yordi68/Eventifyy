@@ -6,6 +6,16 @@ query getEvents($filter:events_bool_exp, $sort: [events_order_by!], $offset:Int,
     time
     price
     location_id
+    follows{
+      user{
+        id
+      }
+    }
+    followers_count: follows_aggregate{
+      aggregate{
+        count
+      }
+    }
     user{
       id
       first_name

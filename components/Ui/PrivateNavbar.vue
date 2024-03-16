@@ -19,7 +19,7 @@ const navigation = [
 
 
 <template>
-        <div class="sticky top-0 z-10">
+        <div class="fixed w-full left-0 top-0 z-50">
                 <Disclosure as="nav" class="bg-[#2D2C3C]" v-slot="{ open }">
                         <div class="mx-auto w-full  md:h-20 px-4 sm:px-6 lg:px-32">
                                 <div class="flex h-full  items-center justify-evenly ">

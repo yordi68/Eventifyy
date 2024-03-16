@@ -1,0 +1,15 @@
+query InfoUser($filter: uuid!){
+  followings: follows_aggregate(where: {user_id:{
+    _eq: $filter
+  }}){
+    aggregate{
+      count
+    }
+  }
+  
+  followers: follows_aggregate(where: {event: {user: {id: {_eq: $filter}}}}){
+    aggregate{
+      count
+    }
+  }
+}

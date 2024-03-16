@@ -28,7 +28,8 @@ const filter = computed(() => {
 
 const { onResult, onError, refetch } = queryList(
         getEvents, {
-        filter: filter
+        filter: filter,
+        clientId: ref('auth')
 }
 );
 
