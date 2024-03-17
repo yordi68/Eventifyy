@@ -209,57 +209,116 @@ bookmarkError((error) => {
             </div>
         </Dialog>
     </TransitionRoot>
-    <div class="px-8 mt-32" v-if="event">
-        <div class="grid grid-cols-2 gap-x-6">
-            <div class="w-full  ">
+    <div class="px-8 space-y-12 mt-28 mb-6" v-if="event">
+        <div class="grid grid-cols-2 gap-x-16 ">
+            <div class="w-full ">
                 <img :src="event.thumbnail" alt="random image"
-                    class="w-full rounded-lg shadow-lg max-h-[500px] object-cover " />
+                    class="w-full rounded-lg shadow-lg max-h-[420px] object-cover " />
+                <div class="grid grid-cols-3  gap-x-4">
+                    <div class="py-4" v-for="media in event.event_medias">
+
+                        <img :src="media.media.url" class=" rounded-2xl overflow-hidden object-cover h-full">
+                    </div>
+                </div>
             </div>
-            <div>
-                <h3 class="font-bold text-4xl">{{ event.title }}</h3>
-                <div>
-                    <div>
-                        <button @click="$event.stopPropagation(); handleFollow()"
-                            class="text-sm hover:bg-[#FFE047] py-1.5 hover:text-white w-full px-3 cursor-pointer flex items-center gap-x-1.5">
-                            <icon name="lucide:plus" class="w-4 h-4" /> Follow
+            <div class="flex flex-col gap-y-6">
+                <div class="flex justify-between">
+                    <h3 class="font-bold text-4xl">{{ event.title }}</h3>
+                    <div class="flex gap-x-2">
+                        <button @click.stop="handleBookmark()">
+                            <Icon name="iconoir:bookmark" class="text-2xl" />
                         </button>
-                        <p class="w-max bg-[#FFE047] px-3 py-1 rounded-md text-neutral-800">
-                            {{ event.followers_count?.aggregate?.count }} Followers
-                        </p>
-                    </div>
-                    <div>
-                        <button @click="$event.stopPropagation(); handleBookmark()"
-                            class="text-sm hover:bg-[#FFE047] py-1.5 hover:text-white w-full px-3 cursor-pointer flex items-center gap-x-1.5">
-                            <Icon name="typcn:star-outline" size="16" /> Bookmark
+                        <button @click.stop=" handleFollow()">
+                            <icon name="ph:heart" class="text-2xl text-black " />
                         </button>
-                        <p class="w-max bg-[#FFE047] px-3 py-1 rounded-md text-neutral-800">
-                            {{ event.bookmarks_count?.aggregate?.count }} Bookmarks
+                        <p class="w-max bg-[#FFE047] flex items-center justify-center text-white px-3  rounded-md ">
+                            {{ event.followers_count?.aggregate?.count }} followers
                         </p>
-                    </div>
-                </div>
-                <div class="space-y-4">
-                    <h3 class="text-xl font-semibold">Date and Time</h3>
-                    <div class="flex space-x-2">
-
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                            stroke="currentColor" class="w-6 h-6">
-                            <path stroke-linecap="round" stroke-linejoin="round"
-                                d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5m-9-6h.008v.008H12v-.008ZM12 15h.008v.008H12V15Zm0 2.25h.008v.008H12v-.008ZM9.75 15h.008v.008H9.75V15Zm0 2.25h.008v.008H9.75v-.008ZM7.5 15h.008v.008H7.5V15Zm0 2.25h.008v.008H7.5v-.008Zm6.75-4.5h.008v.008h-.008v-.008Zm0 2.25h.008v.008h-.008V15Zm0 2.25h.008v.008h-.008v-.008Zm2.25-4.5h.008v.008H16.5v-.008Zm0 2.25h.008v.008H16.5V15Z" />
-                        </svg>
-                        <p>{{ new Date(event.time).toDateString() }}</p>
-                    </div>
-                    <div class="flex space-x-2">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                            stroke="currentColor" class="w-6 h-6">
-                            <path stroke-linecap="round" stroke-linejoin="round"
-                                d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-                        </svg>
-                        <p>{{ new Date(event.time).toLocaleTimeString() }}</p>
-
                     </div>
 
                 </div>
-                <div class="space-y-6">
+                <div class="flex gap-x-12">
+                    <div class="space-y-1">
+                        <h3 class="text-xl font-semibold">Date and Time</h3>
+                        <div class="flex  gap-x-6">
+                            <div class="flex space-x-2">
+
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                    stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                        d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5m-9-6h.008v.008H12v-.008ZM12 15h.008v.008H12V15Zm0 2.25h.008v.008H12v-.008ZM9.75 15h.008v.008H9.75V15Zm0 2.25h.008v.008H9.75v-.008ZM7.5 15h.008v.008H7.5V15Zm0 2.25h.008v.008H7.5v-.008Zm6.75-4.5h.008v.008h-.008v-.008Zm0 2.25h.008v.008h-.008V15Zm0 2.25h.008v.008h-.008v-.008Zm2.25-4.5h.008v.008H16.5v-.008Zm0 2.25h.008v.008H16.5V15Z" />
+                                </svg>
+                                <p>{{ new Date(event.time).toDateString() }}</p>
+                            </div>
+                            <div class="flex space-x-2">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                    stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                        d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                                </svg>
+                                <p>{{ new Date(event.time).toLocaleTimeString() }}</p>
+
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="space-y-1">
+                        <h3 class="text-xl font-semibold">Ticket Information</h3>
+                        <div class="flex space-x-2">
+
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                                stroke="currentColor" class="w-6 h-6">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M16.5 6v.75m0 3v.75m0 3v.75m0 3V18m-9-5.25h5.25M7.5 15h3M3.375 5.25c-.621 0-1.125.504-1.125 1.125v3.026a2.999 2.999 0 0 1 0 5.198v3.026c0 .621.504 1.125 1.125 1.125h17.25c.621 0 1.125-.504 1.125-1.125v-3.026a2.999 2.999 0 0 1 0-5.198V6.375c0-.621-.504-1.125-1.125-1.125H3.375Z" />
+                            </svg>
+                            <p>
+                                Standard Ticket: {{ event.price }} each
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="w-full space-y-1 ">
+                    <h3 class="text-xl font-semibold">Event Description</h3>
+                    <p>
+                        In this version, both start and end dates are returned as Date objects. The end of the month and
+                        the end of the year are adjusted to the last millisecond of the respective periods, hence the
+                        addition of 23, 59, 59, 999 to the end of month and end of year calculations. This ensures that
+                        the end timestamp effectively marks the end of the respective time period.
+                        addition of 23, 59, 59, 999 to the end of month and end of year calculations. This ensures that
+                        the end timestamp effectively marks the end of the respective time period. addition of 23, 59,
+
+                    </p>
+                </div>
+                <div class="space-y-1">
+                    <h3 class="text-xl font-semibold">Tags</h3>
+                    <div class="flex items-center gap-x-4 justify-start flex-wrap">
+                        <UiTag v-for="tag in event.tags" :key="tag.id" :tagName="tag.tag.name" />
+
+                    </div>
+
+                </div>
+                <div class="flex items-center justify-between">
+                    <div class="space-y-2">
+                        <h3 class="text-xl font-semibold">Hosted by</h3>
+                        <div v-if="event.user">
+                            <div class="flex gap-x-4 items-center justify-evenly">
+                                <div>
+                                    <img class="w-16 object-cover h-16 mb-3 rounded-full shadow-lg"
+                                        :src="event.user.photo_url" alt="Bonnie image" />
+                                </div>
+                                <div>
+
+                                    <h5 class="mb-1 text-xl font-medium text-gray-900 dark:text-white">
+                                        {{ event.user.first_name }} {{ event.user.last_name }}
+                                    </h5>
+                                    <!-- <span class="text-sm text-gray-500 dark:text-gray-400">Visual
+                                Designer</span> -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     <button class="flex bg-[#FFE047] rounded-md items-center py-4 px-6 space-x-4 ">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                             stroke="currentColor" class="w-6 h-6">
@@ -270,74 +329,23 @@ bookmarkError((error) => {
                             Buy Tickets
                         </p>
                     </button>
-                    <div class="space-y-4">
-                        <h3 class="font-bold text-lg">Ticket Information</h3>
-                        <div class="flex space-x-2">
-
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                                stroke="currentColor" class="w-6 h-6">
-                                <path stroke-linecap="round" stroke-linejoin="round"
-                                    d="M16.5 6v.75m0 3v.75m0 3v.75m0 3V18m-9-5.25h5.25M7.5 15h3M3.375 5.25c-.621 0-1.125.504-1.125 1.125v3.026a2.999 2.999 0 0 1 0 5.198v3.026c0 .621.504 1.125 1.125 1.125h17.25c.621 0 1.125-.504 1.125-1.125v-3.026a2.999 2.999 0 0 1 0-5.198V6.375c0-.621-.504-1.125-1.125-1.125H3.375Z" />
-                            </svg>
-                            <p class="text-sm">
-                                Standard Ticket: {{ event.price }} each
-                            </p>
-                        </div>
-                    </div>
-                </div>
-                <div class=" ">
-                    <div class="flex items-center justify-start space-x-2">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                            stroke="currentColor" class="w-4 h-4">
-                            <path stroke-linecap="round" stroke-linejoin="round"
-                                d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
-                            <path stroke-linecap="round" stroke-linejoin="round"
-                                d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0Z" />
-                        </svg>
-
-                        <p v-if="event.location" class="text-wrap">
-                            {{ event.location.area.name }}, {{ event.location.city.name }}
-                        </p>
-
-                    </div>
-
-                </div>
-
-                <div class=" my-8  ">
-                    <h3 class="text-3xl font-bold my-4 pr-32">Hosted by</h3>
-                    <div class="w-2/3" v-if="event.user">
-                        <div class="flex items-center justify-evenly">
-                            <div>
-                                <img class="w-24 h-24 mb-3 rounded-full shadow-lg" :src="event.user.photo_url"
-                                    alt="Bonnie image" />
-                            </div>
-                            <div>
-
-                                <h5 class="mb-1 text-xl font-medium text-gray-900 dark:text-white">
-                                    {{ event.user.first_name }} {{ event.user.last_name }}
-                                </h5>
-                                <!-- <span class="text-sm text-gray-500 dark:text-gray-400">Visual
-                                Designer</span> -->
-                            </div>
-                        </div>
-                    </div>
                 </div>
             </div>
 
 
         </div>
 
-        <div>
-            <h3 class="text-3xl font-bold">Location</h3>
+        <div class="space-y-4">
 
+            <h3 class="text-3xl font-bold">Location </h3>
+
+            <p v-if="event.location" class="text-wrap flex items-center gap-x-1">
+                <Icon name="ic:outline-location-on" class="text-2xl" />
+                <span> {{ event.location.city.name }}, {{ event.location.area.name }}
+                </span>
+            </p>
             <EventsLocation :event-location="event.location"></EventsLocation>
         </div>
-        <div class="w-full my-8">
-            <h3 class="text-3xl font-bold my-4">Event Description</h3>
-            <p>
-                {{ event.description }}
-            </p>
-        </div>
 
 
 
@@ -346,13 +354,8 @@ bookmarkError((error) => {
 
 
 
-        <div class="w-1/2 my-8 ">
-            <h3 class="text-3xl font-bold my-4">Tags</h3>
-            <div class="flex items-center justify-start flex-wrap">
-                <UiTag v-for="tag in event.tags" :key="tag.id" :tagName="tag.tag.name" />
-            </div>
 
-        </div>
+
     </div>
 
 </template>

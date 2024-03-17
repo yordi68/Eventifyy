@@ -7,6 +7,12 @@ query getEvent($id:uuid!) {
     price
     location_id
     category_id
+    
+    event_medias{
+      media{
+        url
+      }
+    }
   
     user {
       first_name

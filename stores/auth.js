@@ -42,7 +42,10 @@ export const useAuthStore = defineStore("auth", {
       this.user = null;
       this.id = null;
       this.role = null;
+
       onLogout("auth");
+      const authToken = useCookie("event_management_custom_token");
+      authToken.value = null;
     },
     // autoLogin(){
     //   let decoded = {};
