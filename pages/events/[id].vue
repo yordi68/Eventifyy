@@ -3,7 +3,6 @@ import getEvent from "~/graphql/query/events/item.gql";
 import addFollows from "~/graphql/mutations/follows/item.gql";
 import addBookmarks from "~/graphql/mutations/bookmarks/item.gql";
 import insertTicketMutation from "~/graphql/mutations/tickets/InsertOne.gql"
-
 import { useAuthStore } from "~/stores/auth";
 import { toast } from "vue3-toastify";
 import {
@@ -40,7 +39,7 @@ onResult((result) => {
         const eventLocation = event.value.location
     }
 
-    console.log(result.data)
+    // console.log("this is fetching in events page", result.data)
 })
 onError((error) => {
     console.log(error, "error");

@@ -1,8 +1,8 @@
 <script setup>
-import tags from '~/components/selectors/tags.vue';
 import getEvents from '~/graphql/query/events/list.gql';
 
-const events = ref([]);
+const popularEvents = ref([]);
+const latestEvents = ref([]);
 const tagList = [
         {
                 name: 'All'
@@ -30,14 +30,45 @@ const filter = computed(() => {
 
 });
 
-const { onResult, onError, refetch } = queryList(getEvents, {
-        filter: filter
+/*--------------------- Fetching Popular Events ----------------------- */
+const { onResult: popularEventResult, onError: popularEventError, refetch: popularEventRefetch } = queryList(getEvents, {
+        filter: filter,
+        order: ref({ "created_at": "desc" }),
+        offset: 0,
+        limit: ref(6)
 });
 
-onResult((result) => {
-        events.value = result.data.events;
-        console.log(events.value[0])
+popularEventResult((result) => {
+        popularEvents.value = result.data.events;
+        // console.log(popularEvents.value[0])
 })
+
+popularEventError((error) => {
+        console.log("Error while fetching events in home page", error)
+})
+
+/*--------------------- Fetching Latest Events ----------------------- */
+const { onResult: latestEventResult, onError: latestEventError, refetch: latestEventRefetch } = queryList(getEvents, {
+        filter: filter,
+        order: ref({
+                "follows_aggregate": {
+                        "count": "desc"
+                }
+        }),
+        offset: 0,
+        limit: ref(6)
+});
+
+latestEventResult((result) => {
+        latestEvents.value = result.data.events;
+        console.log(latestEvents.value)
+        console.log(latestEvents.value[0])
+})
+
+latestEventError((error) => {
+        console.log("Error while fetching events in home page", error)
+})
+
 
 
 definePageMeta({
@@ -55,31 +86,19 @@ definePageMeta({
         <div>
                 <UiHero />
                 <div class="px-8 md:px-24">
-
                         <h3 class="text-3xl font-bold my-4 pr-32">Popular Events</h3>
-                        <!-- <div class="w-full md:w-1/2 my-8 ">
-                                <div class="flex  items-center justify-start flex-wrap ">
-
-                                        <UiTag v-for="tag in tagList" :tag-name="tag.name" />
-
-                                </div>
-                        </div> -->
-
-
                         <div class="grid grid-cols-1 gap-y-8 md:grid-cols-3  md:gap-x-4 ">
-                                <UiVerticalCard v-for="event in events" :key="event.price" :event="event"
-                                        @refetch="refetch" />
+                                <UiVerticalCard v-for="popularEvent in popularEvents" :key="popularEvent.price"
+                                        :event="popularEvent" @refetch="popularEventRefetch" />
                         </div>
                 </div>
 
                 <div class="px-8 md:px-24 md:py-16">
-
                         <h3 class="text-3xl  font-bold my-4 pr-32">Latest Events</h3>
-
                         <hr class="my-6 border-gray-200 w-3/4 ">
-
                         <div class="grid grid-cols-1 gap-y-8 md:grid-cols-3  md:gap-x-4 ">
-                                <UiVerticalCard v-for="event in events" :key="event.price" :event="event" />
+                                <UiVerticalCard v-for="latestEvent in latestEvents" :key="latestEvent.price"
+                                        :event="latestEvent" @refetch="latestEventRefetch" />
                         </div>
                 </div>
 

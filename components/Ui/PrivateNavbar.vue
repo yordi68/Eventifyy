@@ -6,8 +6,8 @@ const { user } = useAuthStore();
 const navigation = [
         { name: 'Home', to: '/', current: true },
         { name: 'Events', to: '/events', current: false },
-        { name: 'About', to: '#', current: false },
-        { name: 'Contact', to: '#', current: false },
+        // { name: 'About', to: '#', current: false },
+        // { name: 'Contact', to: '#', current: false },
 ]
 
 </script>

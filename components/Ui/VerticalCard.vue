@@ -86,7 +86,7 @@ followError((error) => {
         })
 })
 
-if (store.user.id === props.event.user.id) {
+if (store.user && store.user.id && props.event && store.user.id === props.event.user.id) {
         isOwner = true;
 
 }
@@ -213,14 +213,14 @@ const formattedDateTime = computed(() => {
                                         <p class="line-clamp-2 font-light text-neutral-800 text-sm">
                                                 {{ event.description }}
                                         </p>
-                                        <div class="flex items-center gap-x-2 capitalize">
+                                        <div class="flex items-center gap-x-2 capitalize" v-if="event.user">
                                                 <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em"
                                                         viewBox="0 0 24 24">
                                                         <circle cx="12" cy="6" r="4" fill="currentColor" />
                                                         <path fill="currentColor"
                                                                 d="M20 17.5c0 2.485 0 4.5-8 4.5s-8-2.015-8-4.5S7.582 13 12 13s8 2.015 8 4.5" />
                                                 </svg>
-                                                {{ event.user.first_name }} {{ event.user.last_name }}
+                                                {{ event.user?.first_name }} {{ event.user?.last_name }}
                                         </div>
                                 </span>
 

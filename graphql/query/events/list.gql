@@ -1,5 +1,5 @@
-query getEvents($filter:events_bool_exp, $sort: [events_order_by!], $offset:Int, $limit:Int){
-  events(where:$filter, order_by:$sort, limit:$limit, offset:$offset){
+query getEvents($filter:events_bool_exp, $order: [events_order_by!], $offset:Int, $limit:Int){
+  events(where:$filter, order_by:$order, limit:$limit, offset:$offset){
     id
     thumbnail
     event_medias{
