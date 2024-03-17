@@ -3,12 +3,13 @@ import addFollows from "~/graphql/mutations/follows/item.gql";
 import { useAuthStore } from "~/stores/auth";
 import { toast } from "vue3-toastify";
 import { Menu, MenuButton, MenuItems, MenuItem } from '@headlessui/vue'
+import deleteEvent from '~/graphql/mutations/events/delete.gql';
 
 let isOwner = false;
 const isFollowed = true;
 const store = useAuthStore();
 
-const emit = defineEmits("refetch")
+const emit = defineEmits(["refetch", "delete"])
 
 
 const props = defineProps({
@@ -22,6 +23,33 @@ const props = defineProps({
         }
 })
 
+
+
+/*------------------------- Deleting an Event ---------------------- */
+
+const { mutate: deleteMutate, onDone: deleteDone, onError: deleteError } = anonymousMutation(deleteEvent, {
+        clientId: "auth"
+})
+
+const handleDelete = () => {
+        const id = props.event.id
+        deleteMutate({ id })
+}
+
+deleteDone(() => {
+        toast.success("You Deleted an event", {
+                transition: toast.TRANSITIONS.FLIP,
+                position: toast.POSITION.TOP_RIGHT,
+        });
+        emit("refetch")
+})
+
+deleteError(() => {
+        toast.error("Error while delete this event", {
+                transition: toast.TRANSITIONS.FLIP,
+                position: toast.POSITION.TOP_RIGHT,
+        });
+})
 
 const { mutate: followMutate, onDone: followDone, onError: followError, loading } = anonymousMutation(addFollows, {
         clientId: "auth"
@@ -123,6 +151,7 @@ const formattedDateTime = computed(() => {
                                                         <button :disabled="!isOwner"
                                                                 :title="!isOwner ? 'Not the owner' : ''"
                                                                 :class="[!isOwner && '!cursor-not-allowed']"
+                                                                @click="$event.stopPropagation(); handleDelete()"
                                                                 class="text-sm hover:bg-sky-600 py-1.5 hover:text-white w-full px-3 cursor-pointer flex items-center gap-x-1.5">
                                                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none"
                                                                         viewBox="0 0 24 24" stroke-width="1.5"

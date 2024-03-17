@@ -2,26 +2,46 @@
 import getEvent from "~/graphql/query/events/item.gql";
 import addFollows from "~/graphql/mutations/follows/item.gql";
 import addBookmarks from "~/graphql/mutations/bookmarks/item.gql";
+import insertTicketMutation from "~/graphql/mutations/tickets/InsertOne.gql"
 
 import { useAuthStore } from "~/stores/auth";
 import { toast } from "vue3-toastify";
-
+import {
+    TransitionRoot,
+    TransitionChild,
+    Dialog,
+    DialogPanel,
+    DialogTitle,
+} from '@headlessui/vue'
 
 const store = useAuthStore();
 const route = useRoute();
 const event = ref({});
 const isFollowed = true;
 
+const isOpen = ref(false)
+
+function closeModal() {
+    isOpen.value = false
+}
+function openModal() {
+    isOpen.value = true
+}
+console.log("object", route.params.id)
 
 const { onResult, onError, refetch } = singleQuery(getEvent, {
     id: route.params.id,
+    clientId: "auth"
 });
 
 onResult((result) => {
-    event.value = { ...result.data.events_by_pk };
-    console.log("Hi this is me", event.value);
-})
+    if (result.data.events_by_pk) {
+        event.value = result.data.events_by_pk;
+        const eventLocation = event.value.location
+    }
 
+    console.log(result.data)
+})
 onError((error) => {
     console.log(error, "error");
 })
@@ -32,6 +52,12 @@ const { mutate: followMutate, onDone: followDone, onError: followError, loading 
     clientId: "auth"
 });
 
+const { mutate: insertTicket, onDone: insertTicketDone, onError: insertTicketError, loading: insertTicketLoading } = anonymousMutation(insertTicketMutation, {
+    clientId: "auth"
+})
+
+
+
 const handleFollow = async () => {
     const input = {
         user_id: store.user.id,
@@ -39,6 +65,36 @@ const handleFollow = async () => {
     }
     followMutate({ input });
 }
+
+const handleInsetTicket = async () => {
+    const input = {
+        user_id: store.user.id,
+        event_id: event.value.id
+    }
+
+    insertTicket({ input })
+}
+
+
+insertTicketDone(() => {
+    openModal()
+})
+
+
+insertTicketError((error) => {
+    if (error.message.includes("duplicate")) {
+        toast.error("You already bought a ticket for this event", {
+            transition: toast.TRANSITIONS.FLIP,
+            position: toast.POSITION.TOP_RIGHT,
+        });
+        return;
+    }
+
+    toast.error("Something went wrong", {
+        transition: toast.TRANSITIONS.FLIP,
+        position: toast.POSITION.TOP_RIGH
+    })
+})
 
 followDone(() => {
     toast.success("You followed an event", {
@@ -104,40 +160,6 @@ bookmarkError((error) => {
 
 
 
-
-
-
-
-const eventLocation = ref(
-    {
-        "id": 12,
-        "location": {
-            "type": "Point",
-            "crs": {
-                "type": "name",
-                "properties": {
-                    "name": "urn:ogc:def:crs:EPSG::4326"
-                }
-            },
-            "coordinates": [
-                9.014253,
-                38.818221
-            ]
-        },
-        "area": {
-            "name": "Megenagna",
-            "__typename": "BasicsAreas"
-        },
-        "city": {
-            "name": "Addis Ababa",
-            "__typename": "BasicsCities"
-        },
-    },
-
-)
-
-console.log("this is event ", event.value)
-
 </script>
 
 
@@ -150,135 +172,166 @@ console.log("this is event ", event.value)
 
 
 <template>
-    <div class="px-32">
-        <div class="w-full  py-20 mt-5">
-            <img :src="event.thumbnail" alt="random image" class="w-full max-h-[500px] object-cover " />
-        </div>
-        <div class="flex justify-between my-6">
-            <h3 class="font-bold text-4xl">{{ event.title }}</h3>
-            <div class="flex gap-x-1.5">
-                <div flex gap-x-4>
-                    <button @click="$event.stopPropagation(); handleFollow()"
-                        class="text-sm hover:bg-[#FFE047] py-1.5 hover:text-white w-full px-3 cursor-pointer flex items-center gap-x-1.5">
-                        <icon name="lucide:plus" class="w-4 h-4" /> Follow
-                    </button>
-                    <p class="w-max bg-[#FFE047] px-3 py-1 rounded-md text-neutral-800">
-                        {{ event.followers_count?.aggregate?.count }} Followers
-                    </p>
+    <TransitionRoot appear :show="isOpen" as="template">
+        <Dialog as="div" @close="closeModal" class="relative z-10">
+            <TransitionChild as="template" enter="duration-300 ease-out" enter-from="opacity-0" enter-to="opacity-100"
+                leave="duration-200 ease-in" leave-from="opacity-100" leave-to="opacity-0">
+                <div class="fixed inset-0 bg-black/25" />
+            </TransitionChild>
+
+            <div class="fixed inset-0 overflow-y-auto">
+                <div class="flex min-h-full items-center justify-center p-4 text-center">
+                    <TransitionChild as="template" enter="duration-300 ease-out" enter-from="opacity-0 scale-95"
+                        enter-to="opacity-100 scale-100" leave="duration-200 ease-in" leave-from="opacity-100 scale-100"
+                        leave-to="opacity-0 scale-95">
+                        <DialogPanel
+                            class="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
+                            <DialogTitle as="h3" class="text-lg font-medium leading-6 text-gray-900">
+                                Payment successful
+                            </DialogTitle>
+                            <div class="mt-2">
+                                <p class="text-sm text-gray-500">
+                                    Your payment has been successfully submitted. We’ve sent you
+                                    an email with all of the details of your order.
+                                </p>
+                            </div>
+
+                            <div class="mt-4">
+                                <button type="button"
+                                    class="inline-flex justify-center rounded-md border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
+                                    @click="closeModal">
+                                    Got it, thanks!
+                                </button>
+                            </div>
+                        </DialogPanel>
+                    </TransitionChild>
                 </div>
+            </div>
+        </Dialog>
+    </TransitionRoot>
+    <div class="px-8 mt-32" v-if="event">
+        <div class="grid grid-cols-2 gap-x-6">
+            <div class="w-full  ">
+                <img :src="event.thumbnail" alt="random image"
+                    class="w-full rounded-lg shadow-lg max-h-[500px] object-cover " />
+            </div>
+            <div>
+                <h3 class="font-bold text-4xl">{{ event.title }}</h3>
                 <div>
-                    <button @click="$event.stopPropagation(); handleBookmark()"
-                        class="text-sm hover:bg-[#FFE047] py-1.5 hover:text-white w-full px-3 cursor-pointer flex items-center gap-x-1.5">
-                        <Icon name="typcn:star-outline" size="16" /> Bookmark
-                    </button>
-                    <p class="w-max bg-[#FFE047] px-3 py-1 rounded-md text-neutral-800">
-                        {{ event.bookmarks_count?.aggregate?.count }} Bookmarks
-                    </p>
+                    <div>
+                        <button @click="$event.stopPropagation(); handleFollow()"
+                            class="text-sm hover:bg-[#FFE047] py-1.5 hover:text-white w-full px-3 cursor-pointer flex items-center gap-x-1.5">
+                            <icon name="lucide:plus" class="w-4 h-4" /> Follow
+                        </button>
+                        <p class="w-max bg-[#FFE047] px-3 py-1 rounded-md text-neutral-800">
+                            {{ event.followers_count?.aggregate?.count }} Followers
+                        </p>
+                    </div>
+                    <div>
+                        <button @click="$event.stopPropagation(); handleBookmark()"
+                            class="text-sm hover:bg-[#FFE047] py-1.5 hover:text-white w-full px-3 cursor-pointer flex items-center gap-x-1.5">
+                            <Icon name="typcn:star-outline" size="16" /> Bookmark
+                        </button>
+                        <p class="w-max bg-[#FFE047] px-3 py-1 rounded-md text-neutral-800">
+                            {{ event.bookmarks_count?.aggregate?.count }} Bookmarks
+                        </p>
+                    </div>
                 </div>
-            </div>
-        </div>
-
-        <div class="flex justify-between">
-            <div class="space-y-4">
-                <h3 class="text-xl font-semibold">Date and Time</h3>
-                <div class="flex space-x-2">
-
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                        stroke="currentColor" class="w-6 h-6">
-                        <path stroke-linecap="round" stroke-linejoin="round"
-                            d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5m-9-6h.008v.008H12v-.008ZM12 15h.008v.008H12V15Zm0 2.25h.008v.008H12v-.008ZM9.75 15h.008v.008H9.75V15Zm0 2.25h.008v.008H9.75v-.008ZM7.5 15h.008v.008H7.5V15Zm0 2.25h.008v.008H7.5v-.008Zm6.75-4.5h.008v.008h-.008v-.008Zm0 2.25h.008v.008h-.008V15Zm0 2.25h.008v.008h-.008v-.008Zm2.25-4.5h.008v.008H16.5v-.008Zm0 2.25h.008v.008H16.5V15Z" />
-                    </svg>
-                    <p>{{ new Date(event.time).toDateString() }}</p>
-                </div>
-                <div class="flex space-x-2">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                        stroke="currentColor" class="w-6 h-6">
-                        <path stroke-linecap="round" stroke-linejoin="round"
-                            d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-                    </svg>
-                    <p>{{ new Date(event.time).toLocaleTimeString() }}</p>
-
-                </div>
-
-            </div>
-            <div class="space-y-6">
-                <button class="flex bg-[#FFE047] rounded-md items-center py-4 px-6 space-x-4 ">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                        stroke="currentColor" class="w-6 h-6">
-                        <path stroke-linecap="round" stroke-linejoin="round"
-                            d="M16.5 6v.75m0 3v.75m0 3v.75m0 3V18m-9-5.25h5.25M7.5 15h3M3.375 5.25c-.621 0-1.125.504-1.125 1.125v3.026a2.999 2.999 0 0 1 0 5.198v3.026c0 .621.504 1.125 1.125 1.125h17.25c.621 0 1.125-.504 1.125-1.125v-3.026a2.999 2.999 0 0 1 0-5.198V6.375c0-.621-.504-1.125-1.125-1.125H3.375Z" />
-                    </svg>
-                    <p class="font-bold text-lg">
-                        Buy Tickets
-                    </p>
-                </button>
                 <div class="space-y-4">
-                    <h3 class="font-bold text-lg">Ticket Information</h3>
+                    <h3 class="text-xl font-semibold">Date and Time</h3>
                     <div class="flex space-x-2">
 
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                             stroke="currentColor" class="w-6 h-6">
                             <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5m-9-6h.008v.008H12v-.008ZM12 15h.008v.008H12V15Zm0 2.25h.008v.008H12v-.008ZM9.75 15h.008v.008H9.75V15Zm0 2.25h.008v.008H9.75v-.008ZM7.5 15h.008v.008H7.5V15Zm0 2.25h.008v.008H7.5v-.008Zm6.75-4.5h.008v.008h-.008v-.008Zm0 2.25h.008v.008h-.008V15Zm0 2.25h.008v.008h-.008v-.008Zm2.25-4.5h.008v.008H16.5v-.008Zm0 2.25h.008v.008H16.5V15Z" />
+                        </svg>
+                        <p>{{ new Date(event.time).toDateString() }}</p>
+                    </div>
+                    <div class="flex space-x-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                            stroke="currentColor" class="w-6 h-6">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                        </svg>
+                        <p>{{ new Date(event.time).toLocaleTimeString() }}</p>
+
+                    </div>
+
+                </div>
+                <div class="space-y-6">
+                    <button class="flex bg-[#FFE047] rounded-md items-center py-4 px-6 space-x-4 ">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                            stroke="currentColor" class="w-6 h-6">
+                            <path stroke-linecap="round" stroke-linejoin="round"
                                 d="M16.5 6v.75m0 3v.75m0 3v.75m0 3V18m-9-5.25h5.25M7.5 15h3M3.375 5.25c-.621 0-1.125.504-1.125 1.125v3.026a2.999 2.999 0 0 1 0 5.198v3.026c0 .621.504 1.125 1.125 1.125h17.25c.621 0 1.125-.504 1.125-1.125v-3.026a2.999 2.999 0 0 1 0-5.198V6.375c0-.621-.504-1.125-1.125-1.125H3.375Z" />
                         </svg>
-                        <p class="text-sm">
-                            Standard Ticket: {{ event.price }} each
+                        <p class="font-bold text-lg" @click="handleInsetTicket">
+                            Buy Tickets
                         </p>
-                    </div>
-                </div>
-            </div>
-        </div>
+                    </button>
+                    <div class="space-y-4">
+                        <h3 class="font-bold text-lg">Ticket Information</h3>
+                        <div class="flex space-x-2">
 
-
-        <div class="w-full flex justify-between">
-
-            <div class="w-1/3 ">
-                <h3 class="text-3xl font-bold">Location</h3>
-                <div class="flex items-center justify-start space-x-2">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                        stroke="currentColor" class="w-24 h-24">
-                        <path stroke-linecap="round" stroke-linejoin="round"
-                            d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
-                        <path stroke-linecap="round" stroke-linejoin="round"
-                            d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0Z" />
-                    </svg>
-
-                    <p class="text-wrap">
-                        Bal Gandharva Rang Mandir, Near Junction Of 24th & 32nd Road &
-                        Patwardhan
-                        Park,Off Linking Road, Bandra West., Mumbai, India
-                    </p>
-
-                </div>
-                <div>
-                    <EventsLocation :event-location="eventLocation"></EventsLocation>
-                </div>
-            </div>
-
-            <div class="w-1/3 my-8  flex flex-col items-end">
-                <h3 class="text-3xl font-bold my-4 pr-32">Hosted by</h3>
-                <div class="w-2/3">
-                    <div class="flex items-center justify-evenly">
-                        <div>
-                            <img class="w-24 h-24 mb-3 rounded-full shadow-lg"
-                                src="https://source.unsplash.com/100x100/?portrait" alt="Bonnie image" />
-                        </div>
-                        <div>
-
-                            <h5 class="mb-1 text-xl font-medium text-gray-900 dark:text-white">
-                                <!-- {{ event.user.first_name }} {{ event.user.last_name }} -->
-                            </h5>
-                            <span class="text-sm text-gray-500 dark:text-gray-400">Visual
-                                Designer</span>
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                                stroke="currentColor" class="w-6 h-6">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M16.5 6v.75m0 3v.75m0 3v.75m0 3V18m-9-5.25h5.25M7.5 15h3M3.375 5.25c-.621 0-1.125.504-1.125 1.125v3.026a2.999 2.999 0 0 1 0 5.198v3.026c0 .621.504 1.125 1.125 1.125h17.25c.621 0 1.125-.504 1.125-1.125v-3.026a2.999 2.999 0 0 1 0-5.198V6.375c0-.621-.504-1.125-1.125-1.125H3.375Z" />
+                            </svg>
+                            <p class="text-sm">
+                                Standard Ticket: {{ event.price }} each
+                            </p>
                         </div>
                     </div>
                 </div>
+                <div class=" ">
+                    <div class="flex items-center justify-start space-x-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                            stroke="currentColor" class="w-4 h-4">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0Z" />
+                        </svg>
+
+                        <p v-if="event.location" class="text-wrap">
+                            {{ event.location.area.name }}, {{ event.location.city.name }}
+                        </p>
+
+                    </div>
+
+                </div>
+
+                <div class=" my-8  ">
+                    <h3 class="text-3xl font-bold my-4 pr-32">Hosted by</h3>
+                    <div class="w-2/3" v-if="event.user">
+                        <div class="flex items-center justify-evenly">
+                            <div>
+                                <img class="w-24 h-24 mb-3 rounded-full shadow-lg" :src="event.user.photo_url"
+                                    alt="Bonnie image" />
+                            </div>
+                            <div>
+
+                                <h5 class="mb-1 text-xl font-medium text-gray-900 dark:text-white">
+                                    {{ event.user.first_name }} {{ event.user.last_name }}
+                                </h5>
+                                <!-- <span class="text-sm text-gray-500 dark:text-gray-400">Visual
+                                Designer</span> -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
+
 
         </div>
 
+        <div>
+            <h3 class="text-3xl font-bold">Location</h3>
 
-
+            <EventsLocation :event-location="event.location"></EventsLocation>
+        </div>
         <div class="w-full my-8">
             <h3 class="text-3xl font-bold my-4">Event Description</h3>
             <p>

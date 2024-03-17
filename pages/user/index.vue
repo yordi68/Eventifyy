@@ -23,7 +23,7 @@ const {
 
 
 
-const { onResult, onError, loading } = singleQuery(getUser, {
+const { onResult, onError, loading, refetch } = singleQuery(getUser, {
         id: store.user.id
 })
 
@@ -96,6 +96,8 @@ imageUploadToDBDone(({ data }) => {
                         userObject: userObject.value,
                         id: store.user.id
                 });
+                refetch()
+
         }
         // this commented code is causing me problems of order...before the user is updated, the users data is fetched from the
         // userMutate({
@@ -169,12 +171,14 @@ definePageMeta({
                                                         <input type="file" id="profile-picture" name="profile-picture"
                                                                 @change="handleProfilePictureChange" class="hidden">
                                                         <label for="profile-picture" class="cursor-pointer">
-                                                                <img v-if="user.profilePicture"
-                                                                        :src="user.profilePicture" alt="Profile Picture"
+                                                                <img v-if="singleUser.photo_url"
+                                                                        :src="singleUser.photo_url"
+                                                                        alt="Profile Picture"
                                                                         class="h-24 w-24 rounded-full shadow-md">
                                                                 <div v-else
                                                                         class="h-24 w-24 rounded-full bg-gray-200 flex items-center justify-center text-gray-400 text-lg">
-                                                                        Upload</div>
+                                                                        Upload
+                                                                </div>
                                                         </label>
                                                 </div>
                                                 <!-- Stats -->
@@ -186,10 +190,10 @@ definePageMeta({
                                                         <div class="font-bold">{{ following }}</div>
                                                         <div class="text-gray-500">Following</div>
                                                 </div>
-                                                <div class="ml-6">
+                                                <!-- <div class="ml-6">
                                                         <div class="font-bold">{{ likes }}</div>
                                                         <div class="text-gray-500">Likes</div>
-                                                </div>
+                                                </div> -->
                                         </div>
 
                                         <!-- Profile Information -->
@@ -214,7 +218,7 @@ definePageMeta({
                                         </div>
 
                                         <!-- Gender -->
-                                        <div class="mb-4">
+                                        <!-- <div class="mb-4">
                                                 <label for="gender"
                                                         class="block text-sm font-medium text-gray-700 mb-2">Gender</label>
                                                 <select id="gender" v-model="user.gender"
@@ -223,7 +227,7 @@ definePageMeta({
                                                         <option value="female">Female</option>
                                                         <option value="other">Other</option>
                                                 </select>
-                                        </div>
+                                        </div> -->
                                 </div>
                         </div>
 

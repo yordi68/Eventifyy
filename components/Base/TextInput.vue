@@ -71,9 +71,11 @@ watch(
                         ).padStart(2, "0")}`;
 
                         inputValue.value = formattedDate;
-                } else {
-                        inputValue.value = props.type == "number" ? Number(newVal) : newVal
-                };
+                }
+
+                // else {
+                //         inputValue.value = props.type == "number" ? Number(newVal) : newVal
+                // };
         }
         , { immediate: true });
 </script>

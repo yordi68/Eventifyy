@@ -34,7 +34,12 @@ const selectedItem = ref(null);
 
 onResult(({ data }) => {
         cities.value = data.cities
-        inputValue.value = props.modelValue
+
+
+        if (props.modelValue && props.modelValue != "") {
+
+                inputValue.value = props.modelValue
+        }
         selectedItem.value = cities.value.find(city => city.id == props.modelValue)
 
 })
@@ -64,6 +69,23 @@ const clear = () => {
         emit("update:modelValue", null);
 }
 
+
+watch(() => props.modelValue, (newValue) => {
+
+
+        if (props.modelValue && props.modelValue != "") {
+
+                inputValue.value = props.modelValue
+        }
+
+        selectedItem.value = cities.value.find(city => city.id == props.modelValue)
+
+},
+        {
+                immediate: true,
+                deep: true
+        }
+)
 
 // onClickOutside(citySelect, (e) => (show.value = false));
 

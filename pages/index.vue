@@ -57,13 +57,13 @@ definePageMeta({
                 <div class="px-8 md:px-24">
 
                         <h3 class="text-3xl font-bold my-4 pr-32">Popular Events</h3>
-                        <div class="w-full md:w-1/2 my-8 ">
+                        <!-- <div class="w-full md:w-1/2 my-8 ">
                                 <div class="flex  items-center justify-start flex-wrap ">
 
                                         <UiTag v-for="tag in tagList" :tag-name="tag.name" />
 
                                 </div>
-                        </div>
+                        </div> -->
 
 
                         <div class="grid grid-cols-1 gap-y-8 md:grid-cols-3  md:gap-x-4 ">

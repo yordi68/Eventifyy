@@ -56,12 +56,16 @@ const { onResult, onError, loading } = queryList(cityListQuery, {
 
 onResult(({ data }) => {
         areas.value = data.areas
-        inputValue.value = props.modelValue
+
+        if (props.modelValue && props.modelValue != "") {
+
+                inputValue.value = props.modelValue
+        }
         selectedItem.value = areas.value.find(area => area.id == props.modelValue)
 
 })
 
-/**-------------------------Handle select-------------------- */
+/**-------------------------Handle select-              ------------------- */
 const show = ref(false);
 const {
         errorMessage,
@@ -86,7 +90,13 @@ const clear = () => {
         emit("update:modelValue", null);
 }
 watch(() => props.modelValue, (newValue) => {
-        inputValue.value = props.modelValue
+
+
+        if (props.modelValue && props.modelValue != "") {
+
+                inputValue.value = props.modelValue
+        }
+
         selectedItem.value = areas.value.find(area => area.id == props.modelValue)
 
 },

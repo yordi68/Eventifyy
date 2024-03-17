@@ -11,6 +11,7 @@ query getEvent($id:uuid!) {
     user {
       first_name
       last_name
+      photo_url
       __typename
     }
     
@@ -27,7 +28,7 @@ query getEvent($id:uuid!) {
     }
     follows{
       user{
-        id
+        id  
       }
     }
     followers_count: follows_aggregate{
@@ -36,6 +37,15 @@ query getEvent($id:uuid!) {
       }
     }
     location {
+      area{
+        id
+        name
+      }
+
+      city{
+        name
+        id
+      }
       area_id
       city_id
        location

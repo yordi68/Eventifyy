@@ -25,7 +25,7 @@ const filter = computed(() => {
 
 // console.log(filter.value)
 
-
+/*------------------------- Query the users event ---------------------- */
 const { onResult, onError, refetch } = queryList(
         getEvents, {
         filter: filter,
@@ -45,7 +45,6 @@ definePageMeta({
 <template>
         <div class="grid grid-cols-3 gap-6">
                 <!-- <UiCard has-icon v-for="event in events" :key="event.price" :event="event" /> -->
-                <UiVerticalCard v-for="event in events" :key="event.price" :event="event" />
-
+                <UiVerticalCard v-for="event in events" :key="event.price" :event="event" @refetch="refetch" />
         </div>
 </template>

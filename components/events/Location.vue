@@ -11,17 +11,18 @@ const props = defineProps({
 
 });
 
-
 // default: () =>,
 
 // static location
 /*-----------------------------------Map data---------------------------- */
 
 const center = ref([9.010631945576197, 38.76055205651439])
-if (props.eventLocation.location?.coordinates?.length > 0) {
+if (props.eventLocation?.location?.coordinates?.length > 0) {
     center.value = props.eventLocation.location?.coordinates
 }
 const zoom = ref(12)
+
+
 
 
 

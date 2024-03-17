@@ -31,10 +31,14 @@ const { onResult, onError, loading } = queryList(categoryListQuery, {
 
 onResult(({ data }) => {
         categories.value = data.categories
-        inputValue.value = props.modelValue
         selectedItem.value = categories.value.find(category =>
                 category.id == props.modelValue
         )
+
+        if (props.modelValue && props.modelValue != "") {
+
+                inputValue.value = props.modelValue
+        }
 })
 
 /**-------------------------Handle select-------------------- */
@@ -64,7 +68,11 @@ const clear = () => {
 }
 
 watch(() => props.modelValue, (newValue) => {
-        inputValue.value = props.modelValue
+
+        if (props.modelValue && props.modelValue != "") {
+
+                inputValue.value = props.modelValue
+        }
         selectedItem.value = categories.value.find(category => category.id == props.modelValue)
 },
         {

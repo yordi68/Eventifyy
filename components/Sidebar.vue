@@ -3,15 +3,14 @@ import { useAuthStore } from "~/stores/auth";
 
 const { user, logout } = useAuthStore()
 // console.log(store.user.first_name)
-
+console.log(user.photo_url);
 </script>
 
 
 <template>
         <div class="h-screen p-3 space-y-2  text-white bg-[#2D2C3C] dark:text-gray-100">
                 <div class="flex items-center  space-x-4 cursor-pointer" @click="$router.push('/user')">
-                        <img src="https://source.unsplash.com/100x100/?portrait" alt=""
-                                class="w-12 h-12 rounded-full dark:bg-gray-500">
+                        <img :src="user.photo_url" alt="" class="w-12 h-12 rounded-full dark:bg-gray-500">
                         <div>
 
                                 <h2 class="text-lg font-semibold" :key="user">{{ user.first_name }} {{ user.last_name }}
