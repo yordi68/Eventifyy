@@ -1,0 +1,7 @@
+mutation addBookmark($input:bookmarks_insert_input!){
+  insert_bookmarks_one(object: $input){
+    id
+    event_id
+    user_id
+  }
+}

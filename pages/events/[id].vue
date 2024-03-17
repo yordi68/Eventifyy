@@ -1,6 +1,7 @@
 <script setup>
 import getEvent from "~/graphql/query/events/item.gql";
 import addFollows from "~/graphql/mutations/follows/item.gql";
+import addBookmarks from "~/graphql/mutations/bookmarks/item.gql";
 
 import { useAuthStore } from "~/stores/auth";
 import { toast } from "vue3-toastify";
@@ -8,8 +9,9 @@ import { toast } from "vue3-toastify";
 
 const store = useAuthStore();
 const route = useRoute();
-
 const event = ref({});
+const isFollowed = true;
+
 
 const { onResult, onError, refetch } = singleQuery(getEvent, {
     id: route.params.id,
@@ -43,6 +45,7 @@ followDone(() => {
         transition: toast.TRANSITIONS.FLIP,
         position: toast.POSITION.TOP_RIGHT,
     });
+    refetch();
 })
 
 followError((error) => {
@@ -61,9 +64,42 @@ followError((error) => {
 })
 
 
-// const isFollowing = ref(
-//     event.likes.some((like) => like.user_id === store.id)
-// );
+const { mutate: bookmarkMutate, onDone: bookmarkDone, onError: bookmarkError } = anonymousMutation(addBookmarks, {
+    clientId: "auth"
+});
+
+const handleBookmark = async () => {
+    const input = {
+        user_id: store.user.id,
+        event_id: event.value.id
+    }
+    bookmarkMutate({ input });
+}
+
+bookmarkDone(() => {
+    toast.success("You bookmarked an event", {
+        transition: toast.TRANSITIONS.FLIP,
+        position: toast.POSITION.TOP_RIGHT,
+    });
+    // refetch();
+})
+
+bookmarkError((error) => {
+    if (error.message.includes("duplicate")) {
+        toast.error("You already bookmarked this event", {
+            transition: toast.TRANSITIONS.FLIP,
+            position: toast.POSITION.TOP_RIGHT,
+        });
+        return;
+    }
+
+    toast.error("Something went wrong", {
+        transition: toast.TRANSITIONS.FLIP,
+        position: toast.POSITION.TOP_RIGH
+    })
+})
+
+
 
 
 
@@ -100,7 +136,7 @@ const eventLocation = ref(
 
 )
 
-
+console.log("this is event ", event.value)
 
 </script>
 
@@ -115,20 +151,30 @@ const eventLocation = ref(
 
 <template>
     <div class="px-32">
-        <div class="w-full mt-5">
-            <img :src="event.thumbnail" alt="random image" class="w-full h-full object-cover " />
+        <div class="w-full  py-20 mt-5">
+            <img :src="event.thumbnail" alt="random image" class="w-full max-h-[500px] object-cover " />
         </div>
         <div class="flex justify-between my-6">
             <h3 class="font-bold text-4xl">{{ event.title }}</h3>
-            <div class="flex space-x-4">
-                <Icon name="gala:add" size="32" v-if="!isFollowing" class="hover:text-[#FFE047] hover:cursor-pointer" />
-                <Icon name="zondicons:minus-outline" size="30" v-else="isFollowing"
-                    class="hover:text-[#FFE047] hover:cursor-pointer" />
-                <div
-                    class="focus:outline-none text-black text-bold bg-[#FFE047] hover:bg-yellow-500 focus:ring-4 focus:ring-yellow-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:focus:ring-yellow-900">
-                    Following
+            <div class="flex gap-x-1.5">
+                <div flex gap-x-4>
+                    <button @click="$event.stopPropagation(); handleFollow()"
+                        class="text-sm hover:bg-[#FFE047] py-1.5 hover:text-white w-full px-3 cursor-pointer flex items-center gap-x-1.5">
+                        <icon name="lucide:plus" class="w-4 h-4" /> Follow
+                    </button>
+                    <p class="w-max bg-[#FFE047] px-3 py-1 rounded-md text-neutral-800">
+                        {{ event.followers_count?.aggregate?.count }} Followers
+                    </p>
                 </div>
-                <Icon name="ic:baseline-share" size="32" />
+                <div>
+                    <button @click="$event.stopPropagation(); handleBookmark()"
+                        class="text-sm hover:bg-[#FFE047] py-1.5 hover:text-white w-full px-3 cursor-pointer flex items-center gap-x-1.5">
+                        <Icon name="typcn:star-outline" size="16" /> Bookmark
+                    </button>
+                    <p class="w-max bg-[#FFE047] px-3 py-1 rounded-md text-neutral-800">
+                        {{ event.bookmarks_count?.aggregate?.count }} Bookmarks
+                    </p>
+                </div>
             </div>
         </div>
 
@@ -231,27 +277,6 @@ const eventLocation = ref(
 
         </div>
 
-
-        <!-- <div class="w-1/3 my-8">
-                        <h3 class="text-3xl font-bold my-4">Hosted by</h3>
-                        <div class="w-2/3">
-                                <div class="flex items-center justify-evenly">
-                                        <div>
-                                                <img class="w-24 h-24 mb-3 rounded-full shadow-lg"
-                                                        src="https://source.unsplash.com/100x100/?portrait"
-                                                        alt="Bonnie image" />
-                                        </div>
-                                        <div>
-
-                                                <h5 class="mb-1 text-xl font-medium text-gray-900 dark:text-white">
-                                                        Bonnie Green
-                                                </h5>
-                                                <span class="text-sm text-gray-500 dark:text-gray-400">Visual
-                                                        Designer</span>
-                                        </div>
-                                </div>
-                        </div>
-                </div> -->
 
 
         <div class="w-full my-8">

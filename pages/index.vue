@@ -67,7 +67,8 @@ definePageMeta({
 
 
                         <div class="grid grid-cols-1 gap-y-8 md:grid-cols-3  md:gap-x-4 ">
-                                <UiVerticalCard v-for="event in events" :key="event.price" :event="event" />
+                                <UiVerticalCard v-for="event in events" :key="event.price" :event="event"
+                                        @refetch="refetch" />
                         </div>
                 </div>
 

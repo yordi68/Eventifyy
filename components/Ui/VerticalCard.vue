@@ -137,7 +137,6 @@ const formattedDateTime = computed(() => {
                                                 </MenuItems>
                                         </Menu>
                                 </div>
-
                                 <img class="w-full aspect-square max-h-48 rounded-t-lg object-cover"
                                         :src="event.thumbnail" alt="" />
                         </div>

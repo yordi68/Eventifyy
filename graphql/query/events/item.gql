@@ -25,6 +25,16 @@ query getEvent($id:uuid!) {
       }
       __typename
     }
+    follows{
+      user{
+        id
+      }
+    }
+    followers_count: follows_aggregate{
+      aggregate{
+        count
+      }
+    }
     location {
       area_id
       city_id

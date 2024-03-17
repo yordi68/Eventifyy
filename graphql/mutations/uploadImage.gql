@@ -1,0 +1,5 @@
+ mutation addImage($image: imagesData!) {
+  imageUpload(arg1:$image){
+    urls
+  }
+}

@@ -6,9 +6,22 @@ import getUser from "~/graphql/query/users/item.gql";
 import InfoUser from "~/graphql/query/users/info_aggregate.gql";
 import { useAuthStore } from "~/stores/auth";
 import updateUser from "~/graphql/mutations/user/edit.gql";
+import imageUploadQuery from "@/graphql/mutations/uploadImage.gql"
 
 const store = useAuthStore();
 const singleUser = ref([]);
+const image = ref()
+const {
+        mutate: imageUploadToDB,
+        onDone: imageUploadToDBDone,
+        loading: uploadLoading,
+        onError: imageUploadToDBError,
+} = anonymousMutation(imageUploadQuery, {
+        clientId: "auth"
+})
+
+
+
 
 const { onResult, onError, loading } = singleQuery(getUser, {
         id: store.user.id
@@ -60,11 +73,29 @@ userError((error) => {
 
 
 const onSubmit = handleSubmit(() => {
-        let userObject = {
-                first_name: singleUser.value.first_name,
-                last_name: singleUser.value.last_name,
-                email: singleUser.value.email,
-                phone_number: singleUser.value.phone_number
+        imageUploadToDB(
+                { image: { images: [image.value] } }
+        )
+})
+
+const pic = ref()
+imageUploadToDBDone(({ data }) => {
+        pic.value = data?.imageUpload?.urls
+        let userObject = ref()
+        // alert(data.imageUpload.urls)
+        if (pic.value.length > 0) {
+                userObject.value = {
+                        first_name: singleUser.value.first_name,
+                        last_name: singleUser.value.last_name,
+                        email: singleUser.value.email,
+                        phone_number: singleUser.value.phone_number,
+                        photo_url: data.imageUpload.urls[0]
+                }
+
+                userMutate({
+                        userObject: userObject.value,
+                        id: store.user.id
+                });
         }
         // this commented code is causing me problems of order...before the user is updated, the users data is fetched from the
         // userMutate({
@@ -72,13 +103,6 @@ const onSubmit = handleSubmit(() => {
         //         id: store.user.id
         // })
         // store.setUser(store.user.id);
-
-
-        userMutate({
-                userObject: userObject,
-                id: store.user.id
-        });
-
 
 
 
@@ -92,7 +116,8 @@ const onSubmit = handleSubmit(() => {
 
 const user = reactive({
         gender: 'male',
-        profilePicture: '' // Add profile picture URL here
+        profilePicture: '',
+        // Add profile picture URL here
 });
 
 const followers = ref(0); // Sample followers count
@@ -105,6 +130,7 @@ function handleProfilePictureChange(event) {
 
         reader.onload = (e) => {
                 user.profilePicture = e.target.result;
+                image.value = user.profilePicture.split(",")[1];
         };
 
         reader.readAsDataURL(file);

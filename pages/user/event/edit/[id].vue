@@ -45,7 +45,7 @@ const { mutate: insertLocation, loading: insertLocationLoading, onDone: insertLo
 insertLocationDone((response) => {
     const tagObject = selectedTags.value.map(tag => ({ tag_id: tag, event_id: event.value.id }))
 
-    const mediaObject = selectedImages.value.map(url => ({ media: { data: { url } }, event_id: event.value.id }))
+
 
 
     const eventObject = {
