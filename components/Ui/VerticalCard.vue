@@ -117,7 +117,7 @@ const formattedDateTime = computed(() => {
                         <div class="relative">
                                 <div class="absolute top-1.5 right-1.5 z-30 ">
 
-                                        <Menu>
+                                        <Menu v-if="store.isAuthenticated">
                                                 <MenuButton @click="$event.stopPropagation()">
                                                         <button
                                                                 class="w-6 h-6 flex items-center justify-center p-1.5 box-content rounded-full bg-white text-black">

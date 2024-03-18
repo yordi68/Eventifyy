@@ -1,4 +1,4 @@
-query getEvents($filter:events_bool_exp, $order: [events_order_by!], $offset:Int, $limit:Int){
+query getEvents($filter:events_bool_exp, $order: [events_order_by!], $offset:Int, $limit:Int, $include: Boolean = false){
   events(where:$filter, order_by:$order, limit:$limit, offset:$offset){
     id
     thumbnail
@@ -21,11 +21,11 @@ query getEvents($filter:events_bool_exp, $order: [events_order_by!], $offset:Int
         id
       }
     }
-    tickets{
+    tickets @include(if:$include) {
       user{
         id
       }
-    }
+    } 
     followers_count: follows_aggregate{
       aggregate{
         count

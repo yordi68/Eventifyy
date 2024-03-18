@@ -5,6 +5,7 @@ const offset_ = ref(0);
 const limit_ = ref(100);
 const filter_ = ref({});
 const client_ = ref("default");
+const isAuthenticated_ = ref(false);
 
 export default function (
   query,
@@ -15,6 +16,7 @@ export default function (
     offset = offset_,
     enabled = enable,
     clientId = client_.value,
+    isAuthenticated = isAuthenticated_.value,
     role,
   }
 ) {
@@ -29,6 +31,7 @@ export default function (
     () => ({
       fetchPolicy: "no-cache",
       clientId: clientId,
+      include: isAuthenticated,
       context: {
         headers: {},
       },

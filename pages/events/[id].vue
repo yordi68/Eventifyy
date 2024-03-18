@@ -12,6 +12,15 @@ import {
     DialogPanel,
     DialogTitle,
 } from '@headlessui/vue'
+import deleteBookmark from "~/graphql/mutations/bookmarks/delete.gql";
+
+
+
+
+
+
+
+
 
 const store = useAuthStore();
 const route = useRoute();
@@ -120,6 +129,12 @@ followError((error) => {
 })
 
 
+
+
+
+
+
+/*----------------------------- Adding BookMark Mutation -------------------------------- */
 const { mutate: bookmarkMutate, onDone: bookmarkDone, onError: bookmarkError } = anonymousMutation(addBookmarks, {
     clientId: "auth"
 });
@@ -154,13 +169,44 @@ bookmarkError((error) => {
 
     toast.error("Something went wrong", {
         transition: toast.TRANSITIONS.FLIP,
-        position: toast.POSITION.TOP_RIGH
+        position: toast.POSITION.TOP_RIGHT
     })
 })
 
 
 
 
+/*----------------------------------- Delete BookMark Mutation -------------------------------- */
+
+const { mutate: deleteBookmarkMutate, onDone: deleteBookmarkOnDone, onError: deleteBookmakeOnError } = anonymousMutation(deleteBookmark, {
+    clientId: "auth"
+})
+
+
+const handleDeleteBookmark = () => {
+    const input = {
+        event_id: event.value.id,
+        user_id: store.user.id
+    }
+    deleteBookmarkMutate({ input })
+}
+
+deleteBookmarkOnDone(() => {
+    toast.success("You removed this event from bookmarks", {
+        transition: toast.TRANSITIONS.FLIP,
+        position: toast.POSITION.TOP_RIGHT,
+    });
+    isBookmarked = false;
+    refetch();
+})
+
+deleteBookmakeOnError((error) => {
+    toast.error("Something went wrong while deleting from bookmark", {
+        transition: toast.TRANSITIONS.FLIP,
+        position: toast.POSITION.TOP_RIGHT
+    })
+    console.log(error)
+})
 
 
 </script>
@@ -227,8 +273,8 @@ bookmarkError((error) => {
             <div class="flex flex-col gap-y-6">
                 <div class="flex justify-between">
                     <h3 class="font-bold text-4xl">{{ event.title }}</h3>
-                    <div class="flex gap-x-2">
-                        <button @click.stop="handleBookmark()" v-if="isBookmarked">
+                    <div class="flex gap-x-2" v-if="store.isAuthenticated">
+                        <button @click.stop="handleDeleteBookmark()" v-if="isBookmarked">
                             <Icon name="mdi:bookmark" class="text-2xl text-[#ffe04a]" Color="#ffe04a" />
                         </button>
                         <button @click.stop="handleBookmark()" v-else>
@@ -330,7 +376,8 @@ bookmarkError((error) => {
                             </div>
                         </div>
                     </div>
-                    <button class="flex bg-[#FFE047] rounded-md items-center py-4 px-6 space-x-4 ">
+                    <button class="flex bg-[#FFE047] rounded-md items-center py-4 px-6 space-x-4 "
+                        v-if="store.isAuthenticated">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                             stroke="currentColor" class="w-6 h-6">
                             <path stroke-linecap="round" stroke-linejoin="round"

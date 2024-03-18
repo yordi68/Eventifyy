@@ -1,9 +1,13 @@
 const client_ = ref("default");
-
-export default function (query, { clientId = client_.value }) {
+const isAuthenticated_ = ref(false);
+export default function (
+  query,
+  { clientId = client_.value, isAuthenticated = isAuthenticated_.value }
+) {
   const { mutate, onDone, loading, onError } = useMutation(query, () => ({
     fetchPolicy: "network-only",
     clientId: clientId,
+    include: isAuthenticated,
     context: {
       headers: {
         // "x-hasura-role": "admin",
