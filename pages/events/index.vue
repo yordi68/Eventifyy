@@ -304,7 +304,7 @@ definePageMeta({
                                 <div v-else class="flex items-center justify-center ">
 
                                         <img src="/noEvents-2.svg" class="max-w-80" />
-                                        <span>We couldn't find any events</span>
+                                        <span class="text-md">We couldn't find any events</span>
                                 </div>
                         </div>
 

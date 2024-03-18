@@ -3,20 +3,7 @@ import getEvents from '~/graphql/query/events/list.gql';
 
 const popularEvents = ref([]);
 const latestEvents = ref([]);
-const tagList = [
-        {
-                name: 'All'
-        },
-        {
-                name: 'Today'
-        },
-        {
-                name: 'Tommorrow'
-        },
-        {
-                name: 'This Weekend'
-        },
-]
+
 
 const filter = computed(() => {
         let query = {};

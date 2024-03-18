@@ -32,6 +32,11 @@ query getEvent($id:uuid!) {
       }
       __typename
     }
+    bookmarks{
+      user{
+        id  
+      }
+    }
     follows{
       user{
         id  

@@ -38,6 +38,10 @@ onResult((result) => {
         console.log(events.value[0])
 })
 
+onError((error) => {
+        console.log(error)
+})
+
 definePageMeta({
         layout: 'admin'
 })

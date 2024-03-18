@@ -16,8 +16,8 @@ import {
 const store = useAuthStore();
 const route = useRoute();
 const event = ref({});
-const isFollowed = true;
-
+let isFollowed = false;
+let isBookmarked = false;
 const isOpen = ref(false)
 
 function closeModal() {
@@ -26,7 +26,7 @@ function closeModal() {
 function openModal() {
     isOpen.value = true
 }
-console.log("object", route.params.id)
+// console.log("object", route.params.id)
 
 const { onResult, onError, refetch } = singleQuery(getEvent, {
     id: route.params.id,
@@ -101,6 +101,7 @@ followDone(() => {
         position: toast.POSITION.TOP_RIGHT,
     });
     refetch();
+    isFollowed = true;
 })
 
 followError((error) => {
@@ -129,6 +130,7 @@ const handleBookmark = async () => {
         event_id: event.value.id
     }
     bookmarkMutate({ input });
+
 }
 
 bookmarkDone(() => {
@@ -136,7 +138,9 @@ bookmarkDone(() => {
         transition: toast.TRANSITIONS.FLIP,
         position: toast.POSITION.TOP_RIGHT,
     });
-    // refetch();
+    isBookmarked = true;
+    refetch();
+    // bookmarkRefetch();
 })
 
 bookmarkError((error) => {
@@ -184,20 +188,20 @@ bookmarkError((error) => {
                         enter-to="opacity-100 scale-100" leave="duration-200 ease-in" leave-from="opacity-100 scale-100"
                         leave-to="opacity-0 scale-95">
                         <DialogPanel
-                            class="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
+                            class="w-full max-w-md transform overflow-hidden rounded-2xl bg-yellow-300 p-6 text-left align-middle shadow-xl transition-all">
                             <DialogTitle as="h3" class="text-lg font-medium leading-6 text-gray-900">
-                                Payment successful
+                                You have bought a ticket
                             </DialogTitle>
                             <div class="mt-2">
                                 <p class="text-sm text-gray-500">
-                                    Your payment has been successfully submitted. We’ve sent you
-                                    an email with all of the details of your order.
+                                    We're thrilled that you've purchased our ticket! We can't wait to see you at the
+                                    event and share the excitement together
                                 </p>
                             </div>
 
                             <div class="mt-4">
                                 <button type="button"
-                                    class="inline-flex justify-center rounded-md border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
+                                    class="inline-flex justify-center rounded-md border border-transparent bg-[#2D2C3C] px-4 py-2 text-sm font-medium text-white hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
                                     @click="closeModal">
                                     Got it, thanks!
                                 </button>
@@ -224,11 +228,18 @@ bookmarkError((error) => {
                 <div class="flex justify-between">
                     <h3 class="font-bold text-4xl">{{ event.title }}</h3>
                     <div class="flex gap-x-2">
-                        <button @click.stop="handleBookmark()">
+                        <button @click.stop="handleBookmark()" v-if="isBookmarked">
+                            <Icon name="mdi:bookmark" class="text-2xl text-[#ffe04a]" Color="#ffe04a" />
+                        </button>
+                        <button @click.stop="handleBookmark()" v-else>
                             <Icon name="iconoir:bookmark" class="text-2xl" />
                         </button>
-                        <button @click.stop=" handleFollow()">
+
+                        <button @click.stop=" handleFollow()" v-if="isFollowed">
                             <icon name="ph:heart" class="text-2xl text-black " />
+                        </button>
+                        <button @click.stop=" handleFollow()" v-else>
+                            <icon name="ph:heart-fill" class="text-2xl text-[#ffe04a] " Color="#ffe04a" />
                         </button>
                         <p class="w-max bg-[#FFE047] flex items-center justify-center text-white px-3  rounded-md ">
                             {{ event.followers_count?.aggregate?.count }} followers
@@ -281,12 +292,13 @@ bookmarkError((error) => {
                 <div class="w-full space-y-1 ">
                     <h3 class="text-xl font-semibold">Event Description</h3>
                     <p>
-                        In this version, both start and end dates are returned as Date objects. The end of the month and
+                        {{ event.description }}
+                        <!-- In this version, both start and end dates are returned as Date objects. The end of the month and
                         the end of the year are adjusted to the last millisecond of the respective periods, hence the
                         addition of 23, 59, 59, 999 to the end of month and end of year calculations. This ensures that
                         the end timestamp effectively marks the end of the respective time period.
                         addition of 23, 59, 59, 999 to the end of month and end of year calculations. This ensures that
-                        the end timestamp effectively marks the end of the respective time period. addition of 23, 59,
+                        the end timestamp effectively marks the end of the respective time period. addition of 23, 59, -->
 
                     </p>
                 </div>

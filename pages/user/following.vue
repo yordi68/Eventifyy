@@ -13,7 +13,7 @@ const order = ref(null);
 
 const filter = computed(() => {
         let query = {};
-        query.tickets = {
+        query.follows = {
                 user_id: {
                         _eq: user.id
                 }

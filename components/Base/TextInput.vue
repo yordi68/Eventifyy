@@ -49,6 +49,11 @@ const {
         initialValue: props.modelValue,
 });
 
+
+// useField(props.name, props.rules, {
+//         initialValue: props.modelValue,
+// });
+
 const type = ref(props.type);
 const set = (event) => {
         emit("update:modelValue", event.target.value);
@@ -73,11 +78,12 @@ watch(
                         inputValue.value = formattedDate;
                 }
 
-                // else {
-                //         inputValue.value = props.type == "number" ? Number(newVal) : newVal
-                // };
+                else {
+
+                        inputValue.value = props.type == "number" ? Number(newVal) : newVal
+                };
         }
-        , { immediate: true });
+);
 </script>
 <template>
         <div class="w-full">

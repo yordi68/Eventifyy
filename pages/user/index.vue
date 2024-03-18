@@ -26,7 +26,7 @@ const {
 const { onResult, onError, loading, refetch } = singleQuery(getUser, {
         id: store.user.id
 })
-
+let furstName = ref()
 onResult(({ data }) => {
         // console.log(data.users_by_pk)
         // console.log(data.users_by_pk.first_name)
@@ -34,8 +34,9 @@ onResult(({ data }) => {
 
         singleUser.value = { ...data?.users_by_pk }
 
-        // console.log(singleUser.value)
-        // console.log(singleUser.value.email)
+        console.log(singleUser.value)
+        console.log(singleUser.value.email)
+        furstName.value = singleUser.value.first_name
 })
 
 onError((error) => {
@@ -138,6 +139,7 @@ function handleProfilePictureChange(event) {
         reader.readAsDataURL(file);
 }
 
+
 function saveChanges() {
         console.log('Changes saved:', user);
         // Replace with your actual logic for saving user data
@@ -151,7 +153,7 @@ definePageMeta({
 
 
 <template>
-        <div class="flex">
+        <div class="flex" v-if="singleUser">
 
                 <!-- User Profile Content -->
                 <div class="flex-1 p-8">
@@ -217,17 +219,6 @@ definePageMeta({
                                                         name="phone_number" rules="required" type="Number" />
                                         </div>
 
-                                        <!-- Gender -->
-                                        <!-- <div class="mb-4">
-                                                <label for="gender"
-                                                        class="block text-sm font-medium text-gray-700 mb-2">Gender</label>
-                                                <select id="gender" v-model="user.gender"
-                                                        class="mt-1 p-2 block w-56 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500">
-                                                        <option value="male">Male</option>
-                                                        <option value="female">Female</option>
-                                                        <option value="other">Other</option>
-                                                </select>
-                                        </div> -->
                                 </div>
                         </div>
 

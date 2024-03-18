@@ -11,8 +11,17 @@ query getEvents($filter:events_bool_exp, $order: [events_order_by!], $offset:Int
     time
     price
     location_id
-    
+    bookmarks{
+      user{
+        id
+      }
+    }
     follows{
+      user{
+        id
+      }
+    }
+    tickets{
       user{
         id
       }
