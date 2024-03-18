@@ -46,7 +46,8 @@ onError((error) => {
 
 
 definePageMeta({
-        layout: 'admin'
+        layout: 'admin',
+        middleware: 'auth',
 })              
 </script>
 

@@ -13,6 +13,7 @@ import {
     DialogTitle,
 } from '@headlessui/vue'
 import deleteBookmark from "~/graphql/mutations/bookmarks/delete.gql";
+import deleteFollow from "~/graphql/mutations/follows/delete.gql";
 
 
 
@@ -25,8 +26,8 @@ import deleteBookmark from "~/graphql/mutations/bookmarks/delete.gql";
 const store = useAuthStore();
 const route = useRoute();
 const event = ref({});
-let isFollowed = false;
-let isBookmarked = false;
+let isFollowed = ref(false);
+let isBookmarked = ref(false);
 const isOpen = ref(false)
 
 function closeModal() {
@@ -56,9 +57,7 @@ onError((error) => {
 
 
 
-const { mutate: followMutate, onDone: followDone, onError: followError, loading } = anonymousMutation(addFollows, {
-    clientId: "auth"
-});
+
 
 const { mutate: insertTicket, onDone: insertTicketDone, onError: insertTicketError, loading: insertTicketLoading } = anonymousMutation(insertTicketMutation, {
     clientId: "auth"
@@ -66,13 +65,7 @@ const { mutate: insertTicket, onDone: insertTicketDone, onError: insertTicketErr
 
 
 
-const handleFollow = async () => {
-    const input = {
-        user_id: store.user.id,
-        event_id: event.value.id
-    }
-    followMutate({ input });
-}
+
 
 const handleInsetTicket = async () => {
     const input = {
@@ -104,13 +97,29 @@ insertTicketError((error) => {
     })
 })
 
+
+/*----------------------------- Adding Follow Mutation -------------------------------- */
+
+const { mutate: followMutate, onDone: followDone, onError: followError, loading } = anonymousMutation(addFollows, {
+    clientId: "auth"
+});
+
+const handleFollow = async () => {
+    const input = {
+        user_id: store.user.id,
+        event_id: event.value.id
+    }
+    followMutate({ input });
+}
+
+
 followDone(() => {
     toast.success("You followed an event", {
         transition: toast.TRANSITIONS.FLIP,
         position: toast.POSITION.TOP_RIGHT,
     });
     refetch();
-    isFollowed = true;
+    isFollowed.value = true;
 })
 
 followError((error) => {
@@ -128,9 +137,38 @@ followError((error) => {
     })
 })
 
+/*----------------------------------- Delete Follow Mutation -------------------------------- */
+
+const { mutate: deleteFollowMutate, onDone: deleteFollowOnDone, onError: deleteFollowOnError } = anonymousMutation(deleteFollow, {
+    clientId: "auth"
+});
+
+const handleDeleteFollow = () => {
+    const input = {
+        event_id: event.value.id,
+        user_id: store.user.id
+    }
+    console.log(input)
+    deleteFollowMutate({ input })
+}
+
+deleteFollowOnDone(() => {
+    toast.success("You removed this event from followed", {
+        transition: toast.TRANSITIONS.FLIP,
+        position: toast.POSITION.TOP_RIGHT,
+    });
+    isFollowed.value = false;
+    refetch();
+})
 
 
-
+deleteFollowOnError((error) => {
+    toast.error("Something went wrong while deleting from follws", {
+        transition: toast.TRANSITIONS.FLIP,
+        position: toast.POSITION.TOP_RIGHT
+    })
+    console.log(error)
+})
 
 
 
@@ -153,7 +191,7 @@ bookmarkDone(() => {
         transition: toast.TRANSITIONS.FLIP,
         position: toast.POSITION.TOP_RIGHT,
     });
-    isBookmarked = true;
+    isBookmarked.value = true;
     refetch();
     // bookmarkRefetch();
 })
@@ -183,11 +221,12 @@ const { mutate: deleteBookmarkMutate, onDone: deleteBookmarkOnDone, onError: del
 })
 
 
-const handleDeleteBookmark = () => {
+const handleDeleteBookmark = async () => {
     const input = {
         event_id: event.value.id,
         user_id: store.user.id
     }
+    console.log(input)
     deleteBookmarkMutate({ input })
 }
 
@@ -196,7 +235,7 @@ deleteBookmarkOnDone(() => {
         transition: toast.TRANSITIONS.FLIP,
         position: toast.POSITION.TOP_RIGHT,
     });
-    isBookmarked = false;
+    isBookmarked.value = false;
     refetch();
 })
 
@@ -281,10 +320,12 @@ deleteBookmakeOnError((error) => {
                             <Icon name="iconoir:bookmark" class="text-2xl" />
                         </button>
 
+
+
                         <button @click.stop=" handleFollow()" v-if="isFollowed">
                             <icon name="ph:heart" class="text-2xl text-black " />
                         </button>
-                        <button @click.stop=" handleFollow()" v-else>
+                        <button @click.stop=" handleDeleteFollow()" v-else>
                             <icon name="ph:heart-fill" class="text-2xl text-[#ffe04a] " Color="#ffe04a" />
                         </button>
                         <p class="w-max bg-[#FFE047] flex items-center justify-center text-white px-3  rounded-md ">

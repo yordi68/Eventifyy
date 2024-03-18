@@ -109,7 +109,8 @@ const onSubmit = handleSubmit(() => {
 
 
 definePageMeta({
-    layout: 'admin'
+    layout: 'admin',
+    middleware: 'auth',
 })
 </script>
 <template>
