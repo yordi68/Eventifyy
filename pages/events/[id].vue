@@ -28,6 +28,7 @@ const route = useRoute();
 const event = ref({});
 let isFollowed = ref(false);
 let isBookmarked = ref(false);
+let isCreator = ref(false);
 const isOpen = ref(false)
 
 function closeModal() {
@@ -48,9 +49,15 @@ onResult((result) => {
         event.value = result.data.events_by_pk;
         const eventLocation = event.value.location
     }
-
+    if (store.isAuthenticated) {
+        if (event.value.user.id === store.user.id) {
+            isCreator.value = true;
+        }
+    }
     // console.log("this is fetching in events page", result.data)
 })
+
+
 onError((error) => {
     console.log(error, "error");
 })
@@ -321,13 +328,15 @@ deleteBookmakeOnError((error) => {
                         </button>
 
 
+                        <div v-if="!isCreator">
+                            <button @click.stop=" handleFollow()" v-if="isFollowed">
+                                <icon name="ph:heart" class="text-2xl text-black " />
+                            </button>
+                            <button @click.stop=" handleDeleteFollow()" v-else>
+                                <icon name="ph:heart-fill" class="text-2xl text-[#ffe04a] " Color="#ffe04a" />
+                            </button>
+                        </div>
 
-                        <button @click.stop=" handleFollow()" v-if="isFollowed">
-                            <icon name="ph:heart" class="text-2xl text-black " />
-                        </button>
-                        <button @click.stop=" handleDeleteFollow()" v-else>
-                            <icon name="ph:heart-fill" class="text-2xl text-[#ffe04a] " Color="#ffe04a" />
-                        </button>
                         <p class="w-max bg-[#FFE047] flex items-center justify-center text-white px-3  rounded-md ">
                             {{ event.followers_count?.aggregate?.count }} followers
                         </p>
@@ -418,7 +427,7 @@ deleteBookmakeOnError((error) => {
                         </div>
                     </div>
                     <button class="flex bg-[#FFE047] rounded-md items-center py-4 px-6 space-x-4 "
-                        v-if="store.isAuthenticated">
+                        v-if="store.isAuthenticated && !isCreator">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                             stroke="currentColor" class="w-6 h-6">
                             <path stroke-linecap="round" stroke-linejoin="round"

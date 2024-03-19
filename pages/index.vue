@@ -17,34 +17,14 @@ const filter = computed(() => {
 
 });
 
-/*--------------------- Fetching Popular Events ----------------------- */
-const { onResult: popularEventResult, onError: popularEventError, refetch: popularEventRefetch } = queryList(getEvents, {
+/*--------------------- Fetching Latest Events ----------------------- */
+const { onResult: latestEventResult, onError: latestEventError, refetch: latestEventRefetch } = queryList(getEvents, {
         filter: filter,
         order: ref({ "created_at": "desc" }),
         offset: 0,
         limit: ref(6)
 });
 
-popularEventResult((result) => {
-        popularEvents.value = result.data.events;
-        // console.log(popularEvents.value[0])
-})
-
-popularEventError((error) => {
-        console.log("Error while fetching events in home page", error)
-})
-
-/*--------------------- Fetching Latest Events ----------------------- */
-const { onResult: latestEventResult, onError: latestEventError, refetch: latestEventRefetch } = queryList(getEvents, {
-        filter: filter,
-        order: ref({
-                "follows_aggregate": {
-                        "count": "desc"
-                }
-        }),
-        offset: 0,
-        limit: ref(6)
-});
 
 latestEventResult((result) => {
         latestEvents.value = result.data.events;
@@ -55,6 +35,55 @@ latestEventResult((result) => {
 latestEventError((error) => {
         console.log("Error while fetching events in home page", error)
 })
+
+
+// const { onResult: popularEventResult, onError: popularEventError, refetch: popularEventRefetch } = queryList(getEvents, {
+//         filter: filter,
+//         order: ref({ "created_at": "desc" }),
+//         offset: 0,
+//         limit: ref(6)
+// });
+
+
+
+/*--------------------- Fetching Popular Events ----------------------- */
+const { onResult: popularEventResult, onError: popularEventError, refetch: popularEventRefetch } = queryList(getEvents, {
+        filter: filter,
+        order: ref({
+                "follows_aggregate": {
+                        "count": "desc"
+                }
+        }),
+        offset: 0,
+        limit: ref(6)
+});
+
+
+// const { onResult: latestEventResult, onError: latestEventError, refetch: latestEventRefetch } = queryList(getEvents, {
+//         filter: filter,
+//         order: ref({
+//                 "follows_aggregate": {
+//                         "count": "desc"
+//                 }
+//         }),
+//         offset: 0,
+//         limit: ref(6)
+// });
+
+
+popularEventResult((result) => {
+        popularEvents.value = result.data.events;
+        // console.log(popularEvents.value[0])
+})
+
+popularEventError((error) => {
+        console.log("Error while fetching events in home page", error)
+})
+
+
+
+
+
 
 
 

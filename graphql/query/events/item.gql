@@ -15,6 +15,7 @@ query getEvent($id:uuid!) {
     }
   
     user {
+      id
       first_name
       last_name
       photo_url

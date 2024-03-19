@@ -1,10 +1,13 @@
 <script setup>
-
 import { useField, useForm } from "vee-validate"
 import addData from "~/graphql/mutations/events/add.gql"
 import { toast } from "vue3-toastify";
-const { handleSubmit } = useForm();
 
+
+
+
+const { handleSubmit } = useForm();
+const router = useRouter();
 
 /**-------------------------Add event-------------------- */
 
@@ -34,20 +37,6 @@ const {
 } = anonymousMutation(addData, {
 	clientId: "auth"
 })
-
-addDataToDBDone((response) => {
-	toast.success("Event successfully added", {
-		transition: toast.TRANSITIONS.FLIP,
-		position: toast.POSITION.TOP_RIGHT,
-
-	});
-
-});
-
-addDataToDBError((error) => {
-	toast.error("Something went wrong");
-	console.log(error.message);;
-});
 
 
 const onSubmit = handleSubmit(() => {
@@ -96,6 +85,27 @@ const onSubmit = handleSubmit(() => {
 
 
 })
+
+addDataToDBDone(({ data }) => {
+	toast.success("Event successfully added", {
+		transition: toast.TRANSITIONS.FLIP,
+		position: toast.POSITION.TOP_RIGHT,
+
+	});
+	// console.log(data);
+	// console.log(data.insert_events);
+	// console.log(data.insert_events.returning[0].id);
+	// navigateTo(`/events/${data.insert_events.returning[0].id}`)
+	router.push(`/events/${data.insert_events.returning[0].id}`)
+});
+
+addDataToDBError((error) => {
+	toast.error("Something went wrong");
+	console.log(error.message);;
+});
+
+
+
 
 
 
