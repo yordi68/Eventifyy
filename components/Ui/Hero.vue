@@ -9,19 +9,23 @@
                 <div class="relative">
                         <!-- Search icon -->
                         <span class="absolute left-3 top-3 text-gray-400">
-                                <i class="iconify" data-icon="bi:search" style="font-size: 1.5rem;"></i>
+                                <icon class="iconify" name="bi:search" style="font-size: 1.2rem;"></icon>
                         </span>
 
                         <!-- Input field -->
                         <input type="text" v-model="searchQuery" @input="handleInput"
-                                class=" w-80 md:w-96 h-12 pl-10 pr-12 text-lg border-2 border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
-                                placeholder="Search..." />
+                                class="w-80 md:w-96 h-12 pl-10 pr-12 text-lg border-2 border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
+                                placeholder="Search..." @keyup.enter="$router.push(`/events?search=${searchQuery}`)" />
 
                         <!-- Clear button -->
-                        <span v-if="searchQuery" class="absolute right-3 top-3 text-gray-400 cursor-pointer"
+                        <!-- <span v-if="searchQuery" class="absolute right-3 top-3 text-gray-400 cursor-pointer"
                                 @click="clearInput">
-                                <i class="iconify" data-icon="bi:x-circle-fill" style="font-size: 1.5rem;"></i>
-                        </span>
+                                <icon class="iconify" name="bi:x-circle-fill" style="font-size: 1.2rem;"></icon>
+                        </span> -->
+                        <button type="submit" v-if="searchQuery" @click="$router.push(`/events?search=${searchQuery}`)"
+                                class="text-white absolute bg-[#FFE047]  end-2 bottom-1.5   hover:bg-[#2D2C3C] focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                                Search
+                        </button>
                 </div>
         </div>
 </template>

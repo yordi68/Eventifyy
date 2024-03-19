@@ -3,11 +3,20 @@ import { useAuthStore } from "~/stores/auth";
 
 const { user, logout } = useAuthStore()
 // console.log(store.user.first_name)
-console.log(user.photo_url);
+// console.log(user.photo_url);
+
+import { ref } from 'vue';
+
+const modalVisible = ref(false);
+
+
+
 </script>
 
 
+
 <template>
+
         <div class="h-screen p-3 space-y-2  text-white bg-[#2D2C3C] dark:text-gray-100">
                 <div class="flex items-center  space-x-4 cursor-pointer" @click="$router.push('/user')">
                         <img :src="user.photo_url" alt="" class="w-12 h-12 rounded-full dark:bg-gray-500">
@@ -127,7 +136,7 @@ console.log(user.photo_url);
                                         </a>
                                 </li> -->
                                 <li>
-                                        <button @click="[logout(), navigateTo('/')]"
+                                        <button @click="showModal('popup-modal')"
                                                 class="flex items-center p-2 space-x-3 rounded-md hover:text-[#FFE047]">
                                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"
                                                         class="w-5 h-5 fill-current dark:text-gray-400">
@@ -143,3 +152,4 @@ console.log(user.photo_url);
                 </div>
         </div>
 </template>
+<!-- @click="[logout(), navigateTo('/')]" -->

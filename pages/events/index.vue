@@ -301,10 +301,10 @@ definePageMeta({
                                                         :key="event.price" :event="event" />
                                         </div>
                                 </div>
-                                <div v-else class="flex items-center justify-center ">
+                                <div v-else class="flex flex-col items-center justify-center my-auto ">
 
-                                        <img src="/noEvents-2.svg" class="max-w-80" />
-                                        <span class="text-md">We couldn't find any events</span>
+                                        <img src="/noEvents-2.svg" class="max-w-32" />
+                                        <span class="text-md font-semibold">Sorry! We couldn't find any events</span>
                                 </div>
                         </div>
 
