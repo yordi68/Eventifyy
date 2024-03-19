@@ -125,8 +125,8 @@ followDone(() => {
         transition: toast.TRANSITIONS.FLIP,
         position: toast.POSITION.TOP_RIGHT,
     });
-    refetch();
     isFollowed.value = true;
+    refetch();
 })
 
 followError((error) => {
@@ -140,7 +140,7 @@ followError((error) => {
 
     toast.error("Something went wrong", {
         transition: toast.TRANSITIONS.FLIP,
-        position: toast.POSITION.TOP_RIGH
+        position: toast.POSITION.TOP_RIGHT
     })
 })
 
@@ -167,7 +167,6 @@ deleteFollowOnDone(() => {
     isFollowed.value = false;
     refetch();
 })
-
 
 deleteFollowOnError((error) => {
     toast.error("Something went wrong while deleting from follws", {
@@ -242,16 +241,17 @@ deleteBookmarkOnDone(() => {
         transition: toast.TRANSITIONS.FLIP,
         position: toast.POSITION.TOP_RIGHT,
     });
-    isBookmarked.value = false;
+    isBookmarked.value = true;
     refetch();
 })
 
 deleteBookmakeOnError((error) => {
+    console.log("error", error)
+
     toast.error("Something went wrong while deleting from bookmark", {
         transition: toast.TRANSITIONS.FLIP,
         position: toast.POSITION.TOP_RIGHT
     })
-    console.log(error)
 })
 
 
@@ -319,23 +319,25 @@ deleteBookmakeOnError((error) => {
             <div class="flex flex-col gap-y-6">
                 <div class="flex justify-between">
                     <h3 class="font-bold text-4xl">{{ event.title }}</h3>
-                    <div class="flex gap-x-2" v-if="store.isAuthenticated">
-                        <button @click.stop="handleDeleteBookmark()" v-if="isBookmarked">
-                            <Icon name="mdi:bookmark" class="text-2xl text-[#ffe04a]" Color="#ffe04a" />
-                        </button>
-                        <button @click.stop="handleBookmark()" v-else>
-                            <Icon name="iconoir:bookmark" class="text-2xl" />
-                        </button>
+                    <div class="flex items-center gap-x-2" v-if="store.isAuthenticated">
+                        <span>
+                            <button @click.stop="handleDeleteBookmark()" v-if="isBookmarked">
+                                <Icon name="mdi:bookmark" class="text-2xl text-[#ffe04a]" />
+                            </button>
+                            <button @click.stop="handleBookmark()" v-else>
+                                <Icon name="iconoir:bookmark" class="text-2xl" />
+                            </button>
+                        </span>
 
 
-                        <div v-if="!isCreator">
-                            <button @click.stop=" handleFollow()" v-if="isFollowed">
+                        <span v-if="!isCreator">
+                            <button @click.stop="handleDeleteFollow()" v-if="isFollowed">
+                                <icon name="ph:heart-fill" class="text-2xl text-[#ffe04a]" />
+                            </button>
+                            <button @click.stop=" handleFollow()" v-else>
                                 <icon name="ph:heart" class="text-2xl text-black " />
                             </button>
-                            <button @click.stop=" handleDeleteFollow()" v-else>
-                                <icon name="ph:heart-fill" class="text-2xl text-[#ffe04a] " Color="#ffe04a" />
-                            </button>
-                        </div>
+                        </span>
 
                         <p class="w-max bg-[#FFE047] flex items-center justify-center text-white px-3  rounded-md ">
                             {{ event.followers_count?.aggregate?.count }} followers

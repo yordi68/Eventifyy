@@ -14,7 +14,6 @@ const filter = computed(() => {
         // }
 
         return query;
-
 });
 
 /*--------------------- Fetching Latest Events ----------------------- */
