@@ -54,6 +54,25 @@ onResult((result) => {
             isCreator.value = true;
         }
     }
+    if (store.isAuthenticated) {
+        // console.log(event.value.bookmarks[0].user.id)
+        event.value.bookmarks.forEach(function (bookmark) {
+            if (bookmark.user && bookmark.user.id) {
+                // console.log("hi im iterating ", bookmark.user.id)
+                if (bookmark.user.id === store.user.id) {
+                    isBookmarked.value = true;
+                }
+            }
+        })
+
+        event.value.follows.forEach(function (follow) {
+            if (follow.user && follow.user.id) {
+                if (follow.user.id === store.user.id) {
+                    isFollowed.value = true;
+                }
+            }
+        })
+    }
     // console.log("this is fetching in events page", result.data)
 })
 
@@ -125,7 +144,6 @@ followDone(() => {
         transition: toast.TRANSITIONS.FLIP,
         position: toast.POSITION.TOP_RIGHT,
     });
-    isFollowed.value = true;
     refetch();
 })
 
@@ -155,8 +173,8 @@ const handleDeleteFollow = () => {
         event_id: event.value.id,
         user_id: store.user.id
     }
-    console.log(input)
-    deleteFollowMutate({ input })
+    // console.log(input)
+    deleteFollowMutate(input)
 }
 
 deleteFollowOnDone(() => {
@@ -164,8 +182,8 @@ deleteFollowOnDone(() => {
         transition: toast.TRANSITIONS.FLIP,
         position: toast.POSITION.TOP_RIGHT,
     });
-    isFollowed.value = false;
     refetch();
+    isFollowed.value = false;
 })
 
 deleteFollowOnError((error) => {
@@ -197,7 +215,6 @@ bookmarkDone(() => {
         transition: toast.TRANSITIONS.FLIP,
         position: toast.POSITION.TOP_RIGHT,
     });
-    isBookmarked.value = true;
     refetch();
     // bookmarkRefetch();
 })
@@ -232,8 +249,8 @@ const handleDeleteBookmark = async () => {
         event_id: event.value.id,
         user_id: store.user.id
     }
-    console.log(input)
-    deleteBookmarkMutate({ input })
+    console.log("this is while trying to unbookmark", input)
+    deleteBookmarkMutate(input)
 }
 
 deleteBookmarkOnDone(() => {
@@ -241,8 +258,8 @@ deleteBookmarkOnDone(() => {
         transition: toast.TRANSITIONS.FLIP,
         position: toast.POSITION.TOP_RIGHT,
     });
-    isBookmarked.value = true;
     refetch();
+    isBookmarked.value = false;
 })
 
 deleteBookmakeOnError((error) => {
@@ -332,10 +349,10 @@ deleteBookmakeOnError((error) => {
 
                         <span v-if="!isCreator">
                             <button @click.stop="handleDeleteFollow()" v-if="isFollowed">
-                                <icon name="ph:heart-fill" class="text-2xl text-[#ffe04a]" />
+                                <icon name="zondicons:minus-outline" class="text-2xl text-[#ffe04a]" />
                             </button>
                             <button @click.stop=" handleFollow()" v-else>
-                                <icon name="ph:heart" class="text-2xl text-black " />
+                                <icon name="ri:add-line" class="text-3xl  " />
                             </button>
                         </span>
 
