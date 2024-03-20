@@ -5,6 +5,7 @@ import { toast } from "vue3-toastify";
 import { Menu, MenuButton, MenuItems, MenuItem } from '@headlessui/vue'
 import deleteEvent from '~/graphql/mutations/events/delete.gql';
 
+let isCreator = ref(false);
 let isOwner = false;
 const isFollowed = true;
 const store = useAuthStore();
@@ -22,6 +23,14 @@ const props = defineProps({
                 default: false
         }
 })
+
+
+if (store.isAuthenticated) {
+        // console.log(props.event.user.id)
+        if (props.event.user.id === store.user.id) {
+                isCreator.value = true;
+        }
+}
 
 
 
@@ -126,7 +135,7 @@ const formattedDateTime = computed(() => {
                                                 </MenuButton>
                                                 <MenuItems
                                                         class="absolute mt-1 overflow-hidden bg-white  rounded-md right-0">
-                                                        <MenuItem v-slot="{ active }">
+                                                        <MenuItem v-slot="{ active }" v-if="!isCreator">
                                                         <button @click="$event.stopPropagation(); handleFollow()"
                                                                 class="text-sm hover:bg-sky-600 py-1.5 hover:text-white w-full px-3 cursor-pointer flex items-center gap-x-1.5">
                                                                 <icon name="lucide:plus" class="w-4 h-4" /> Follow
