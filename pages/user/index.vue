@@ -179,7 +179,7 @@ definePageMeta({
         <div class="grid grid-cols-2" v-if="singleUser">
 
                 <!-- User Profile Content -->
-                <div class="flex-1 p-8 bg-blue-500">
+                <div class="flex-1 p-8">
                         <h1 class="text-2xl font-bold mb-4">User Profile</h1>
 
                         <!-- Profile Section -->
