@@ -1,4 +1,4 @@
-mutation($input:tickets_insert_input!){
+mutation buyTicket($input:tickets_insert_input!){
   insert_tickets_one(object:$input){
     event_id
   }

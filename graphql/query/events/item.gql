@@ -1,5 +1,5 @@
-query getEvent($id:uuid!) {
-  events_by_pk(id:$id) {
+query getEvent($id: uuid!) {
+  events_by_pk(id: $id) {
     id
     thumbnail
     title
@@ -7,13 +7,11 @@ query getEvent($id:uuid!) {
     price
     location_id
     category_id
-    
-    event_medias{
-      media{
+    event_medias {
+      media {
         url
       }
     }
-  
     user {
       id
       first_name
@@ -21,7 +19,6 @@ query getEvent($id:uuid!) {
       photo_url
       __typename
     }
-    
     description
     venue
     tags {
@@ -33,34 +30,38 @@ query getEvent($id:uuid!) {
       }
       __typename
     }
-    bookmarks{
-      user{
-        id  
+    bookmarks {
+      user {
+        id
       }
     }
-    follows{
-      user{
-        id  
+    follows {
+      user {
+        id
       }
     }
-    followers_count: follows_aggregate{
-      aggregate{
+    followers_count: follows_aggregate {
+      aggregate {
         count
       }
     }
+    tickets{
+      user{
+        id
+      }
+    }
     location {
-      area{
+      area {
         id
         name
       }
-
-      city{
+      city {
         name
         id
       }
       area_id
       city_id
-       location
+      location
     }
     __typename
   }

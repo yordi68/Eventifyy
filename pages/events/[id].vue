@@ -2,7 +2,7 @@
 import getEvent from "~/graphql/query/events/item.gql";
 import addFollows from "~/graphql/mutations/follows/item.gql";
 import addBookmarks from "~/graphql/mutations/bookmarks/item.gql";
-import insertTicketMutation from "~/graphql/mutations/tickets/InsertOne.gql"
+import buyTicket from "~/graphql/mutations/tickets/add.gql"
 import { useAuthStore } from "~/stores/auth";
 import { toast } from "vue3-toastify";
 import {
@@ -29,6 +29,7 @@ const event = ref({});
 let isFollowed = ref(false);
 let isBookmarked = ref(false);
 let isCreator = ref(false);
+let hasBoughtTicket = ref(false);
 const isOpen = ref(false)
 
 function closeModal() {
@@ -72,6 +73,14 @@ onResult((result) => {
                 }
             }
         })
+        event.value.tickets.forEach(function (ticket) {
+            if (ticket.user && ticket.user.id) {
+                if (ticket.user.id === store.user.id) {
+                    hasBoughtTicket.value = true;
+                }
+            }
+        })
+
     }
     // console.log("this is fetching in events page", result.data)
 })
@@ -85,7 +94,7 @@ onError((error) => {
 
 
 
-const { mutate: insertTicket, onDone: insertTicketDone, onError: insertTicketError, loading: insertTicketLoading } = anonymousMutation(insertTicketMutation, {
+const { mutate: buyTicketMutate, onDone: buyTicketDone, onError: buyTicketError } = anonymousMutation(buyTicket, {
     clientId: "auth"
 })
 
@@ -99,16 +108,22 @@ const handleInsetTicket = async () => {
         event_id: event.value.id
     }
 
-    insertTicket({ input })
+    console.log("booking an event", input)
+    buyTicketMutate({ input })
 }
 
 
-insertTicketDone(() => {
+buyTicketDone(() => {
+    refetch();
     openModal()
+    // toast.success("You followed an event", {
+    //     transition: toast.TRANSITIONS.FLIP,
+    //     position: toast.POSITION.TOP_RIGHT,
+    // });
 })
 
 
-insertTicketError((error) => {
+buyTicketError((error) => {
     if (error.message.includes("duplicate")) {
         toast.error("You already bought a ticket for this event", {
             transition: toast.TRANSITIONS.FLIP,
@@ -119,7 +134,7 @@ insertTicketError((error) => {
 
     toast.error("Something went wrong", {
         transition: toast.TRANSITIONS.FLIP,
-        position: toast.POSITION.TOP_RIGH
+        position: toast.POSITION.TOP_RIGHT
     })
 })
 
@@ -302,7 +317,7 @@ deleteBookmakeOnError((error) => {
                                 You have bought a ticket
                             </DialogTitle>
                             <div class="mt-2">
-                                <p class="text-sm text-gray-500">
+                                <p class="text-sm text-black">
                                     We're thrilled that you've purchased our ticket! We can't wait to see you at the
                                     event and share the excitement together
                                 </p>
@@ -310,7 +325,7 @@ deleteBookmakeOnError((error) => {
 
                             <div class="mt-4">
                                 <button type="button"
-                                    class="inline-flex justify-center rounded-md border border-transparent bg-[#2D2C3C] px-4 py-2 text-sm font-medium text-white hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
+                                    class="inline-flex justify-center rounded-md border border-transparent bg-[#2D2C3C] px-4 py-2 text-sm font-medium text-white  focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2"
                                     @click="closeModal">
                                     Got it, thanks!
                                 </button>
