@@ -3,6 +3,8 @@ import { Disclosure, DisclosureButton, DisclosurePanel, Menu, MenuButton, MenuIt
 import { Icon as IconifyIcon } from '@iconify/vue';
 import { useAuthStore } from "~/stores/auth";
 const { user } = useAuthStore();
+
+// const user = toRef(user)
 const navigation = [
         { name: 'Home', to: '/', current: true },
         { name: 'Events', to: '/events', current: false },
@@ -60,7 +62,7 @@ const navigation = [
                                                                                 stroke-linejoin="round"
                                                                                 d="M17.982 18.725A7.488 7.488 0 0 0 12 15.75a7.488 7.488 0 0 0-5.982 2.975m11.963 0a9 9 0 1 0-11.963 0m11.963 0A8.966 8.966 0 0 1 12 21a8.966 8.966 0 0 1-5.982-2.275M15 9.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
                                                                 </svg> -->
-                                                                <img :src="user.photo_url" alt=""
+                                                                <img :src="user?.photo_url" alt=""
                                                                         class="w-12 h-12 rounded-full dark:bg-gray-500">
 
 
@@ -86,11 +88,11 @@ const navigation = [
 
                         <DisclosurePanel class="sm:hidden">
                                 <div class="space-y-1 px-2 pb-3 pt-2">
-                                        <NuxtLink v-for="item in navigation" :key="item.name" :to="item.to">
-                                                <DisclosureButton :key="item.name"
+                                        <NuxtLink v-for="item in navigation" :key="item?.name" :to="item?.to">
+                                                <DisclosureButton :key="item?.name"
                                                         class="block rounded-md px-3 py-2 text-base font-medium text-gray-300 hover:bg-gray-700 hover:text-white"
                                                         exact-active-class="text-extrabold text-[#FFE047]">
-                                                        {{ item.name }}
+                                                        {{ item?.name }}
                                                 </DisclosureButton>
                                         </NuxtLink>
                                 </div>

@@ -1,5 +1,6 @@
 <script setup>
 import { useAuthStore } from "~/stores/auth";
+const { onLogout } = useApollo()
 
 const { user, logout } = useAuthStore()
 // console.log(store.user.first_name)
@@ -8,7 +9,11 @@ const { user, logout } = useAuthStore()
 import { ref } from 'vue';
 
 const modalVisible = ref(false);
-
+const handleLogout = () => {
+        onLogout('auth');
+        logout();
+        navigateTo('/');
+}
 
 
 </script>
@@ -136,7 +141,7 @@ const modalVisible = ref(false);
                                         </a>
                                 </li> -->
                                 <li>
-                                        <button @click="showModal('popup-modal')"
+                                        <button @click="handleLogout"
                                                 class="flex items-center p-2 space-x-3 rounded-md hover:text-[#FFE047]">
                                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"
                                                         class="w-5 h-5 fill-current dark:text-gray-400">
@@ -153,3 +158,4 @@ const modalVisible = ref(false);
         </div>
 </template>
 <!-- @click="[logout(), navigateTo('/')]" -->
+<!-- @click="showModal('popup-modal')" -->

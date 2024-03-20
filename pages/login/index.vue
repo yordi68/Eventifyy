@@ -40,8 +40,9 @@ const onSubmit = handleSubmit(() => {
 
 
 loginonDone(({ data }) => {
+        console.log("zeru login", data)
         onLogin(data.login.token, "auth")
-        router.push('/')
+        router.replace('/')
         toast.success("user succesfully logged in", {
                 transition: toast.TRANSITIONS.FLIP,
                 position: toast.POSITION.TOP_RIGHT,
@@ -51,9 +52,6 @@ loginonDone(({ data }) => {
         authStore.setId(data.login.id);
         authStore.setUser(data.login.id);
         authStore.setRole(data.login.role);
-        console.log("logged in 2")
-
-
 });
 
 

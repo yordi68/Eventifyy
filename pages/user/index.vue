@@ -8,6 +8,14 @@ import { useAuthStore } from "~/stores/auth";
 import updateUser from "~/graphql/mutations/user/edit.gql";
 import imageUploadQuery from "@/graphql/mutations/uploadImage.gql"
 
+
+
+
+
+
+
+
+
 const store = useAuthStore();
 const singleUser = ref([]);
 const image = ref()
@@ -20,6 +28,20 @@ const {
         clientId: "auth"
 })
 
+
+const {
+        errorMessage: passwordError,
+        value: password
+} = useField("password", "password|required", {
+        initialValue: "",
+})
+
+const {
+        errorMessage: confirmPasswordError,
+        value: confirmPassword
+} = useField("confirmPassword", "password|required", {
+        initialValue: "",
+})
 
 
 
@@ -44,7 +66,7 @@ onError((error) => {
         console.log("error", error)
 })
 
-const aggregateFilter = computed(() => store.user.id)
+const aggregateFilter = computed(() => store.user?.id)
 
 const { onResult: onAggregateResult } = queryList(InfoUser, { filter: aggregateFilter, clientId: ref('auth') })
 
@@ -154,10 +176,10 @@ definePageMeta({
 
 
 <template>
-        <div class="flex" v-if="singleUser">
+        <div class="grid grid-cols-2" v-if="singleUser">
 
                 <!-- User Profile Content -->
-                <div class="flex-1 p-8">
+                <div class="flex-1 p-8 bg-blue-500">
                         <h1 class="text-2xl font-bold mb-4">User Profile</h1>
 
                         <!-- Profile Section -->
@@ -225,8 +247,30 @@ definePageMeta({
 
                         <!-- Save Button -->
                         <button @click.prevent="onSubmit" type="submit"
-                                class="bg-indigo-500 text-white py-2 px-4 rounded-md hover:bg-indigo-600">Save
-                                Changes</button>
+                                class="bg-indigo-500 text-white py-2 px-4 rounded-md hover:bg-indigo-600">
+                                Save Changes
+                        </button>
                 </div>
+
+                <!-- <div class="p-8">
+
+                        <h1 class="text-2xl font-bold mb-4">Password Setting</h1>
+
+                        <div class="flex flex-col mb-4 space-y-4">
+
+                                <BaseTextInput v-model="password" label="Password" name="password" rules="required"
+                                        type="password" />
+
+
+                                <BaseTextInput v-model="confirmPassword" label="Confirm Password" name="confirmPassword"
+                                        rules="required" type="password" />
+
+                        </div>
+                        <button @click.prevent="onSubmit" type="submit"
+                                class="bg-indigo-500 text-white py-2 px-4 rounded-md hover:bg-indigo-600">
+                                Change Password
+                        </button>
+                </div> -->
+
         </div>
 </template>

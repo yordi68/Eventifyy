@@ -9,5 +9,3 @@ export default defineApolloClient({
   defaultOptions: {},
   inMemoryCacheOptions: {},
 });
-
-// tokenName: "vascom_tender_custom_token",

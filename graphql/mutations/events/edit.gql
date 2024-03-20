@@ -1,11 +1,9 @@
-  mutation editEvent($eventObject: events_set_input, $tagObject:[event_tags_insert_input!]!, $mediaObject:[event_medias_insert_input!]!, $id:uuid! ) {
+  mutation editEvent($eventObject: events_set_input, $tagObject:[event_tags_insert_input!]!, $id:uuid! ) {
 
     delete_event_tags(where:{event_id:{_eq:$id}}){
       affected_rows
     }
-    delete_event_medias(where:{event_id:{_eq:$id}}){
-      affected_rows
-    }
+
     update_events_by_pk(_set: $eventObject, pk_columns: {id:$id}){
       id
     }
@@ -13,8 +11,13 @@
     insert_event_tags(objects: $tagObject){
       affected_rows
     }
-    insert_event_medias(objects: $mediaObject){
-      affected_rows
-    }
+
   
 }
+# $mediaObject:[event_medias_insert_input!]!
+    # delete_event_medias(where:{event_id:{_eq:$id}}){
+    #   affected_rows
+    # }
+    #     insert_event_medias(objects: $mediaObject){
+    #   affected_rows
+    # }

@@ -7,7 +7,7 @@ export const useAuthStore = defineStore("auth", {
     token: null,
     id: null,
     role: null,
-    user: null,
+    user: ref({}),
   }),
   getters: {
     isAuthenticated: (state) => !!state.token,
@@ -38,14 +38,7 @@ export const useAuthStore = defineStore("auth", {
       this.role = role;
     },
     logout() {
-      this.token = null;
-      this.user = null;
-      this.id = null;
-      this.role = null;
-
-      onLogout("auth");
-      const authToken = useCookie("event_management_custom_token");
-      authToken.value = null;
+      this.$reset();
     },
     // autoLogin(){
     //   let decoded = {};
