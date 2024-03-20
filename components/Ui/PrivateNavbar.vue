@@ -28,7 +28,7 @@ const navigation = [
 
                                         <div class="flex items-center justify-between w-full">
                                                 <div>
-                                                        <NuxtLink to="#">
+                                                        <NuxtLink to="/">
                                                                 <img src="/logo.png" alt="">
                                                         </NuxtLink>
                                                 </div>
