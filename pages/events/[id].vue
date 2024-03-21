@@ -551,21 +551,7 @@ relatedEventError((error) => {
             <EventsLocation :event-location="event.location"></EventsLocation>
         </div>
 
-        <!-- <div class="max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
-            <div class="w-full">
-                <img class="rounded-t-lg" :src="event.thumbnail" alt="" />
-            </div>
-            <div class="p-5">
-                <a href="#">
-                    <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Noteworthy
-                        technology acquisitions 2021</h5>
-                </a>
-                <p class="mb-3 font-normal text-gray-700 dark:text-gray-400">Here are the biggest enterprise technology
-                    acquisitions of 2021 so far, in reverse chronological order.</p>
-            </div>
-        </div> -->
-
-        <div class="md:py-16">
+        <div class="md:py-16" v-if="relatedEvents && relatedEvents.length > 0">
             <h3 class="text-3xl  font-bold my-4 pr-32">Related Events</h3>
             <hr class="my-6 border-gray-200 w-3/4 ">
             <div class="grid grid-cols-1 gap-y-8 md:grid-cols-3  md:gap-x-4 ">
