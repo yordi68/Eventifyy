@@ -1,4 +1,6 @@
 <script setup>
+import getEvents from '@/graphql/query/events/list.gql';
+
 import getEvent from "~/graphql/query/events/item.gql";
 import addFollows from "~/graphql/mutations/follows/item.gql";
 import addBookmarks from "~/graphql/mutations/bookmarks/item.gql";
@@ -14,7 +16,6 @@ import {
 } from '@headlessui/vue'
 import deleteBookmark from "~/graphql/mutations/bookmarks/delete.gql";
 import deleteFollow from "~/graphql/mutations/follows/delete.gql";
-
 
 
 
@@ -287,6 +288,54 @@ deleteBookmakeOnError((error) => {
 })
 
 
+/*---------------------Fetch Related Event ---------------*/
+
+const filter = computed(() => {
+    let query = {}
+    query._and = [{
+        category_id: {
+            _eq: event.value.category_id
+        }
+    },
+    {
+        id: {
+            _neq: event.value.id
+        }
+    }
+    ]
+    return query;
+})
+
+const { onResult: relatedEventResult, onError: relatedEventError, refetch: relatedEventRefetch, loading: relatedEventLoading } = queryList(
+    getEvents,
+    {
+        filter: filter,
+        clientId: "auth",
+        limit: ref(3)
+    }
+);
+
+let relatedEvents = ref([])
+
+
+relatedEventResult((result) => {
+    relatedEvents.value = result.data.events
+    // console.log("related event new", relatedEvent.value[0])
+    // console.log("related event new", relatedEvent.value[0].thumbnail)
+    // console.log("related event new", relatedEvent.value[0].title)
+    // console.log("related event new", relatedEvent.value[0].description)
+    // console.log(relatedEvents.value.forEach((event) => {
+    //     console.log("related event id", event.id)
+    //     console.log("related event thumbnail", event.thumbnail)
+    //     console.log("related event title", event.title)
+    // }))
+})
+
+relatedEventError((error) => {
+    console.log(error, "fetching related event error")
+})
+
+
 </script>
 
 
@@ -500,6 +549,28 @@ deleteBookmakeOnError((error) => {
                 </span>
             </p>
             <EventsLocation :event-location="event.location"></EventsLocation>
+        </div>
+
+        <!-- <div class="max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
+            <div class="w-full">
+                <img class="rounded-t-lg" :src="event.thumbnail" alt="" />
+            </div>
+            <div class="p-5">
+                <a href="#">
+                    <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Noteworthy
+                        technology acquisitions 2021</h5>
+                </a>
+                <p class="mb-3 font-normal text-gray-700 dark:text-gray-400">Here are the biggest enterprise technology
+                    acquisitions of 2021 so far, in reverse chronological order.</p>
+            </div>
+        </div> -->
+
+        <div class="md:py-16">
+            <h3 class="text-3xl  font-bold my-4 pr-32">Related Events</h3>
+            <hr class="my-6 border-gray-200 w-3/4 ">
+            <div class="grid grid-cols-1 gap-y-8 md:grid-cols-3  md:gap-x-4 ">
+                <UiVerticalCard v-for="relatedEvent in relatedEvents" :key="relatedEvent.price" :event="relatedEvent" />
+            </div>
         </div>
 
 
