@@ -30,6 +30,7 @@ const {
 
 eventOnResult(({ data }) => {
     event.value = { ...data.events_by_pk }
+    console.log("event editing", event.value)
     selectedTags.value = data.events_by_pk.tags.map(tag => tag?.tag?.id)
     city.value = data.events_by_pk.location.city_id
     area.value = data.events_by_pk.location.area_id

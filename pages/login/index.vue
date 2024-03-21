@@ -1,5 +1,6 @@
 <script setup>
 import login from "~/graphql/auth/login.gql";
+import { jwtDecode } from 'jwt-decode';
 import { useField, useForm } from "vee-validate";
 import { toast } from "vue3-toastify";
 import { useAuthStore } from "~/stores/auth";
@@ -47,10 +48,10 @@ loginonDone(({ data }) => {
                 transition: toast.TRANSITIONS.FLIP,
                 position: toast.POSITION.TOP_RIGHT,
         });
-        console.log("logged in")
+        const decodedPayload = jwtDecode(data.login.token)
         authStore.setToken(data.login.token);
         authStore.setId(data.login.id);
-        authStore.setUser(data.login.id);
+        authStore.user = decodedPayload['https://hasura.io/jwt/claims']?.user?.user
         authStore.setRole(data.login.role);
 });
 

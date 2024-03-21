@@ -85,7 +85,8 @@ userDone((response) => {
                 position: toast.POSITION.TOP_RIGHT,
 
         });
-        store.setUser(store.user.id);
+        store.user = response.data?.update_users_by_pk
+        window.location.reload()
 })
 
 userError((error) => {
@@ -95,11 +96,13 @@ userError((error) => {
 
 
 
-const onSubmit = handleSubmit(() => {
-        imageUploadToDB(
-                { image: { images: [image.value] } }
-        )
-})
+const onSubmit = () => {
+        const { id, __typename, ...rest } = singleUser.value
+        userMutate({
+                userObject: { ...rest },
+                id: store.user.id
+        });
+}
 
 const pic = ref()
 imageUploadToDBDone(({ data }) => {
@@ -108,10 +111,6 @@ imageUploadToDBDone(({ data }) => {
         // alert(data.imageUpload.urls)
         if (pic.value.length > 0) {
                 userObject.value = {
-                        first_name: singleUser.value.first_name,
-                        last_name: singleUser.value.last_name,
-                        email: singleUser.value.email,
-                        phone_number: singleUser.value.phone_number,
                         photo_url: data.imageUpload.urls[0]
                 }
 
@@ -128,10 +127,6 @@ imageUploadToDBDone(({ data }) => {
         //         id: store.user.id
         // })
         // store.setUser(store.user.id);
-
-
-
-
 })
 
 
@@ -148,14 +143,20 @@ const user = reactive({
 const followers = ref(0); // Sample followers count
 const following = ref(0); // Sample following count
 const likes = ref(2000); // Sample likes count
+const previewImage = ref(null)
 
 function handleProfilePictureChange(event) {
+        previewImage.value = URL.createObjectURL(event.target.files[0]);
         const file = event.target.files[0];
         const reader = new FileReader();
 
         reader.onload = (e) => {
                 user.profilePicture = e.target.result;
                 image.value = user.profilePicture.split(",")[1];
+                imageUploadToDB(
+                        { image: { images: [image.value] } }
+                );
+                refetch()
         };
 
         reader.readAsDataURL(file);
@@ -187,17 +188,21 @@ definePageMeta({
                                 <!-- Profile Image and Stats -->
                                 <div class="mr-6">
                                         <!-- Profile Picture and Stats -->
-                                        <div class="flex items-center mb-4">
+                                        <div class="flex items-center mb-4 relative">
                                                 <!-- Profile Picture -->
-                                                <div class="mr-4">
+
+                                                <div class="mr-4 relative">
+
                                                         <label for="profile-picture"
                                                                 class="block text-sm font-medium text-gray-700 mb-8">Profile
                                                                 Picture</label>
                                                         <input type="file" id="profile-picture" name="profile-picture"
                                                                 @change="handleProfilePictureChange" class="hidden">
-                                                        <label for="profile-picture" class="cursor-pointer">
+                                                        <label for="profile-picture" class="cursor-pointer relative">
+                                                                <Icon name="ic:baseline-plus"
+                                                                        class="absolute bottom-0 right-0 bg-black !text-white box-content p-2 rounded-full !text-lg" />
                                                                 <img v-if="singleUser.photo_url"
-                                                                        :src="singleUser.photo_url"
+                                                                        :src="previewImage || singleUser.photo_url"
                                                                         alt="Profile Picture"
                                                                         class="h-24 w-24 rounded-full shadow-md">
                                                                 <div v-else
@@ -220,36 +225,38 @@ definePageMeta({
                                                         <div class="text-gray-500">Likes</div>
                                                 </div> -->
                                         </div>
+                                        <form @submit.prevent="onSubmit">
+                                                <!-- Profile Information -->
+                                                <div class="flex mt-10 space-x-8">
 
-                                        <!-- Profile Information -->
-                                        <div class="flex mt-10 space-x-8">
+                                                        <BaseTextInput v-model="singleUser.first_name"
+                                                                label="First Name" name="first_name" rules="required" />
 
-                                                <BaseTextInput v-model="singleUser.first_name" label="First Name"
-                                                        name="first_name" rules="required" />
+                                                        <BaseTextInput v-model="singleUser.last_name" label="Last Name"
+                                                                name="last_name" rules="required" />
+                                                </div>
 
-                                                <BaseTextInput v-model="singleUser.last_name" label="Last Name"
-                                                        name="last_name" rules="required" />
-                                        </div>
+                                                <!-- Email and Phone Number -->
+                                                <div class="flex mb-4 space-x-8">
 
-                                        <!-- Email and Phone Number -->
-                                        <div class="flex mb-4 space-x-8">
+                                                        <BaseTextInput v-model="singleUser.email" label="Email"
+                                                                name="email" rules="required" type="email" />
 
-                                                <BaseTextInput v-model="singleUser.email" label="Email" name="email"
-                                                        rules="required" type="email" />
+                                                        <!-- Phone Number -->
+                                                        <BaseTextInput v-model="singleUser.phone_number"
+                                                                label="Phone Number" name="phone_number"
+                                                                rules="required" type="Number" />
+                                                </div>
 
-                                                <!-- Phone Number -->
-                                                <BaseTextInput v-model="singleUser.phone_number" label="Phone Number"
-                                                        name="phone_number" rules="required" type="Number" />
-                                        </div>
-
+                                                <!-- Save Button -->
+                                                <button
+                                                        class="bg-indigo-500 text-white py-2 px-4 rounded-md hover:bg-indigo-600">
+                                                        Save Changes
+                                                </button>
+                                        </form>
                                 </div>
                         </div>
 
-                        <!-- Save Button -->
-                        <button @click.prevent="onSubmit" type="submit"
-                                class="bg-indigo-500 text-white py-2 px-4 rounded-md hover:bg-indigo-600">
-                                Save Changes
-                        </button>
                 </div>
 
                 <!-- <div class="p-8">

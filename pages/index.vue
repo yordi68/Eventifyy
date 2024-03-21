@@ -27,8 +27,8 @@ const { onResult: latestEventResult, onError: latestEventError, refetch: latestE
 
 latestEventResult((result) => {
         latestEvents.value = result.data.events;
-        console.log(latestEvents.value)
-        console.log(latestEvents.value[0])
+        // console.log(latestEvents.value)
+        // console.log(latestEvents.value[0])
 })
 
 latestEventError((error) => {

@@ -73,7 +73,7 @@ onResult((result) => {
                 }
             }
         })
-        event.value.tickets.forEach(function (ticket) {
+        event.value?.tickets?.forEach(function (ticket) {
             if (ticket.user && ticket.user.id) {
                 if (ticket.user.id === store.user.id) {
                     hasBoughtTicket.value = true;
