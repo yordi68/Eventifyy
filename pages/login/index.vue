@@ -41,7 +41,6 @@ const onSubmit = handleSubmit(() => {
 
 
 loginonDone(({ data }) => {
-        console.log("zeru login", data)
         onLogin(data.login.token, "auth")
         router.replace('/')
         toast.success("user succesfully logged in", {

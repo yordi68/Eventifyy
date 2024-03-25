@@ -3,7 +3,7 @@ import signup from "~/graphql/auth/signup.gql"
 import { toast } from "vue3-toastify";
 import { useField, useForm } from "vee-validate"
 import { useAuthStore } from "~/stores/auth";
-
+import { jwtDecode } from "jwt-decode";
 
 
 const { onLogin } = useApollo()
@@ -59,16 +59,18 @@ const onSubmit = handleSubmit((values, { setFieldError }) => {
 });
 signuponDone(({ data }) => {
         onLogin(data.signup.token, "auth")
+        const decodedPayload = jwtDecode(data.login.token)
+        console.log("signup-", decodedPayload)
         toast.success("user succesfully signed in", {
                 transition: toast.TRANSITIONS.FLIP,
                 position: toast.POSITION.TOP_RIGHT,
         });
-        console.log("signed up")
+        // console.log("signed up")
         authStore.setToken(data.signup.token);
         authStore.setId(data.signup.id);
         authStore.setUser(data.signup.id);
         authStore.setRole(data.signup.role);
-        console.log("signed up 2")
+        // console.log("signed up 2")
 
         router.replace('/')
 
