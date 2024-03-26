@@ -26,6 +26,7 @@ import deleteFollow from "~/graphql/mutations/follows/delete.gql";
 
 const store = useAuthStore();
 const route = useRoute();
+const router = useRouter();
 const event = ref({});
 let isFollowed = ref(false);
 let isBookmarked = ref(false);
@@ -104,6 +105,10 @@ const { mutate: buyTicketMutate, onDone: buyTicketDone, onError: buyTicketError 
 
 
 const handleInsetTicket = async () => {
+    if (!store.isAuthenticated) {
+        router.replace("/login");
+        return;
+    }
     const input = {
         user_id: store.user.id,
         event_id: event.value.id
@@ -147,6 +152,10 @@ const { mutate: followMutate, onDone: followDone, onError: followError, loading 
 });
 
 const handleFollow = async () => {
+    if (!store.isAuthenticated) {
+        router.replace("/login");
+        return;
+    }
     const input = {
         user_id: store.user.id,
         event_id: event.value.id
@@ -218,6 +227,10 @@ const { mutate: bookmarkMutate, onDone: bookmarkDone, onError: bookmarkError } =
 });
 
 const handleBookmark = async () => {
+    if (!store.isAuthenticated) {
+        router.replace("/login");
+        return;
+    }
     const input = {
         user_id: store.user.id,
         event_id: event.value.id
@@ -400,7 +413,7 @@ relatedEventError((error) => {
             <div class="flex flex-col gap-y-6">
                 <div class="flex justify-between">
                     <h3 class="font-bold text-4xl">{{ event.title }}</h3>
-                    <div class="flex items-center gap-x-2" v-if="store.isAuthenticated">
+                    <div class="flex items-center gap-x-2">
                         <span>
                             <button @click.stop="handleDeleteBookmark()" v-if="isBookmarked">
                                 <Icon name="mdi:bookmark" class="text-2xl text-[#ffe04a]" />
@@ -510,7 +523,7 @@ relatedEventError((error) => {
                         </div>
                     </div>
                     <button class="flex bg-[#FFE047] rounded-md items-center py-4 px-6 space-x-4 "
-                        v-if="store.isAuthenticated && !isCreator && !hasBoughtTicket">
+                        v-if="!isCreator && !hasBoughtTicket">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                             stroke="currentColor" class="w-6 h-6">
                             <path stroke-linecap="round" stroke-linejoin="round"
