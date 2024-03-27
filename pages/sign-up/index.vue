@@ -58,7 +58,7 @@ const onSubmit = handleSubmit((values, { setFieldError }) => {
         signupMutation({ input });
 });
 signuponDone(({ data }) => {
-        onLogin(data.signup.token, "auth")
+
         router.replace('/login')
         toast.success("user succesfully signed up", {
                 transition: toast.TRANSITIONS.FLIP,
@@ -69,7 +69,7 @@ signuponDone(({ data }) => {
         authStore.setToken(data.signup.token);
         authStore.setId(data.signup.id);
         authStore.user = decodedPayload['https://hasura.io/jwt/claims']?.user?.user
-        // authStore.setUser(data.signup.id);
+
         authStore.setRole(data.signup.role);
         // console.log("signed up 2")
 

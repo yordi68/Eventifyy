@@ -3,6 +3,10 @@ query getEvents($filter:events_bool_exp, $order: [events_order_by!], $offset:Int
     id
     thumbnail
     category_id
+    category{
+      id
+      name
+    }
     event_medias{
       media{
         url

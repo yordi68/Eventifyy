@@ -201,12 +201,6 @@ const filter = computed(() => {
         let query = {
                 _and
         };
-        // query.user = {
-        //         id: {
-        //                 _eq: user.id
-        //         }
-        // }
-
         return query;
 
 });
@@ -221,65 +215,19 @@ const { onResult, onError, refetch, loading } = queryList(
         }
 );
 
-// provide("refetch", refetch)
+
 
 onResult((result) => {
         events.value = result.data.events;
-        console.log(events.value[0])
+        // console.log(events.value[0])
 })
 
-console.log(events);
+// console.log(events);
 
 onError((error) => {
         console.log(error)
 });
 
-
-
-// const events = [
-//         {
-//                 thumbnail: '/event-details-1.jpg',
-//                 title: 'Noteworthy technology',
-//                 date: 'Nov 23 - 29',
-//                 place: 'Chengapattu, India',
-//                 price: 1200,
-//         },
-//         {
-//                 thumbnail: '/event-details-1.jpg',
-//                 title: 'Noteworthy technology',
-//                 date: 'Nov 23 - 29',
-//                 place: 'Chengapattu, India',
-//                 price: 1200,
-//         },
-//         {
-//                 thumbnail: '/event-details-1.jpg',
-//                 title: 'Noteworthy technology',
-//                 date: 'Nov 23 - 29',
-//                 place: 'Chengapattu, India',
-//                 price: 1200,
-//         },
-//         {
-//                 thumbnail: '/event-details-1.jpg',
-//                 title: 'Noteworthy technology',
-//                 date: 'Nov 23 - 29',
-//                 place: 'Chengapattu, India',
-//                 price: 1200,
-//         },
-//         {
-//                 thumbnail: '/event-details-1.jpg',
-//                 title: 'Noteworthy technology',
-//                 date: 'Nov 23 - 29',
-//                 place: 'Chengapattu, India',
-//                 price: 1200,
-//         },
-//         {
-//                 thumbnail: '/event-details-1.jpg',
-//                 title: 'Noteworthy technology',
-//                 date: 'Nov 23 - 29',
-//                 place: 'Chengapattu, India',
-//                 price: 1200,
-//         },
-// ]
 
 definePageMeta({
         layout: 'default'

@@ -50,10 +50,9 @@ loginonDone(({ data }) => {
         const decodedPayload = jwtDecode(data.login.token)
         authStore.setToken(data.login.token);
         authStore.setId(data.login.id);
-        authStore.user = decodedPayload['https://hasura.io/jwt/claims']?.user?.user
+        authStore.user = { ...decodedPayload['https://hasura.io/jwt/claims']?.user?.user }
         authStore.setRole(data.login.role);
 });
-
 
 
 

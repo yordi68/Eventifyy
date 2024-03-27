@@ -8,6 +8,7 @@ export const useAuthStore = defineStore("auth", {
     id: null,
     role: null,
     user: ref({}),
+    photo_url: "",
   }),
   getters: {
     isAuthenticated: (state) => !!state.token,
@@ -21,7 +22,7 @@ export const useAuthStore = defineStore("auth", {
       });
 
       onResult((result) => {
-        console.log(result, "result");
+        // console.log(result, "result");
         this.user = { ...result.data.users_by_pk };
       });
 
@@ -41,9 +42,6 @@ export const useAuthStore = defineStore("auth", {
     logout() {
       this.$reset();
     },
-    // autoLogin(){
-    //   let decoded = {};
-    // }
   },
   persist: true,
 });

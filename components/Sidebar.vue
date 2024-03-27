@@ -2,7 +2,7 @@
 import { useAuthStore } from "~/stores/auth";
 const { onLogout } = useApollo()
 
-const { getUser: user, logout } = useAuthStore()
+const { getUser: user, logout, photo_url } = useAuthStore()
 // console.log(store.user.first_name)
 // console.log(user.photo_url);
 

@@ -86,7 +86,8 @@ userDone((response) => {
 
         });
         store.user = response.data?.update_users_by_pk
-        window.location.reload()
+        store.photo_url = response.data?.update_users_by_pk?.photo_url
+        // window.location.reload()
 })
 
 userError((error) => {
@@ -156,7 +157,6 @@ function handleProfilePictureChange(event) {
                 imageUploadToDB(
                         { image: { images: [image.value] } }
                 );
-                refetch()
         };
 
         reader.readAsDataURL(file);
