@@ -5,17 +5,7 @@ import getCategories from '~/graphql/query/categories/list.gql';
 
 const categoryFilter = ref(null);
 
-// const filter = computed(() => {
-//         // let query = {};
 
-//         return {
-//                 category: {
-//                         id: {
-//                                 _eq: category.id
-//                         }
-//                 }
-//         };
-// });
 
 /*--------------------- Fetching Latest Events ----------------------- */
 

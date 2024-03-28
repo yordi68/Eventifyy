@@ -16,7 +16,7 @@ query getEvents($filter:events_bool_exp, $order: [events_order_by!], $offset:Int
     time
     price
     location_id
-    bookmarks{
+    bookmarks @include(if:$include) {
       user{
         id
       }
