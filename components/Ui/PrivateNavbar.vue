@@ -2,7 +2,7 @@
 import { Disclosure, DisclosureButton, DisclosurePanel, Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/vue'
 import { Icon as IconifyIcon } from '@iconify/vue';
 import { useAuthStore } from "~/stores/auth";
-const { getUser, getTest, getFirstName, getLastName, getPhotoUrl } = useAuthStore();
+const { isAuthenticated, getFirstName, getLastName, getPhotoUrl } = useAuthStore();
 
 // const user = toRef(user)
 const navigation = [
@@ -37,12 +37,8 @@ const navigation = [
                                                         </NuxtLink>
                                                 </div>
 
-                                                <div class="flex justify-between items-center space-x-3">
-                                                        <!-- <NuxtLink to="/login" class="text-white"
-                                                                exact-active-class="text-extrabold text-[#FFE047] w-20">
-                                                                <span>Login</span>
-                                                        </NuxtLink> -->
-
+                                                <div v-if="isAuthenticated"
+                                                        class="flex justify-between items-center space-x-3">
                                                         <NuxtLink to="/user"
                                                                 class="flex text-white items-center space-x-2 ">
                                                                 <div class="space-x-2">
@@ -56,6 +52,20 @@ const navigation = [
 
 
 
+                                                        </NuxtLink>
+                                                </div>
+
+                                                <div v-else class="flex justify-between items-center space-x-3">
+                                                        <NuxtLink to="/login" class="text-white"
+                                                                exact-active-class="text-extrabold text-[#FFE047] w-20">
+                                                                <span>Login</span>
+                                                        </NuxtLink>
+
+                                                        <NuxtLink to="/sign-up">
+                                                                <button
+                                                                        class="bg-[#FFE047] !w-30 whitespace-nowrap px-4 py-2 rounded-md cursor-pointer">
+                                                                        Sign Up
+                                                                </button>
                                                         </NuxtLink>
                                                 </div>
                                         </div>

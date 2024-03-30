@@ -16,14 +16,16 @@ const authStore = useAuthStore()
 
 <template>
         <main class="relative">
-                <div class="relative" v-if="authStore.isAuthenticated">
+                <UiPrivateNavbar />
+
+                <!-- <div class="relative" v-if="authStore.isAuthenticated">
                         <UiPrivateNavbar />
                 </div>
                 <div v-else>
                         <UiPublicNavbar />
-                </div>
+                </div> -->
 
-              
+
 
 
                 <div>
