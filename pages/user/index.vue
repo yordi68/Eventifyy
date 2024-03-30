@@ -79,14 +79,21 @@ const { mutate: userMutate, loading: userLoading, onError: userError, onDone: us
         clientId: "auth"
 })
 
-userDone((response) => {
+userDone(async (response) => {
         toast.success("You have updated your profile", {
                 transition: toast.TRANSITIONS.FLIP,
                 position: toast.POSITION.TOP_RIGHT,
 
         });
-        store.user = response.data?.update_users_by_pk
-        store.photo_url = response.data?.update_users_by_pk?.photo_url
+
+        store.setUser(null)
+        store.setUser(response.data?.update_users_by_pk);
+
+        await store.fetchUser(response.data?.update_users_by_pk.id)
+
+
+        // store.user = response.data?.update_users_by_pk
+        // store.photo_url = response.data?.update_users_by_pk?.photo_url
         // window.location.reload()
 })
 

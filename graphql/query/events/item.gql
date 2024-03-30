@@ -1,4 +1,4 @@
-query getEvent($id: uuid!) {
+query getEvent($id: uuid!, $include: Boolean = false) {
   events_by_pk(id: $id) {
     id
     thumbnail
@@ -30,7 +30,7 @@ query getEvent($id: uuid!) {
       }
       __typename
     }
-    bookmarks {
+    bookmarks @include(if:$include)  {
       user {
         id
       }

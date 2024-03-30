@@ -1,8 +1,10 @@
 <script setup>
 import { useAuthStore } from "~/stores/auth";
+const router = useRouter()
+
 const { onLogout } = useApollo()
 
-const { getUser: user, logout, photo_url } = useAuthStore()
+const { getUser: user, getFirstName, getLastName, logout, getPhotoUrl } = useAuthStore()
 // console.log(store.user.first_name)
 // console.log(user.photo_url);
 
@@ -79,15 +81,16 @@ const handleLogout = () => {
         </div>
 
 
-        <div class="h-screen p-3 w-full space-y-2  text-white bg-[#2D2C3C] dark:text-gray-100">
-                <div class="flex items-center  space-x-4 cursor-pointer" @click="$router.push('/user')">
-                        <img :src="user.photo_url" alt="" class="w-12 h-12 rounded-full dark:bg-gray-500">
+        <div v-if="user" class="h-screen p-3 w-full space-y-2  text-white bg-[#2D2C3C] dark:text-gray-100">
+                <div class="flex items-center  space-x-4 cursor-pointer" @click="router.push('/user')">
+                        <img :src="getPhotoUrl" alt="" class="w-12 h-12 rounded-full dark:bg-gray-500">
                         <div>
 
-                                <h2 class="text-lg font-semibold" :key="user">{{ user.first_name }} {{ user.last_name }}
+                                <h2 class="text-lg font-semibold">{{ getFirstName }} {{ getLastName }}
                                 </h2>
                                 <span class="flex items-center space-x-1">
-                                        <span class="text-xs hover:underline dark:text-gray-400">View profile
+                                        <span class="text-xs hover:underline dark:text-gray-400">View profile {{
+                                                }}
                                         </span>
                                 </span>
                         </div>
@@ -199,6 +202,3 @@ const handleLogout = () => {
                 </div>
         </div>
 </template>
-<!-- @click="[logout(), navigateTo('/')]" -->
-<!-- @click="showModal('popup-modal')" -->
-<!-- @click="handleLogout" -->

@@ -8,6 +8,8 @@ const authStore = useAuthStore()
 // console.log(authStore.user.first_name)
 // console.log(authStore.user.last_name)
 // console.log(authStore.user.token)
+
+
 </script>
 
 
@@ -20,6 +22,10 @@ const authStore = useAuthStore()
                 <div v-else>
                         <UiPublicNavbar />
                 </div>
+
+              
+
+
                 <div>
                         <slot />
                         <ScrollToTop />

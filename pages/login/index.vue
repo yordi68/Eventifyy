@@ -4,6 +4,8 @@ import { jwtDecode } from 'jwt-decode';
 import { useField, useForm } from "vee-validate";
 import { toast } from "vue3-toastify";
 import { useAuthStore } from "~/stores/auth";
+import getUser from "~/graphql/query/users/item.gql";
+
 const router = useRouter()
 
 
@@ -27,8 +29,8 @@ const {
 
 const {
         mutate: loginMutation,
-        onDone: loginonDone,
-        onError: loginonError,
+        onDone: loginOnDone,
+        onError: loginOnError,
         loading } = authentication(login)
 
 const onSubmit = handleSubmit(() => {
@@ -40,24 +42,68 @@ const onSubmit = handleSubmit(() => {
 });
 
 
-loginonDone(({ data }) => {
+loginOnDone(({ data }) => {
         onLogin(data.login.token, "auth")
-        router.replace('/')
         toast.success("user succesfully logged in", {
                 transition: toast.TRANSITIONS.FLIP,
                 position: toast.POSITION.TOP_RIGHT,
         });
-        const decodedPayload = jwtDecode(data.login.token)
-        authStore.setToken(data.login.token);
-        authStore.setId(data.login.id);
-        authStore.user = { ...decodedPayload['https://hasura.io/jwt/claims']?.user?.user }
-        authStore.setRole(data.login.role);
+
+        authStore.fetchUser(data.login.id).then((result) => {
+                authStore.setToken(data.login.token);
+                authStore.setId(data.login.id);
+                authStore.setRole(data.login.role);
+        }).catch((error) => {
+        })
+
+
+
+
+
+        // fetch user
+
+        // const { onResult, onError, onDone } = singleQuery(getUser, {
+        //         id: data.login.id
+        // })
+
+
+
+
+        // onResult((result) => {
+
+        //         authStore.setUser(result.data.users_by_pk)
+
+
+
+
+
+        // })
+
+        // onError((error) => {
+        //         console.log("error", error.message)
+
+        //         toast.success("error", {
+        //                 transition: toast.TRANSITIONS.FLIP,
+        //                 position: toast.POSITION.TOP_RIGHT,
+        //         });
+
+        // })
+
+        router.replace('/')
+
 });
 
 
 
 
-loginonError((error) => {
+loginOnError((error) => {
+        if (error.message.includes("Invalid")) {
+                toast.error("Invalid Email or Password", {
+                        transition: toast.TRANSITIONS.FLIP,
+                        position: toast.POSITION.TOP_RIGHT,
+                });
+                return;
+        }
         toast.error("Something went wrong while logging in", {
                 transition: toast.TRANSITIONS.FLIP,
                 position: toast.POSITION.TOP_RIGHT,

@@ -15,7 +15,8 @@ const { onResult: latestEventResult, onError: latestEventError, refetch: latestE
         filter: categoryFilter,
         order: ref({ "created_at": "desc" }),
         offset: 0,
-        limit: ref(6)
+        limit: ref(6),
+        clientId: ref("auth")
 });
 
 
@@ -41,14 +42,18 @@ const popularEvents = ref([]);
 const { onResult: popularEventResult, onError: popularEventError, refetch: popularEventRefetch, loading: popularEventLoading } = queryList(getEvents, {
         filter: categoryFilter,
         order: ref({
-                "follows_aggregate": {
-                        "count": "desc"
-                }
+                "total_follow": "desc"
         }),
         offset: 0,
-        limit: ref(6)
+        limit: ref(6),
+        clientId: ref("auth")
 });
 
+// order: ref({
+//                 "follows_aggregate": {
+//                         "count": "desc"
+//                 }
+//         }),
 
 
 

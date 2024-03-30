@@ -7,28 +7,71 @@ export const useAuthStore = defineStore("auth", {
     token: null,
     id: null,
     role: null,
-    user: ref({}),
-    photo_url: "",
+    user: null,
+    first_name: null,
+    last_name: null,
+    email: null,
+    phone_number: null,
+    photo_url: null,
+    userFetchEnabled: false,
   }),
   getters: {
-    isAuthenticated: (state) => !!state.token,
-    getUser: (state) => state.user,
+    isAuthenticated() {
+      return !!this.token;
+    },
+    getUser() {
+      return this.user;
+    },
+    isFetchEnabled() {
+      return this.userFetchEnabled;
+    },
+    getFirstName() {
+      return this.first_name;
+    },
+    getLastName() {
+      return this.last_name;
+    },
+    getEmail() {
+      return this.email;
+    },
+    getPhoneNumber() {
+      return this.phone_number;
+    },
+    getPhotoUrl() {
+      return this.photo_url;
+    },
   },
   actions: {
-    setUser(id) {
-      console.log("objectdasd", id);
-      const { onResult, onError, refetch } = singleQuery(getUser, {
+    enableFetchUser() {
+      this.userFetchEnabled = true;
+    },
+
+    async fetchUser(id) {
+      const { onResult, onError } = singleQuery(getUser, {
         id,
       });
 
-      onResult((result) => {
-        // console.log(result, "result");
-        this.user = { ...result.data.users_by_pk };
-      });
+      return new Promise((resolve, reject) => {
+        onResult((result) => {
+          this.first_name = result.data.users_by_pk.first_name;
+          this.last_name = result.data.users_by_pk.last_name;
+          this.email = result.data.users_by_pk.email;
+          this.phone_number = result.data.users_by_pk.phone_number;
+          this.photo_url = result.data.users_by_pk.photo_url;
+          this.user = null;
+          this.user = result.data.users_by_pk;
 
-      onError((error) => {
-        console.log(error, "error");
+          resolve(true);
+        });
+
+        onError((error) => {
+          reject(error);
+        });
       });
+    },
+    setUser(user) {
+      console.log("setting user", user);
+      this.user = user;
     },
     setToken(token) {
       this.token = token;

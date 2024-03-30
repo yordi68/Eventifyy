@@ -184,7 +184,8 @@ const formattedDateTime = computed(() => {
                                                 {{ event.title }}
                                         </h5>
                                         <p class="w-max bg-[#FFE047] px-3 py-1 rounded-md text-neutral-800">
-                                                {{ event.followers_count?.aggregate?.count }} Followers
+                                                <!-- {{ event.followers_count?.aggregate?.count }} Followers -->
+                                                {{ event.total_follow }} Followers
                                         </p>
                                 </div>
 

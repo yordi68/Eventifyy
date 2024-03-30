@@ -36,6 +36,7 @@ query getEvents($filter:events_bool_exp, $order: [events_order_by!], $offset:Int
         count
       }
     }
+    total_follow
     user{
       id
       first_name
