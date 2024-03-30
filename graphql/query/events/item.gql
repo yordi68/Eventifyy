@@ -45,6 +45,7 @@ query getEvent($id: uuid!, $include: Boolean = false) {
         count
       }
     }
+    total_follow
     tickets{
       user{
         id

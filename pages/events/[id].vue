@@ -434,7 +434,9 @@ relatedEventError((error) => {
                         </span>
 
                         <p class="w-max bg-[#FFE047] flex items-center justify-center text-white px-3  rounded-md ">
-                            {{ event.followers_count?.aggregate?.count }} followers
+                            <!-- {{ event.followers_count?.aggregate?.count }} followers -->
+                            {{ event.total_follow }} followers
+
                         </p>
                     </div>
 
