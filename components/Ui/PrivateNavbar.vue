@@ -36,7 +36,7 @@ const navigation = [
                                                                 {{ item.name }}
                                                         </NuxtLink>
                                                 </div>
-
+                                                {{ isAuthenticated }}
                                                 <div v-if="isAuthenticated"
                                                         class="flex justify-between items-center space-x-3">
                                                         <NuxtLink to="/user"

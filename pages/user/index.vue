@@ -4,7 +4,7 @@ const { handleSubmit } = useForm();
 import { toast } from "vue3-toastify";
 import getUser from "~/graphql/query/users/item.gql";
 import InfoUser from "~/graphql/query/users/info_aggregate.gql";
-import { useAuthStore } from "~/stores/auth";
+import { useAuthStore, useUserStore } from "~/stores/auth";
 import updateUser from "~/graphql/mutations/user/edit.gql";
 import imageUploadQuery from "@/graphql/mutations/uploadImage.gql"
 
@@ -15,7 +15,7 @@ import imageUploadQuery from "@/graphql/mutations/uploadImage.gql"
 
 
 
-
+const userStore = useUserStore()
 const store = useAuthStore();
 const singleUser = ref([]);
 const image = ref()
@@ -126,6 +126,8 @@ imageUploadToDBDone(({ data }) => {
                         userObject: userObject.value,
                         id: store.user.id
                 });
+                userStore.photo_url = data.imageUpload.urls[0]
+
                 refetch()
 
         }

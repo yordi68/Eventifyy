@@ -1,6 +1,6 @@
 <script setup>
-import { useField, useForm } from "vee-validate"
-import addData from "~/graphql/mutations/events/add.gql"
+import { useForm } from "vee-validate"
+import addEvent from "~/graphql/mutations/events/add.gql"
 import { toast } from "vue3-toastify";
 
 
@@ -21,9 +21,6 @@ const tags = ref([])
 const time = ref('')
 const venue = ref('')
 const uploadedFiles = ref([])
-// const thumbnail = ref('https://icon2.cleanpng.com/20240106/sxp/transparent-web-404-error-webpage-error-computer-screen-error-screenshot-of-a-404-error-webpage-with-icons65997670c34f92.8814632817045561448.jpg')
-
-
 const lat = ref(0);
 const long = ref(0);
 
@@ -31,11 +28,11 @@ const long = ref(0);
 
 
 const {
-	mutate: addDataToDB,
-	onDone: addDataToDBDone,
-	onError: addDataToDBError,
-	loading: addDataLoading
-} = anonymousMutation(addData, {
+	mutate: addEventMutate,
+	onDone: addEventDone,
+	onError: addEventError,
+	loading: addEventLoading
+} = anonymousMutation(addEvent, {
 	clientId: "auth"
 })
 
@@ -82,27 +79,26 @@ const onSubmit = handleSubmit(() => {
 			})
 		}
 	}
-	addDataToDB({ input })
+	addEventMutate({ input })
 
 
 })
 
-addDataToDBDone(({ data }) => {
+addEventDone(({ data }) => {
 	toast.success("Event successfully added", {
 		transition: toast.TRANSITIONS.FLIP,
 		position: toast.POSITION.TOP_RIGHT,
 
 	});
-	// console.log(data);
-	// console.log(data.insert_events);
-	// console.log(data.insert_events.returning[0].id);
-	// navigateTo(`/events/${data.insert_events.returning[0].id}`)
 	router.push(`/events/${data.insert_events.returning[0].id}`)
 });
 
-addDataToDBError((error) => {
-	toast.error("Something went wrong");
-	console.log(error.message);;
+addEventError((error) => {
+	toast.error("Something went wrong", {
+		transition: toast.TRANSITIONS.FLIP,
+		position: toast.POSITION.TOP_RIGHT,
+
+	});
 });
 
 
@@ -175,12 +171,12 @@ definePageMeta({
 		</div>
 
 		<div class="col-span-2">
-			<button type="submit" @click.prevent="onSubmit" v-if="!addDataLoading"
+			<button type="submit" @click.prevent="onSubmit" v-if="!addEventLoading"
 				class="flex w-full  justify-center  rounded-md bg-[#2D2C3C]  py-1.5 text-sm font-semibold leading-6 text-white shadow-sm  focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Add
 				Event
 			</button>
 			<div>
-				<button type="submit" v-if="addDataLoading"
+				<button type="submit" v-if="addEventLoading"
 					class="flex w-full  justify-center items-center  rounded-md bg-[#2D2C3C] hover:bg-[#2D2C3C] px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
 
 					<div role="status">

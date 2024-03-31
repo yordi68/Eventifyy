@@ -3,13 +3,17 @@ import login from "~/graphql/auth/login.gql";
 import { jwtDecode } from 'jwt-decode';
 import { useField, useForm } from "vee-validate";
 import { toast } from "vue3-toastify";
-import { useAuthStore } from "~/stores/auth";
+import { useAuthStore, useUserStore } from "~/stores/auth";
 import getUser from "~/graphql/query/users/item.gql";
-
 const router = useRouter()
 
 
+onError((error) => {
+        reject(error);
+});
+
 const authStore = useAuthStore();
+const userStore = useUserStore()
 const { handleSubmit } = useForm();
 const { onLogin } = useApollo()
 
@@ -48,48 +52,23 @@ loginOnDone(({ data }) => {
                 transition: toast.TRANSITIONS.FLIP,
                 position: toast.POSITION.TOP_RIGHT,
         });
+        userStore.setuser({
+                first_name: "samuel",
+                last_name: "Noah",
 
+        })
         authStore.fetchUser(data.login.id).then((result) => {
                 authStore.setToken(data.login.token);
                 authStore.setId(data.login.id);
                 authStore.setRole(data.login.role);
+                router.replace('/')
+
         }).catch((error) => {
+                toast.error("Something wrong try agin ", {
+                        transition: toast.TRANSITIONS.FLIP,
+                        position: toast.POSITION.TOP_RIGHT,
+                });
         })
-
-
-
-
-
-        // fetch user
-
-        // const { onResult, onError, onDone } = singleQuery(getUser, {
-        //         id: data.login.id
-        // })
-
-
-
-
-        // onResult((result) => {
-
-        //         authStore.setUser(result.data.users_by_pk)
-
-
-
-
-
-        // })
-
-        // onError((error) => {
-        //         console.log("error", error.message)
-
-        //         toast.success("error", {
-        //                 transition: toast.TRANSITIONS.FLIP,
-        //                 position: toast.POSITION.TOP_RIGHT,
-        //         });
-
-        // })
-
-        router.replace('/')
 
 });
 
@@ -108,7 +87,7 @@ loginOnError((error) => {
                 transition: toast.TRANSITIONS.FLIP,
                 position: toast.POSITION.TOP_RIGHT,
         });
-        console.log("error", error)
+        // console.log("error", error)
 
 });
 

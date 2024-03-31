@@ -88,3 +88,26 @@ export const useAuthStore = defineStore("auth", {
   },
   persist: true,
 });
+
+export const useUserStore = defineStore(
+  "userStore",
+  () => {
+    const token = ref(null);
+    const id = ref(null);
+    const role = ref(null);
+    const user = ref(null);
+    const first_name = ref(null);
+    const last_name = ref(null);
+    const email = ref(null);
+    const phone_number = ref(null);
+    const photo_url = ref(null);
+    const userFetchEnabled = ref(false);
+
+    function setuser(userDate) {
+      console.log(userDate);
+    }
+
+    return { photo_url, first_name, last_name, setuser };
+  },
+  { persist: true }
+);

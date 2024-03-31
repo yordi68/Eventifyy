@@ -1,15 +1,12 @@
 <script setup>
-
 import getEvents from '@/graphql/query/events/list.gql';
-import { useAuthStore } from "~/stores/auth";
-const { user } = useAuthStore();
-const router = useRouter()
+import { getUser as user } from "~/stores/auth";
+
+
 
 const events = ref([]);
-const limit = ref(10);
-const offset = ref(1);
-const search = ref("");
-const order = ref(null);
+
+/*------------------------- Filtering Events the user follows  ---------------------- */
 
 const filter = computed(() => {
         let query = {};
@@ -24,9 +21,7 @@ const filter = computed(() => {
 });
 
 
-// console.log(filter.value)
-
-/*------------------------- Query the users event ---------------------- */
+/*------------------------- Fetching Event the user follows ---------------------- */
 const { onResult, onError, refetch, loading } = queryList(
         getEvents, {
         filter: filter,
@@ -36,11 +31,14 @@ const { onResult, onError, refetch, loading } = queryList(
 
 onResult((result) => {
         events.value = result.data.events;
-        console.log(events.value[0])
 })
 
 onError((error) => {
-        console.log(error)
+        toast.error("Something went wrong while fetching", {
+                transition: toast.TRANSITIONS.FLIP,
+                position: toast.POSITION.TOP_RIGHT,
+
+        });
 })
 
 
@@ -62,7 +60,7 @@ definePageMeta({
                 v-if="!loading">
                 <div v-if="events && events.length > 0">
                         <div class="grid grid-cols-1 md:grid-cols-3 md:gap-4 mx-auto py-6 sm:px-6 lg:px-8">
-                                <UiVerticalCard @refetch="refetch" v-for="event in events" :key="event.price"
+                                <UiVerticalCard @refetch="refetch" v-for="event in events" :key="event.id"
                                         :event="event" />
                         </div>
                 </div>

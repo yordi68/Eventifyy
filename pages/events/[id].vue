@@ -319,6 +319,10 @@ const filter = computed(() => {
     return query;
 })
 
+
+
+let relatedEvents = ref([])
+
 const { onResult: relatedEventResult, onError: relatedEventError, refetch: relatedEventRefetch, loading: relatedEventLoading } = queryList(
     getEvents,
     {
@@ -328,24 +332,18 @@ const { onResult: relatedEventResult, onError: relatedEventError, refetch: relat
     }
 );
 
-let relatedEvents = ref([])
 
 
 relatedEventResult((result) => {
     relatedEvents.value = result.data.events
-    // console.log("related event new", relatedEvent.value[0])
-    // console.log("related event new", relatedEvent.value[0].thumbnail)
-    // console.log("related event new", relatedEvent.value[0].title)
-    // console.log("related event new", relatedEvent.value[0].description)
-    // console.log(relatedEvents.value.forEach((event) => {
-    //     console.log("related event id", event.id)
-    //     console.log("related event thumbnail", event.thumbnail)
-    //     console.log("related event title", event.title)
-    // }))
 })
 
 relatedEventError((error) => {
-    console.log(error, "fetching related event error")
+    toast.error("Something went wrong while fetching related events", {
+        transition: toast.TRANSITIONS.FLIP,
+        position: toast.POSITION.TOP_RIGHT,
+
+    });
 })
 
 

@@ -1,15 +1,12 @@
 <script setup>
-
 import getEvents from '@/graphql/query/events/list.gql';
-import { useAuthStore } from "~/stores/auth";
-const { user } = useAuthStore();
-const router = useRouter()
+import { getUser as user } from "~/stores/auth";
+
+
 
 const events = ref([]);
-const limit = ref(10);
-const offset = ref(1);
-const search = ref("");
-const order = ref(null);
+
+/*------------------------- Filtering Events the user booked  ---------------------- */
 
 const filter = computed(() => {
         let query = {};
@@ -24,9 +21,9 @@ const filter = computed(() => {
 });
 
 
-// console.log(filter.value)
 
-/*------------------------- Query the users event ---------------------- */
+
+/*------------------------- Fetching Event the user booked ---------------------- */
 const { onResult, onError, refetch, loading } = queryList(
         getEvents, {
         filter: filter,
@@ -36,11 +33,14 @@ const { onResult, onError, refetch, loading } = queryList(
 
 onResult((result) => {
         events.value = result.data.events;
-        console.log(events.value[0])
 })
 
 onError((error) => {
-        console.log(error)
+        toast.error("Something went wrong while fetching", {
+                transition: toast.TRANSITIONS.FLIP,
+                position: toast.POSITION.TOP_RIGHT,
+
+        });
 })
 
 
