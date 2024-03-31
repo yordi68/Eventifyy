@@ -16,9 +16,9 @@ export const useAuthStore = defineStore("auth", {
     userFetchEnabled: false,
   }),
   getters: {
-    isAuthenticated() {
-      return !!this.token;
-    },
+    // isAuthenticated() {
+    //   return !!this.token;
+    // },
     getUser() {
       return this.user;
     },
@@ -102,10 +102,6 @@ export const useUserStore = defineStore(
     const photo_url = ref(null);
     const userFetchEnabled = ref(false);
 
-    // function (userData) {
-    //   console.log(userData);
-    // }
-
     async function setuser(id) {
       const { onResult, onError } = singleQuery(getUser, {
         id,
@@ -126,8 +122,20 @@ export const useUserStore = defineStore(
     }
 
     const isAuthenticated = computed(() => {
-      return token ? true : false;
+      return token.value ? true : false;
     });
+
+    function $reset() {
+      token.value = null;
+      id.value = null;
+      role.value = null;
+      user.value = null;
+      first_name.value = null;
+      last_name.value = null;
+      email.value = null;
+      phone_number.value = null;
+      photo_url.value = null;
+    }
 
     return {
       token,
@@ -141,6 +149,7 @@ export const useUserStore = defineStore(
       photo_url,
       setuser,
       isAuthenticated,
+      $reset,
     };
   },
   { persist: true }

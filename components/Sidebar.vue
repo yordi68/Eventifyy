@@ -29,7 +29,7 @@ const confirmDelete = () => {
 
 const handleLogout = () => {
         onLogout('auth');
-        logout();
+        userStore.$reset()
         navigateTo('/');
 }
 
