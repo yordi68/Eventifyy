@@ -38,20 +38,20 @@ const zoom = ref(12)
                 layer-type="base" name="OpenStreetMap" />
 
             <!-- --------------------Markers---------------------- -->
-            <LMarker :lat-lng="eventLocation.location?.coordinates" :name="eventLocation.area?.name">
+            <LMarker :lat-lng="eventLocation?.location?.coordinates" :name="eventLocation?.area?.name">
                 <!-- -------------------------Icon Image---------------- -->
 
-                <LIcon :name="eventLocation.area?.name" :class="'custom-div-icon'" :icon-size="[40, 40]"
+                <LIcon :name="eventLocation?.area?.name" :class="'custom-div-icon'" :icon-size="[40, 40]"
                     icon-url="/mapIcon.jpg"></LIcon>
 
                 <!-- -------------------------Tooltip---------------- -->
                 <LTooltip :permanent="true" :direction="'top'" :offset="[0, -50]">
-                    <div class="text-primary-600">{{ eventLocation.area?.name }}</div>
+                    <div class="text-primary-600">{{ eventLocation?.area?.name }}</div>
                 </LTooltip>
                 <!-- -------------------------Popup---------------- -->
                 <LPopup :offset="[0, -50]">
                     <div class="flex flex-col w-full">
-                        <p class="text-primary-600">{{ eventLocation.area?.name }}</p>
+                        <p class="text-primary-600">{{ eventLocation?.area?.name }}</p>
 
                     </div>
                 </LPopup>

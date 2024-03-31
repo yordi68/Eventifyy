@@ -1,10 +1,13 @@
 <script setup>
 import getEvents from '@/graphql/query/events/list.gql';
-import { getUser as user } from "~/stores/auth";
+import { useUserStore } from "~/stores/auth";
 
 
 
 const events = ref([]);
+const userStore = useUserStore();
+
+
 
 /*------------------------- Filtering Events the user booked  ---------------------- */
 
@@ -12,7 +15,7 @@ const filter = computed(() => {
         let query = {};
         query.tickets = {
                 user_id: {
-                        _eq: user.id
+                        _eq: userStore.id
                 }
         }
 

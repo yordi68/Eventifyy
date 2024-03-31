@@ -8,9 +8,9 @@ import getUser from "~/graphql/query/users/item.gql";
 const router = useRouter()
 
 
-onError((error) => {
-        reject(error);
-});
+// onError((error) => {
+//         reject(error);
+// });
 
 const authStore = useAuthStore();
 const userStore = useUserStore()
@@ -52,25 +52,21 @@ loginOnDone(({ data }) => {
                 transition: toast.TRANSITIONS.FLIP,
                 position: toast.POSITION.TOP_RIGHT,
         });
-        userStore.setuser({
-                first_name: "samuel",
-                last_name: "Noah",
 
-        })
-        authStore.fetchUser(data.login.id).then((result) => {
-                authStore.setToken(data.login.token);
-                authStore.setId(data.login.id);
-                authStore.setRole(data.login.role);
+        userStore.id = data.login.id
+        userStore.role = data.login.user
+        userStore.token = data.login.token
+        userStore.setuser(data.login.id).then((result) => {
                 router.replace('/')
-
         }).catch((error) => {
-                toast.error("Something wrong try agin ", {
+                toast.error("Something went wront try again", {
                         transition: toast.TRANSITIONS.FLIP,
                         position: toast.POSITION.TOP_RIGHT,
-                });
+                })
         })
 
 });
+
 
 
 

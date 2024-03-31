@@ -1,16 +1,14 @@
 <script setup>
 import { Disclosure, DisclosureButton, DisclosurePanel, Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/vue'
 import { Icon as IconifyIcon } from '@iconify/vue';
-import { useAuthStore } from "~/stores/auth";
-const { isAuthenticated, getFirstName, getLastName, getPhotoUrl } = useAuthStore();
+import { useUserStore } from "~/stores/auth";
 
-// const user = toRef(user)
+const userStore = useUserStore()
 const navigation = [
         { name: 'Home', to: '/', current: true },
         { name: 'Events', to: '/events', current: false },
-        // { name: 'About', to: '#', current: false },
-        // { name: 'Contact', to: '#', current: false },
 ]
+
 </script>
 
 <template>
@@ -36,21 +34,18 @@ const navigation = [
                                                                 {{ item.name }}
                                                         </NuxtLink>
                                                 </div>
-                                                {{ isAuthenticated }}
-                                                <div v-if="isAuthenticated"
+
+                                                <div v-if="userStore.isAuthenticated"
                                                         class="flex justify-between items-center space-x-3">
                                                         <NuxtLink to="/user"
                                                                 class="flex text-white items-center space-x-2 ">
                                                                 <div class="space-x-2">
 
-                                                                        <span>{{ getFirstName }}</span>
-                                                                        <span>{{ getLastName }}</span>
+                                                                        <span>{{ userStore.first_name }}</span>
+                                                                        <span>{{ userStore.last_name }}</span>
                                                                 </div>
-                                                                <img :src="getPhotoUrl" alt=""
+                                                                <img :src="userStore.photo_url" alt=""
                                                                         class="w-12 h-12 rounded-full dark:bg-gray-500">
-
-
-
 
                                                         </NuxtLink>
                                                 </div>

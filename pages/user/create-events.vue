@@ -99,6 +99,8 @@ addEventError((error) => {
 		position: toast.POSITION.TOP_RIGHT,
 
 	});
+	console.log(error)
+
 });
 
 

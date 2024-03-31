@@ -1,6 +1,6 @@
 <script setup>
 import addFollows from "~/graphql/mutations/follows/item.gql";
-import { useAuthStore } from "~/stores/auth";
+import { useAuthStore, useUserStore } from "~/stores/auth";
 import { toast } from "vue3-toastify";
 import { Menu, MenuButton, MenuItems, MenuItem } from '@headlessui/vue'
 import deleteEvent from '~/graphql/mutations/events/delete.gql';
@@ -9,7 +9,7 @@ let isCreator = ref(false);
 let isOwner = false;
 const isFollowed = true;
 const store = useAuthStore();
-
+const userStore = useUserStore()
 const emit = defineEmits(["refetch", "delete"])
 
 
@@ -25,9 +25,9 @@ const props = defineProps({
 })
 
 
-if (store.isAuthenticated) {
+if (userStore.isAuthenticated) {
         // console.log(props.event.user.id)
-        if (props.event.user.id === store.user.id) {
+        if (props.event.user.id === userStore.id) {
                 isCreator.value = true;
         }
 }
@@ -126,7 +126,7 @@ const formattedDateTime = computed(() => {
                         <div class="relative">
                                 <div class="absolute top-1.5 right-1.5 z-30 ">
 
-                                        <Menu v-if="store.isAuthenticated">
+                                        <Menu v-if="userStore.isAuthenticated">
                                                 <MenuButton @click="$event.stopPropagation()">
                                                         <button
                                                                 class="w-6 h-6 flex items-center justify-center p-1.5 box-content rounded-full bg-white text-black">

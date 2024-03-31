@@ -46,29 +46,28 @@ export const useAuthStore = defineStore("auth", {
       this.userFetchEnabled = true;
     },
 
-    async fetchUser(id) {
-      const { onResult, onError } = singleQuery(getUser, {
-        id,
-      });
+    // async fetchUser(id) {
+    //   const { onResult, onError } = singleQuery(getUser, {
+    //     id,
+    //   });
 
-      return new Promise((resolve, reject) => {
-        onResult((result) => {
-          this.first_name = result.data.users_by_pk.first_name;
-          this.last_name = result.data.users_by_pk.last_name;
-          this.email = result.data.users_by_pk.email;
-          this.phone_number = result.data.users_by_pk.phone_number;
-          this.photo_url = result.data.users_by_pk.photo_url;
-          this.user = null;
-          this.user = result.data.users_by_pk;
+    //   return new Promise((resolve, reject) => {
+    //     onResult((result) => {
+    //       this.first_name = result.data.users_by_pk.first_name;
+    //       this.last_name = result.data.users_by_pk.last_name;
+    //       this.email = result.data.users_by_pk.email;
+    //       this.phone_number = result.data.users_by_pk.phone_number;
+    //       this.photo_url = result.data.users_by_pk.photo_url;
+    //       this.user = result.data.users_by_pk;
 
-          resolve(true);
-        });
+    //       resolve(true);
+    //     });
 
-        onError((error) => {
-          reject(error);
-        });
-      });
-    },
+    //     onError((error) => {
+    //       reject(error);
+    //     });
+    //   });
+    // },
     setUser(user) {
       console.log("setting user", user);
       this.user = user;
@@ -103,11 +102,46 @@ export const useUserStore = defineStore(
     const photo_url = ref(null);
     const userFetchEnabled = ref(false);
 
-    function setuser(userDate) {
-      console.log(userDate);
+    // function (userData) {
+    //   console.log(userData);
+    // }
+
+    async function setuser(id) {
+      const { onResult, onError } = singleQuery(getUser, {
+        id,
+      });
+      onResult((result) => {
+        first_name.value = result.data.users_by_pk.first_name;
+        last_name.value = result.data.users_by_pk.last_name;
+        email.value = result.data.users_by_pk.email;
+        phone_number.value = result.data.users_by_pk.phone_number;
+        photo_url.value = result.data.users_by_pk.photo_url;
+        user.value = result.data.users_by_pk;
+      });
+      onError((error) => {
+        reject(error);
+      });
+
+      return "";
     }
 
-    return { photo_url, first_name, last_name, setuser };
+    const isAuthenticated = computed(() => {
+      return token ? true : false;
+    });
+
+    return {
+      token,
+      id,
+      role,
+      user,
+      first_name,
+      last_name,
+      email,
+      phone_number,
+      photo_url,
+      setuser,
+      isAuthenticated,
+    };
   },
   { persist: true }
 );

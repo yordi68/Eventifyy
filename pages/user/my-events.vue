@@ -1,12 +1,12 @@
 <script setup>
 import getEvents from '@/graphql/query/events/list.gql';
-import { getUser as user } from "~/stores/auth";
+import { useUserStore } from "~/stores/auth";
 import { toast } from "vue3-toastify";
 
 
 
 const events = ref([]);
-
+const userStore = useUserStore()
 
 
 
@@ -17,7 +17,7 @@ const filter = computed(() => {
         let query = {};
         query.user = {
                 id: {
-                        _eq: user.id
+                        _eq: userStore.id
                 }
         }
         return query;

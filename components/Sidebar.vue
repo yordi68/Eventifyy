@@ -1,14 +1,15 @@
 <script setup>
 import { useAuthStore, useUserStore } from "~/stores/auth";
+
+
+
+
+
 const router = useRouter()
-
 const { onLogout } = useApollo()
-
-const { getUser: user, getFirstName, getLastName, logout, getPhotoUrl } = useAuthStore()
+const { logout } = useAuthStore()
 const userStore = useUserStore()
-console.log("==============", userStore);
-// console.log(store.user.first_name)
-// console.log(user.photo_url);
+
 
 const isModalOpen = ref(false);
 
@@ -83,13 +84,14 @@ const handleLogout = () => {
         </div>
 
 
-        <div v-if="user" class="h-screen p-3 w-full space-y-2  text-white bg-[#2D2C3C] dark:text-gray-100">
+        <div v-if="userStore.isAuthenticated"
+                class="h-screen p-3 w-full space-y-2  text-white bg-[#2D2C3C] dark:text-gray-100">
                 <div class="flex items-center  space-x-4 cursor-pointer" @click="router.push('/user')">
                         <img :src="userStore.photo_url" alt="" class="w-12 h-12 rounded-full dark:bg-gray-500">
-                        {{ photo_url }}
+
                         <div>
 
-                                <h2 class="text-lg font-semibold">{{ getFirstName }} {{ getLastName }}
+                                <h2 class="text-lg font-semibold">{{ userStore.first_name }} {{ userStore.last_name }}
                                 </h2>
                                 <span class="flex items-center space-x-1">
                                         <span class="text-xs hover:underline dark:text-gray-400">View profile {{

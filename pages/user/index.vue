@@ -1,10 +1,8 @@
 <script setup>
-import { useField, useForm } from "vee-validate"
-const { handleSubmit } = useForm();
 import { toast } from "vue3-toastify";
 import getUser from "~/graphql/query/users/item.gql";
 import InfoUser from "~/graphql/query/users/info_aggregate.gql";
-import { useAuthStore, useUserStore } from "~/stores/auth";
+import { useUserStore } from "~/stores/auth";
 import updateUser from "~/graphql/mutations/user/edit.gql";
 import imageUploadQuery from "@/graphql/mutations/uploadImage.gql"
 
@@ -12,13 +10,99 @@ import imageUploadQuery from "@/graphql/mutations/uploadImage.gql"
 
 
 
-
-
-
 const userStore = useUserStore()
-const store = useAuthStore();
+
 const singleUser = ref([]);
+
+/************************ Fetch a single user data ***************************/
+
+const { onResult, onError, loading, refetch } = singleQuery(getUser, {
+        id: userStore.id
+})
+onResult(({ data }) => {
+
+        singleUser.value = { ...data?.users_by_pk }
+})
+
+onError((error) => {
+        toast.error("Something went wrong try again", {
+                transition: toast.TRANSITIONS.FLIP,
+                position: toast.POSITION.TOP_RIGHT,
+        })
+})
+
+
+
+/************************ Get Follower and Following Count ***************************/
+
+
+const aggregateFilter = computed(() => userStore.id)
+
+const { onResult: onAggregateResult } = queryList(InfoUser, { filter: aggregateFilter, clientId: ref('auth') })
+
+onAggregateResult(({ data }) => {
+        followers.value = data.followers?.aggregate?.count
+        following.value = data.followings?.aggregate?.count
+})
+
+
+
+
+
+
+/************************ User Profile Update Mutation ***************************/
+
+
+const { mutate: userMutate, onDone: userDone, onError: userError, loading: userLoading } = anonymousMutation(updateUser, {
+        clientId: "auth"
+})
+
+const onSubmit = () => {
+        const { id, __typename, ...rest } = singleUser.value
+        userMutate({
+                userObject: { ...rest },
+                id: userStore.id
+        });
+        // refetch()
+}
+
+
+userDone(async (response) => {
+        toast.success("You have updated your profile", {
+                transition: toast.TRANSITIONS.FLIP,
+                position: toast.POSITION.TOP_RIGHT,
+
+        });
+
+        // await store.fetchUser(response.data?.update_users_by_pk.id)
+        // await userStore.setuser(response.data?.update_users_by_pk.id)
+        userStore.setuser(response?.data?.update_users_by_pk.id).then((result) => {
+                // router.replace('/')
+                singleUser.value = { ...response?.data?.update_users_by_pk }
+
+        }).catch((error) => {
+                toast.error("Something went wrong try again", {
+                        transition: toast.TRANSITIONS.FLIP,
+                        position: toast.POSITION.TOP_RIGHT,
+                })
+        })
+})
+
+userError((error) => {
+        toast.error("Something went wrong while updating profile");
+});
+
+
+
+
+
+
+/************************ Image Upload Mutation ***************************/
+
+
 const image = ref()
+const pic = ref()
+
 const {
         mutate: imageUploadToDB,
         onDone: imageUploadToDBDone,
@@ -29,94 +113,9 @@ const {
 })
 
 
-const {
-        errorMessage: passwordError,
-        value: password
-} = useField("password", "password|required", {
-        initialValue: "",
-})
-
-const {
-        errorMessage: confirmPasswordError,
-        value: confirmPassword
-} = useField("confirmPassword", "password|required", {
-        initialValue: "",
-})
-
-
-
-const { onResult, onError, loading, refetch } = singleQuery(getUser, {
-        id: store.user.id
-})
-let furstName = ref()
-onResult(({ data }) => {
-        // console.log(data.users_by_pk)
-        // console.log(data.users_by_pk.first_name)
-        // console.log(data.users_by_pk.last_name)
-
-        singleUser.value = { ...data?.users_by_pk }
-
-        console.log(singleUser.value)
-        console.log(singleUser.value.email)
-        furstName.value = singleUser.value.first_name
-})
-
-onError((error) => {
-        console.log("error", error.message)
-        console.log("error", error)
-})
-
-const aggregateFilter = computed(() => store.user?.id)
-
-const { onResult: onAggregateResult } = queryList(InfoUser, { filter: aggregateFilter, clientId: ref('auth') })
-
-onAggregateResult(({ data }) => {
-        followers.value = data.followers?.aggregate?.count
-        following.value = data.followings?.aggregate?.count
-})
-
-const { mutate: userMutate, loading: userLoading, onError: userError, onDone: userDone } = anonymousMutation(updateUser, {
-        clientId: "auth"
-})
-
-userDone(async (response) => {
-        toast.success("You have updated your profile", {
-                transition: toast.TRANSITIONS.FLIP,
-                position: toast.POSITION.TOP_RIGHT,
-
-        });
-
-        store.setUser(null)
-        store.setUser(response.data?.update_users_by_pk);
-
-        await store.fetchUser(response.data?.update_users_by_pk.id)
-
-
-        // store.user = response.data?.update_users_by_pk
-        // store.photo_url = response.data?.update_users_by_pk?.photo_url
-        // window.location.reload()
-})
-
-userError((error) => {
-        toast.error("Something went wrong while updating profile");
-        console.log(error.message);;
-});
-
-
-
-const onSubmit = () => {
-        const { id, __typename, ...rest } = singleUser.value
-        userMutate({
-                userObject: { ...rest },
-                id: store.user.id
-        });
-}
-
-const pic = ref()
 imageUploadToDBDone(({ data }) => {
         pic.value = data?.imageUpload?.urls
         let userObject = ref()
-        // alert(data.imageUpload.urls)
         if (pic.value.length > 0) {
                 userObject.value = {
                         photo_url: data.imageUpload.urls[0]
@@ -124,19 +123,10 @@ imageUploadToDBDone(({ data }) => {
 
                 userMutate({
                         userObject: userObject.value,
-                        id: store.user.id
+                        id: userStore.id
                 });
                 userStore.photo_url = data.imageUpload.urls[0]
-
-                refetch()
-
         }
-        // this commented code is causing me problems of order...before the user is updated, the users data is fetched from the
-        // userMutate({
-        //         userObject: userObject,
-        //         id: store.user.id
-        // })
-        // store.setUser(store.user.id);
 })
 
 
@@ -145,14 +135,11 @@ imageUploadToDBDone(({ data }) => {
 
 
 const user = reactive({
-        gender: 'male',
         profilePicture: '',
-        // Add profile picture URL here
 });
 
-const followers = ref(0); // Sample followers count
-const following = ref(0); // Sample following count
-const likes = ref(2000); // Sample likes count
+const followers = ref(0);
+const following = ref(0);
 const previewImage = ref(null)
 
 function handleProfilePictureChange(event) {
@@ -171,11 +158,6 @@ function handleProfilePictureChange(event) {
         reader.readAsDataURL(file);
 }
 
-
-function saveChanges() {
-        console.log('Changes saved:', user);
-        // Replace with your actual logic for saving user data
-}
 
 definePageMeta({
         layout: 'admin',
@@ -258,7 +240,7 @@ definePageMeta({
                                                 </div>
 
                                                 <!-- Save Button -->
-                                                <button
+                                                <button @click.prevent="onSubmit" type="submit"
                                                         class="bg-indigo-500 text-white py-2 px-4 rounded-md hover:bg-indigo-600">
                                                         Save Changes
                                                 </button>

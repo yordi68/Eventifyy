@@ -5,7 +5,7 @@ import getEvent from "~/graphql/query/events/item.gql";
 import addFollows from "~/graphql/mutations/follows/item.gql";
 import addBookmarks from "~/graphql/mutations/bookmarks/item.gql";
 import buyTicket from "~/graphql/mutations/tickets/add.gql"
-import { useAuthStore } from "~/stores/auth";
+import { useAuthStore, useUserStore } from "~/stores/auth";
 import { toast } from "vue3-toastify";
 import {
     TransitionRoot,
@@ -25,6 +25,7 @@ import deleteFollow from "~/graphql/mutations/follows/delete.gql";
 
 
 const store = useAuthStore();
+const userStore = useUserStore()
 const route = useRoute();
 const router = useRouter();
 const event = ref({});
@@ -52,17 +53,17 @@ onResult((result) => {
         event.value = result.data.events_by_pk;
         const eventLocation = event.value.location
     }
-    if (store.isAuthenticated) {
-        if (event.value.user.id === store.user.id) {
+    if (userStore.isAuthenticated) {
+        if (event.value.user.id === userStore.id) {
             isCreator.value = true;
         }
     }
-    if (store.isAuthenticated) {
+    if (userStore.isAuthenticated) {
         // console.log(event.value.bookmarks[0].user.id)
         event.value.bookmarks.forEach(function (bookmark) {
             if (bookmark.user && bookmark.user.id) {
                 // console.log("hi im iterating ", bookmark.user.id)
-                if (bookmark.user.id === store.user.id) {
+                if (bookmark.user.id === userStore.id) {
                     isBookmarked.value = true;
                 }
             }
@@ -70,14 +71,14 @@ onResult((result) => {
 
         event.value.follows.forEach(function (follow) {
             if (follow.user && follow.user.id) {
-                if (follow.user.id === store.user.id) {
+                if (follow.user.id === userStore.id) {
                     isFollowed.value = true;
                 }
             }
         })
         event.value?.tickets?.forEach(function (ticket) {
             if (ticket.user && ticket.user.id) {
-                if (ticket.user.id === store.user.id) {
+                if (ticket.user.id === userStore.id) {
                     hasBoughtTicket.value = true;
                 }
             }
@@ -105,12 +106,12 @@ const { mutate: buyTicketMutate, onDone: buyTicketDone, onError: buyTicketError 
 
 
 const handleInsetTicket = async () => {
-    if (!store.isAuthenticated) {
+    if (!userStore.isAuthenticated) {
         router.replace("/login");
         return;
     }
     const input = {
-        user_id: store.user.id,
+        user_id: userStore.id,
         event_id: event.value.id
     }
 
@@ -152,12 +153,12 @@ const { mutate: followMutate, onDone: followDone, onError: followError, loading 
 });
 
 const handleFollow = async () => {
-    if (!store.isAuthenticated) {
+    if (!userStore.isAuthenticated) {
         router.replace("/login");
         return;
     }
     const input = {
-        user_id: store.user.id,
+        user_id: userStore.id,
         event_id: event.value.id
     }
     followMutate({ input });
@@ -196,7 +197,7 @@ const { mutate: deleteFollowMutate, onDone: deleteFollowOnDone, onError: deleteF
 const handleDeleteFollow = () => {
     const input = {
         event_id: event.value.id,
-        user_id: store.user.id
+        user_id: userStore.id
     }
     // console.log(input)
     deleteFollowMutate(input)
@@ -227,12 +228,12 @@ const { mutate: bookmarkMutate, onDone: bookmarkDone, onError: bookmarkError } =
 });
 
 const handleBookmark = async () => {
-    if (!store.isAuthenticated) {
+    if (!userStore.isAuthenticated) {
         router.replace("/login");
         return;
     }
     const input = {
-        user_id: store.user.id,
+        user_id: userStore.id,
         event_id: event.value.id
     }
     bookmarkMutate({ input });
@@ -276,7 +277,7 @@ const { mutate: deleteBookmarkMutate, onDone: deleteBookmarkOnDone, onError: del
 const handleDeleteBookmark = async () => {
     const input = {
         event_id: event.value.id,
-        user_id: store.user.id
+        user_id: userStore.id
     }
     console.log("this is while trying to unbookmark", input)
     deleteBookmarkMutate(input)
@@ -534,7 +535,7 @@ relatedEventError((error) => {
                         </p>
                     </button>
                     <div class="flex bg-[#FFE047] rounded-md items-center py-4 px-6 space-x-4 "
-                        v-if="store.isAuthenticated && !isCreator && hasBoughtTicket">
+                        v-if="userStore.isAuthenticated && !isCreator && hasBoughtTicket">
                         <!-- <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                             stroke="currentColor" class="w-6 h-6">
                             <path stroke-linecap="round" stroke-linejoin="round"
