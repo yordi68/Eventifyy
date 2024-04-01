@@ -35,7 +35,7 @@ query getEvent($id: uuid!, $include: Boolean = false) {
         id
       }
     }
-    follows {
+    follows @include(if:$include){
       user {
         id
       }
@@ -67,3 +67,4 @@ query getEvent($id: uuid!, $include: Boolean = false) {
     __typename
   }
 }
+# @include(if:$include)

@@ -106,7 +106,7 @@ const pic = ref()
 const {
         mutate: imageUploadToDB,
         onDone: imageUploadToDBDone,
-        loading: uploadLoading,
+        loading: imageUploadToDBLoading,
         onError: imageUploadToDBError,
 } = anonymousMutation(imageUploadQuery, {
         clientId: "auth"
@@ -129,6 +129,13 @@ imageUploadToDBDone(({ data }) => {
         }
 })
 
+
+imageUploadToDBError(() => {
+        toast.error("Something went wrong while uploading profile Picture", {
+                transition: toast.TRANSITIONS.FLIP,
+                position: toast.POSITION.TOP_RIGHT,
+        })
+})
 
 
 
@@ -191,6 +198,9 @@ definePageMeta({
                                                                 @change="handleProfilePictureChange" class="hidden">
                                                         <label for="profile-picture" class="cursor-pointer relative">
                                                                 <Icon name="ic:baseline-plus"
+                                                                        v-if="!imageUploadToDBLoading"
+                                                                        class="absolute bottom-0 right-0 bg-black !text-white box-content p-2 rounded-full !text-lg" />
+                                                                <Icon name="line-md:loading-twotone-loop" v-else
                                                                         class="absolute bottom-0 right-0 bg-black !text-white box-content p-2 rounded-full !text-lg" />
                                                                 <img v-if="singleUser.photo_url"
                                                                         :src="previewImage || singleUser.photo_url"

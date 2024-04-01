@@ -1,6 +1,6 @@
 <script setup>
 import addFollows from "~/graphql/mutations/follows/item.gql";
-import { useAuthStore, useUserStore } from "~/stores/auth";
+import { useUserStore } from "~/stores/auth";
 import { toast } from "vue3-toastify";
 import { Menu, MenuButton, MenuItems, MenuItem } from '@headlessui/vue'
 import deleteEvent from '~/graphql/mutations/events/delete.gql';
@@ -8,7 +8,6 @@ import deleteEvent from '~/graphql/mutations/events/delete.gql';
 let isCreator = ref(false);
 let isOwner = false;
 const isFollowed = true;
-const store = useAuthStore();
 const userStore = useUserStore()
 const emit = defineEmits(["refetch", "delete"])
 
@@ -66,7 +65,7 @@ const { mutate: followMutate, onDone: followDone, onError: followError, loading 
 
 const handleFollow = async () => {
         const input = {
-                user_id: store.user.id,
+                user_id: userStore.id,
                 event_id: props.event.id
         }
         followMutate({ input });
@@ -95,7 +94,7 @@ followError((error) => {
         })
 })
 
-if (store.user && store.user.id && props.event && store.user.id === props.event.user.id) {
+if (userStore && userStore.id && props.event && userStore.id === props.event.user.id) {
         isOwner = true;
 
 }

@@ -45,7 +45,8 @@ function openModal() {
 
 const { onResult, onError, refetch } = singleQuery(getEvent, {
     id: route.params.id,
-    clientId: "auth"
+    clientId: "auth",
+    include: userStore.isAuthenticated
 });
 
 onResult((result) => {
@@ -60,7 +61,7 @@ onResult((result) => {
     }
     if (userStore.isAuthenticated) {
         // console.log(event.value.bookmarks[0].user.id)
-        event.value.bookmarks.forEach(function (bookmark) {
+        event.value?.bookmarks?.forEach(function (bookmark) {
             if (bookmark.user && bookmark.user.id) {
                 // console.log("hi im iterating ", bookmark.user.id)
                 if (bookmark.user.id === userStore.id) {
@@ -69,7 +70,7 @@ onResult((result) => {
             }
         })
 
-        event.value.follows.forEach(function (follow) {
+        event.value?.follows?.forEach(function (follow) {
             if (follow.user && follow.user.id) {
                 if (follow.user.id === userStore.id) {
                     isFollowed.value = true;
@@ -236,6 +237,7 @@ const handleBookmark = async () => {
         user_id: userStore.id,
         event_id: event.value.id
     }
+    console.log("object")
     bookmarkMutate({ input });
 
 }
