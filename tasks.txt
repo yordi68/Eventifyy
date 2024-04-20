@@ -1,3 +1,6 @@
+ngrok http 7000 --domain diverse-intent-coyote.ngrok-free.app
+
+
 Questions
 
 1. why use (insert_bookmarks_one) instead of (insert_bookmarks).....
