@@ -434,7 +434,8 @@ relatedEventError((error) => {
                             </button>
                         </span>
 
-                        <p class="w-max bg-[#FFE047] flex items-center justify-center text-white px-3  rounded-md ">
+                        <p
+                            class="w-max bg-[#FFE047] flex items-center justify-center text-white px-3  rounded-md dark:text-black ">
                             <!-- {{ event.followers_count?.aggregate?.count }} followers -->
                             {{ event.total_follow }} followers
 
@@ -527,12 +528,8 @@ relatedEventError((error) => {
                     </div>
                     <button class="flex bg-[#FFE047] rounded-md items-center py-4 px-6 space-x-4 "
                         v-if="!isCreator && !hasBoughtTicket">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                            stroke="currentColor" class="w-6 h-6">
-                            <path stroke-linecap="round" stroke-linejoin="round"
-                                d="M16.5 6v.75m0 3v.75m0 3v.75m0 3V18m-9-5.25h5.25M7.5 15h3M3.375 5.25c-.621 0-1.125.504-1.125 1.125v3.026a2.999 2.999 0 0 1 0 5.198v3.026c0 .621.504 1.125 1.125 1.125h17.25c.621 0 1.125-.504 1.125-1.125v-3.026a2.999 2.999 0 0 1 0-5.198V6.375c0-.621-.504-1.125-1.125-1.125H3.375Z" />
-                        </svg>
-                        <p class="font-bold text-lg" @click="handleInsetTicket">
+                        <Icon name="heroicons:ticket" class="w-6 h-6 dark:text-gray-800" />
+                        <p class="font-bold text-lg dark:text-gray-800" @click="handleInsetTicket">
                             Buy Tickets
                         </p>
                     </button>
@@ -544,7 +541,7 @@ relatedEventError((error) => {
                                 d="M16.5 6v.75m0 3v.75m0 3v.75m0 3V18m-9-5.25h5.25M7.5 15h3M3.375 5.25c-.621 0-1.125.504-1.125 1.125v3.026a2.999 2.999 0 0 1 0 5.198v3.026c0 .621.504 1.125 1.125 1.125h17.25c.621 0 1.125-.504 1.125-1.125v-3.026a2.999 2.999 0 0 1 0-5.198V6.375c0-.621-.504-1.125-1.125-1.125H3.375Z" />
                         </svg> -->
                         <Icon name="lets-icons:done-ring-round-fill" class="text-3xl" />
-                        <p class="font-bold text-lg text-wrap">
+                        <p class="font-bold text-lg text-wrap dark:text-gray-800">
                             <!-- You already bought ticket for this event -->
                             Ticket Booked
                         </p>
