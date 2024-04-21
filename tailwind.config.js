@@ -1,7 +1,7 @@
 /** @type {import('tailwindcss').Config} */
 export default {
   content: [],
-
+  darkMode: "class",
   theme: {
     screens: {
       xs: "321px",

@@ -120,7 +120,7 @@ const formattedDateTime = computed(() => {
 
 <template>
         <div
-                class="w-full aspect-square h-full bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 hover:cursor-pointer">
+                class="w-full aspect-square h-full bg-white border border-gray-200 rounded-lg shadow dark:text-white  dark:bg-gray-800 dark:border-gray-700 hover:cursor-pointer">
                 <div @click="$router.push(`/events/${event.id}`)">
                         <div class="relative">
                                 <div class="absolute top-1.5 right-1.5 z-30 ">

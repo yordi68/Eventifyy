@@ -125,7 +125,8 @@ const handleDateInput = (event) => {
 
 
 <template>
-        <div class="flex flex-col items-start pl-20 pb-48 justify-center border-gray-200 border-r-1 ">
+        <div
+                class="flex flex-col items-start pl-20 pb-48 justify-center border-gray-200 border-r-1 dark:text-white dark:bg-gray-800">
 
                 <div class="flex flex-col space-y-2">
                         <h4 class="my-4 font-bold">Price</h4>

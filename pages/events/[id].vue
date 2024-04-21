@@ -399,7 +399,7 @@ relatedEventError((error) => {
             </div>
         </Dialog>
     </TransitionRoot>
-    <div class="px-8 space-y-12 mt-28 mb-6" v-if="event">
+    <div class="px-8 space-y-12 mt-28 mb-6 dark:bg-gray-800 dark:text-white" v-if="event">
         <div class="grid grid-cols-2 gap-x-16 ">
             <div class="w-full ">
                 <img :src="event.thumbnail" alt="random image"
