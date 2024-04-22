@@ -1,5 +1,4 @@
-April 21
-        - replace svg icons with iconfiy
+April 21(Have not started)
         - the add button should be off, when adding an event, it should prompt the user to first upload the images of the event 
         - the user should be able to edit the images when editing the event [when the user is editing an event, the image should be fetched from database and if the user decides to change the images, the images should be deleted from database, and upload the new images of the event ]
         - search on how to implement a page is viewed so that i can count how many times someone has checked out the users event....and i want to display the view's count on the creator's dashboard
@@ -7,9 +6,15 @@ April 21
         - the filter component....the filter's are static they should be fetched from the database
         - scroll to top button should be shown after the user has scrolled a certain distance downward
         - create an about page 
-        - fix everything related to dark mode
-        - make the whole website responsive
+
+
+On-Progress
+        - replace svg icons with iconfiy
         - delete un-used or un-necessary components
+        - make the whole website responsive
+        - fix everything related to dark mode
+
+Done
         - the cards padding bottom is growing as the screen size grows, fix that  
 
 

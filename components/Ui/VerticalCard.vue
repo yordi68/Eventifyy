@@ -118,9 +118,10 @@ const formattedDateTime = computed(() => {
 
 </script>
 
+<!-- there was an aspect-square on the containing div -->
 <template>
         <div
-                class="w-full aspect-square h-full bg-white border border-gray-200 rounded-lg shadow dark:text-white  dark:bg-gray-800 dark:border-gray-700 hover:cursor-pointer">
+                class="w-full h-fullbg-white border border-gray-200 rounded-lg shadow dark:text-white  dark:bg-gray-800 dark:border-gray-700 hover:cursor-pointer">
                 <div @click="$router.push(`/events/${event.id}`)">
                         <div class="relative">
                                 <div class="absolute top-1.5 right-1.5 z-30 ">
@@ -167,7 +168,7 @@ const formattedDateTime = computed(() => {
                                 <img class="w-full aspect-square max-h-48 rounded-t-lg object-cover"
                                         :src="event.thumbnail" alt="" />
                         </div>
-                        <div class="p-5 flex flex-col space-y-2">
+                        <div class="p-5 flex flex-col gap-y-2">
                                 <div class="flex items-center justify-between whitespace-nowrap ">
                                         <h5 class="text-wrap text-bold  text-md md:text-xl capitalize">
                                                 {{ event.title }}

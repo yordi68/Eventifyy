@@ -6,7 +6,7 @@
 
 <template>
         <main class="relative">
-                <UiPrivateNavbar />
+                <UiNavbar />
                 <div>
                         <slot />
                         <ScrollToTop />

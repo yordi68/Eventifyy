@@ -1,4 +1,10 @@
-<script setup></script>
+<script setup>
+useHead({
+  title: 'Eventify',
+})
+
+
+</script>
 
 <template>
   <div>

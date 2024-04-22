@@ -113,7 +113,7 @@ definePageMeta({
         <div>
                 <UiHero />
 
-                <div class="px-28 md:px-24 flex items-start justify-start gap-x-4 mt-10"
+                <div class="flex items-start justify-start flex-wrap gap-2 px-8  mt-10  md:px-24 md:gap-x-4"
                         v-if="categories && categories.length > 0">
                         <div v-for="category in categories" :key="category.id">
                                 <button type="button"
@@ -137,7 +137,7 @@ definePageMeta({
                                 v-if="!popularEventLoading">
                                 <div v-if="latestEvents && latestEvents.length > 0">
                                         <div
-                                                class="grid grid-cols-1 md:grid-cols-3 md:gap-4 mx-auto py-6 sm:px-6 lg:px-8">
+                                                class="grid grid-cols-1 gap-y-8 md:grid-cols-3 md:gap-4 mx-auto py-6 sm:px-6 lg:px-8">
                                                 <UiVerticalCard @refetch="popularEventRefetch"
                                                         v-for="popularEvent in popularEvents" :key="popularEvent.price"
                                                         :event="popularEvent" />
@@ -154,7 +154,7 @@ definePageMeta({
                                 <div
                                         class="overflow-y-scroll col-span-12 lg:col-span-10 h-full  border-l-2 border-gray-200">
                                         <div
-                                                class="grid grid-cols-1 md:grid-cols-3 md:gap-4 mx-auto py-6 sm:px-6 lg:px-8">
+                                                class="grid grid-cols-1 gap-y-8 md:grid-cols-3 md:gap-4 mx-auto py-6 sm:px-6 lg:px-8">
                                                 <UiLoadingCard v-for="index in 9" :key="index" />
                                         </div>
 
@@ -169,7 +169,7 @@ definePageMeta({
                                 v-if="!latestEventLoading">
                                 <div v-if="latestEvents && latestEvents.length > 0">
                                         <div
-                                                class="grid grid-cols-1 md:grid-cols-3 md:gap-4 mx-auto py-6 sm:px-6 lg:px-8">
+                                                class="grid grid-cols-1 gap-y-8 md:grid-cols-3 md:gap-4 mx-auto py-6 sm:px-6 lg:px-8">
                                                 <UiVerticalCard @refetch="latestEventRefetch" v-for="
                                                 latestEvent in latestEvents" :key="latestEvent.price"
                                                         :event="latestEvent" />
@@ -188,7 +188,7 @@ definePageMeta({
                                 <div
                                         class="overflow-y-scroll col-span-12 lg:col-span-10 h-full  border-l-2 border-gray-200">
                                         <div
-                                                class="grid grid-cols-1 md:grid-cols-3 md:gap-4 mx-auto py-6 sm:px-6 lg:px-8">
+                                                class="grid grid-cols-1 gap-y-8 md:grid-cols-3 md:gap-4 mx-auto py-6 sm:px-6 lg:px-8">
                                                 <UiLoadingCard v-for="index in 9" :key="index" />
                                         </div>
 

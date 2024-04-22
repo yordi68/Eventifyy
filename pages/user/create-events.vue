@@ -6,8 +6,6 @@ import { toast } from "vue3-toastify";
 
 
 
-const { handleSubmit } = useForm();
-const router = useRouter();
 
 /**-------------------------Add event-------------------- */
 
@@ -35,6 +33,9 @@ const {
 } = anonymousMutation(addEvent, {
 	clientId: "auth"
 })
+
+
+const { handleSubmit } = useForm();
 
 
 const onSubmit = handleSubmit(() => {
@@ -83,6 +84,9 @@ const onSubmit = handleSubmit(() => {
 
 
 })
+
+
+const router = useRouter();
 
 addEventDone(({ data }) => {
 	toast.success("Event successfully added", {
@@ -174,8 +178,8 @@ definePageMeta({
 
 		<div class="col-span-2">
 			<button type="submit" @click.prevent="onSubmit" v-if="!addEventLoading"
-				class="flex w-full  justify-center  rounded-md bg-[#2D2C3C]  py-1.5 text-sm font-semibold leading-6 text-white shadow-sm  focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Add
-				Event
+				class="flex w-full  justify-center  rounded-md bg-[#2D2C3C]  py-1.5 text-sm font-semibold leading-6 text-white shadow-sm  focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
+				Add Event
 			</button>
 			<div>
 				<button type="submit" v-if="addEventLoading"

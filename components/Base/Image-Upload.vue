@@ -61,7 +61,7 @@ const handleThumbnailChange = (image) => {
     coverImage.value = image.split(",")[1];
 };
 
-/*-----------------------------Image Upload Mutayion ---------------------------*/
+/*-----------------------------Image Upload Mutation ---------------------------*/
 
 const {
     mutate: imageUploadToDB,
@@ -71,6 +71,7 @@ const {
 } = anonymousMutation(imageUploadQuery, {
     clientId: "auth"
 })
+
 
 const handleUpload = () => {
     for (let i = 0; i < images.value.length; i++) {
