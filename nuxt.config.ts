@@ -8,7 +8,7 @@ export default defineNuxtConfig({
     "nuxt3-leaflet",
     // "@nuxtjs/color-mode",
     "@vee-validate/nuxt",
-    // "@vueuse/nuxt",
+    "@vueuse/nuxt",
     "nuxt-icon",
     "@nuxtjs/apollo",
     "nuxt-headlessui",

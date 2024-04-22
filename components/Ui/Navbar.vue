@@ -2,6 +2,16 @@
 import { Disclosure, DisclosureButton, DisclosurePanel, Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/vue'
 import { Icon as IconifyIcon } from '@iconify/vue';
 import { useUserStore } from "~/stores/auth";
+import { useDark, useToggle } from '@vueuse/core';
+
+const isDark = useDark();
+const toggleDark = useToggle(isDark);
+
+
+
+
+
+
 
 const userStore = useUserStore()
 const navigation = [
@@ -36,6 +46,18 @@ const navigation = [
                                                 </div>
                                                 <div v-if="userStore.isAuthenticated"
                                                         class="hidden md:flex justify-between items-center gap-x-3 ">
+                                                        <div v-if="!isDark" class="p-1 hover:bg-gray-100">
+                                                                <Icon name="material-symbols:light-mode"
+                                                                        @click="toggleDark()"
+                                                                        class="text-white text-xl cursor-pointer hover:text-black" />
+                                                        </div>
+                                                        <div v-else class="p-1 hover:bg-gray-600">
+
+                                                                <Icon name="circum:dark" @click="toggleDark()"
+                                                                        class="text-white text-xl cursor-pointer" />
+                                                        </div>
+
+
                                                         <NuxtLink to="/user"
                                                                 class="flex text-white items-center space-x-2 ">
                                                                 <div class="space-x-2">

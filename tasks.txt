@@ -6,15 +6,16 @@ April 21(Have not started)
         - the filter component....the filter's are static they should be fetched from the database
         - scroll to top button should be shown after the user has scrolled a certain distance downward
         - create an about page 
+        - the cards that display the events, when they show on bigger screens -> their width becomes very large.....and it's unattrative
 
 
 On-Progress
-        - replace svg icons with iconfiy
         - delete un-used or un-necessary components
         - make the whole website responsive
         - fix everything related to dark mode
 
 Done
+        - replace svg icons with iconfiy
         - the cards padding bottom is growing as the screen size grows, fix that  
 
 
