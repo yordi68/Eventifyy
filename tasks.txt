@@ -9,7 +9,8 @@ April 21
         - create an about page 
         - fix everything related to dark mode
         - make the whole website responsive
-        - delete un-used or un-necessary components    
+        - delete un-used or un-necessary components
+        - the cards padding bottom is growing as the screen size grows, fix that  
 
 
 
@@ -20,6 +21,9 @@ April 21
 
 
 
+
+rifa@mailinator.com
+12344321
 
 
 ngrok http 7000 --domain diverse-intent-coyote.ngrok-free.app
