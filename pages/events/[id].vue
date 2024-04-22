@@ -448,20 +448,13 @@ relatedEventError((error) => {
                         <h3 class="text-xl font-semibold">Date and Time</h3>
                         <div class="flex  gap-x-6">
                             <div class="flex space-x-2">
+                                <Icon name="heroicons:calendar-days" class="w-6 h-6" />
 
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                    stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                        d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5m-9-6h.008v.008H12v-.008ZM12 15h.008v.008H12V15Zm0 2.25h.008v.008H12v-.008ZM9.75 15h.008v.008H9.75V15Zm0 2.25h.008v.008H9.75v-.008ZM7.5 15h.008v.008H7.5V15Zm0 2.25h.008v.008H7.5v-.008Zm6.75-4.5h.008v.008h-.008v-.008Zm0 2.25h.008v.008h-.008V15Zm0 2.25h.008v.008h-.008v-.008Zm2.25-4.5h.008v.008H16.5v-.008Zm0 2.25h.008v.008H16.5V15Z" />
-                                </svg>
                                 <p>{{ new Date(event.time).toDateString() }}</p>
                             </div>
                             <div class="flex space-x-2">
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                    stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                        d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-                                </svg>
+                                <Icon name="heroicons:clock" class="w-6 h-6" />
+
                                 <p>{{ new Date(event.time).toLocaleTimeString() }}</p>
 
                             </div>
@@ -472,11 +465,8 @@ relatedEventError((error) => {
                         <h3 class="text-xl font-semibold">Ticket Information</h3>
                         <div class="flex space-x-2">
 
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                                stroke="currentColor" class="w-6 h-6">
-                                <path stroke-linecap="round" stroke-linejoin="round"
-                                    d="M16.5 6v.75m0 3v.75m0 3v.75m0 3V18m-9-5.25h5.25M7.5 15h3M3.375 5.25c-.621 0-1.125.504-1.125 1.125v3.026a2.999 2.999 0 0 1 0 5.198v3.026c0 .621.504 1.125 1.125 1.125h17.25c.621 0 1.125-.504 1.125-1.125v-3.026a2.999 2.999 0 0 1 0-5.198V6.375c0-.621-.504-1.125-1.125-1.125H3.375Z" />
-                            </svg>
+                            <Icon name="heroicons:ticket" class="w-6 h-6 dark:text-gray-800" />
+
                             <p>
                                 Standard Ticket: {{ event.price }} each
                             </p>
@@ -489,13 +479,6 @@ relatedEventError((error) => {
                     <h3 class="text-xl font-semibold">Event Description</h3>
                     <p>
                         {{ event.description }}
-                        <!-- In this version, both start and end dates are returned as Date objects. The end of the month and
-                        the end of the year are adjusted to the last millisecond of the respective periods, hence the
-                        addition of 23, 59, 59, 999 to the end of month and end of year calculations. This ensures that
-                        the end timestamp effectively marks the end of the respective time period.
-                        addition of 23, 59, 59, 999 to the end of month and end of year calculations. This ensures that
-                        the end timestamp effectively marks the end of the respective time period. addition of 23, 59, -->
-
                     </p>
                 </div>
                 <div class="space-y-1">
@@ -535,11 +518,6 @@ relatedEventError((error) => {
                     </button>
                     <div class="flex bg-[#FFE047] rounded-md items-center py-4 px-6 space-x-4 "
                         v-if="userStore.isAuthenticated && !isCreator && hasBoughtTicket">
-                        <!-- <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                            stroke="currentColor" class="w-6 h-6">
-                            <path stroke-linecap="round" stroke-linejoin="round"
-                                d="M16.5 6v.75m0 3v.75m0 3v.75m0 3V18m-9-5.25h5.25M7.5 15h3M3.375 5.25c-.621 0-1.125.504-1.125 1.125v3.026a2.999 2.999 0 0 1 0 5.198v3.026c0 .621.504 1.125 1.125 1.125h17.25c.621 0 1.125-.504 1.125-1.125v-3.026a2.999 2.999 0 0 1 0-5.198V6.375c0-.621-.504-1.125-1.125-1.125H3.375Z" />
-                        </svg> -->
                         <Icon name="lets-icons:done-ring-round-fill" class="text-3xl" />
                         <p class="font-bold text-lg text-wrap dark:text-gray-800">
                             <!-- You already bought ticket for this event -->
