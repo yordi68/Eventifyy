@@ -1,5 +1,5 @@
 <template>
-        <div class="grid grid-cols-12 ">
+        <div class="grid grid-cols-12 dark:bg-gray-800 dark:text-white">
                 <div class="col-span-2 h-full">
 
                         <Sidebar />

@@ -121,7 +121,7 @@ const formattedDateTime = computed(() => {
 <!-- there was an aspect-square on the containing div -->
 <template>
         <div
-                class="w-full h-fullbg-white border border-gray-200 rounded-lg shadow dark:text-white  dark:bg-gray-800 dark:border-gray-700 hover:cursor-pointer">
+                class="w-full h-full aspect-square bg-white border border-gray-200 rounded-lg shadow dark:text-white  dark:bg-gray-900 dark:border-gray-700 hover:cursor-pointer">
                 <div @click="$router.push(`/events/${event.id}`)">
                         <div class="relative">
                                 <div class="absolute top-1.5 right-1.5 z-30 ">
@@ -196,7 +196,7 @@ const formattedDateTime = computed(() => {
 
                                                 {{ event.price }}
                                         </div>
-                                        <p class="line-clamp-2 font-light text-neutral-800 text-sm">
+                                        <p class="line-clamp-2 font-light text-neutral-800 text-sm dark:text-white">
                                                 {{ event.description }}
                                         </p>
                                         <div class="flex items-center gap-x-2 capitalize" v-if="event.user">

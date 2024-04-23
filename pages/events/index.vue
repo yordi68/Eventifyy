@@ -240,11 +240,11 @@ definePageMeta({
                 <UiSearchHero />
                 <div class="grid grid-cols-12 h-screen overflow-hidden">
                         <Filter v-model="dates" class="hidden md:block md:col-span-2 h-full overflow-y-scroll " />
-                        <div class="px-8 pt-4 overflow-y-scroll col-span-12 lg:col-span-10 h-full  border-l-2 border-gray-200 md:px-24"
+                        <div class="px-8 pt-4 overflow-y-scroll col-span-12 lg:col-span-10 h-full  border-l-2 border-gray-200 md:px-4"
                                 v-if="!loading">
                                 <div v-if="events && events.length > 0">
                                         <div
-                                                class="grid grid-cols-1 gap-y-8 md:grid-cols-3 md:gap-4 mx-auto py-6 sm:px-6 lg:px-8">
+                                                class="grid grid-cols-1 gap-y-8 md:grid-cols-3 md:gap-4 mx-auto py-6 sm:px-6 ">
                                                 <UiVerticalCard @refetch="refetch" v-for="event in events"
                                                         :key="event.price" :event="event" />
                                         </div>

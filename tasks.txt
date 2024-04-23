@@ -7,6 +7,7 @@ April 21(Have not started)
         - scroll to top button should be shown after the user has scrolled a certain distance downward
         - create an about page 
         - the cards that display the events, when they show on bigger screens -> their width becomes very large.....and it's unattrative
+        - do server side rendering where it needs to be 
 
 
 On-Progress
