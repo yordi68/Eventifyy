@@ -15,8 +15,8 @@ const toggleDark = useToggle(isDark);
 
 const userStore = useUserStore()
 const navigation = [
-        { name: 'Home', to: '/', current: true },
-        { name: 'Events', to: '/events', current: false },
+        { name: 'Home', to: '/', current: true, dataTest: 'home-link' },
+        { name: 'Events', to: '/events', current: false, dataTest: 'events-link' },
 ]
 
 </script>
@@ -40,8 +40,10 @@ const navigation = [
                                                 <div class="items-center hidden space-x-12 text-white md:block">
                                                         <NuxtLink v-for="item in navigation" :key="item.name"
                                                                 :to="item.to"
-                                                                exact-active-class="text-extrabold text-[#FFE047] w-20">
+                                                                exact-active-class="text-extrabold text-[#FFE047] w-20"
+                                                                :data-test="item.dataTest">
                                                                 {{ item.name }}
+
                                                         </NuxtLink>
                                                 </div>
                                                 <div v-if="userStore.isAuthenticated"
@@ -73,11 +75,12 @@ const navigation = [
 
                                                 <div v-else class="items-center justify-between hidden md:flex gap-x-3">
                                                         <NuxtLink to="/login" class="text-white"
+                                                                data-test="login-button"
                                                                 exact-active-class="text-extrabold text-[#FFE047] w-20">
                                                                 <span>Login</span>
                                                         </NuxtLink>
 
-                                                        <NuxtLink to="/sign-up">
+                                                        <NuxtLink to="/sign-up" data-test="signup-button">
                                                                 <button
                                                                         class="bg-[#FFE047] !w-30 whitespace-nowrap px-4 py-2 rounded-md cursor-pointer">
                                                                         Sign Up
@@ -101,7 +104,7 @@ const navigation = [
                         </div>
 
                         <DisclosurePanel class="p-8 sm:hidden">
-                                <!-- new added -->
+
                                 <div v-if="userStore.isAuthenticated">
                                         <NuxtLink to="/user"
                                                 class="flex items-center gap-x-2  rounded-md px-3 py-2 text-base font-medium text-gray-300 hover:bg-[#FFE047] hover:text-white">
@@ -116,7 +119,7 @@ const navigation = [
 
                                         </NuxtLink>
                                 </div>
-                                <!-- bg-gray-700 -->
+
 
 
                                 <div class="px-2 pt-2 pb-3 space-y-1">
@@ -129,7 +132,7 @@ const navigation = [
                                         </NuxtLink>
 
                                 </div>
-                                <!-- hover:text-[#FFE047] -->
+
                                 <div v-if="!userStore.isAuthenticated" class="flex items-center px-2 gap-x-3">
                                         <NuxtLink to="/login"
                                                 class="flex text-white rounded-md px-3 py-2 gap-x-4 hover:bg-[#FFE047]"
