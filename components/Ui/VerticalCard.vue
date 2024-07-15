@@ -25,7 +25,6 @@ const props = defineProps({
 
 
 if (userStore.isAuthenticated) {
-        // console.log(props.event.user.id)
         if (props.event.user.id === userStore.id) {
                 isCreator.value = true;
         }
@@ -113,7 +112,6 @@ const formattedDateTime = computed(() => {
 });
 
 
-// console.log(props.event)
 
 
 </script>
@@ -121,7 +119,7 @@ const formattedDateTime = computed(() => {
 <!-- there was an aspect-square on the containing div -->
 <template>
         <div
-                class="w-full h-full aspect-square bg-white border border-gray-200 rounded-lg shadow dark:text-white  dark:bg-gray-900 dark:border-gray-700 hover:cursor-pointer">
+                class="w-full h-full 3xl:w-[500px] 3xl:h-[425px] bg-white border border-gray-200 rounded-lg shadow dark:text-white dark:bg-gray-900 dark:border-gray-700 hover:cursor-pointer">
                 <div @click="$router.push(`/events/${event.id}`)">
                         <div class="relative">
                                 <div class="absolute top-1.5 right-1.5 z-30 ">
@@ -130,11 +128,11 @@ const formattedDateTime = computed(() => {
                                                 <MenuButton @click="$event.stopPropagation()">
                                                         <button
                                                                 class="w-6 h-6 flex items-center justify-center p-1.5 box-content rounded-full bg-white text-black">
-                                                                <Icon name="tabler:dots" class="rotate-90 text-xl" />
+                                                                <Icon name="tabler:dots" class="text-xl rotate-90" />
                                                         </button>
                                                 </MenuButton>
                                                 <MenuItems
-                                                        class="absolute mt-1 overflow-hidden bg-white  rounded-md right-0">
+                                                        class="absolute right-0 mt-1 overflow-hidden bg-white rounded-md">
                                                         <MenuItem v-slot="{ active }" v-if="!isCreator">
                                                         <button @click="$event.stopPropagation(); handleFollow()"
                                                                 class="text-sm hover:bg-sky-600 py-1.5 hover:text-white w-full px-3 cursor-pointer flex items-center gap-x-1.5">
@@ -165,12 +163,12 @@ const formattedDateTime = computed(() => {
                                                 </MenuItems>
                                         </Menu>
                                 </div>
-                                <img class="w-full aspect-square max-h-48 rounded-t-lg object-cover"
+                                <img class="object-cover w-full rounded-t-lg aspect-square max-h-48"
                                         :src="event.thumbnail" alt="" />
                         </div>
-                        <div class="p-5 flex flex-col gap-y-2">
+                        <div class="flex flex-col p-5 gap-y-2">
                                 <div class="flex items-center justify-between whitespace-nowrap ">
-                                        <h5 class="text-wrap text-bold  text-md md:text-xl capitalize">
+                                        <h5 class="capitalize text-wrap text-bold text-md md:text-xl">
                                                 {{ event.title }}
                                         </h5>
                                         <p class="w-max bg-[#FFE047] px-3 py-1 rounded-md text-neutral-800">
@@ -179,27 +177,27 @@ const formattedDateTime = computed(() => {
                                         </p>
                                 </div>
 
-                                <div class="flex items-center space-x-3 text-sm  md:text-md">
+                                <div class="flex items-center space-x-3 text-sm md:text-md">
                                         <Icon name="heroicons:calendar-days" class="w-6 h-6" />
                                         <p>{{ formattedDateTime.formattedDate }}</p>
                                         <Icon name="heroicons:clock" class="w-5 h-5" />
 
                                         <p>{{ formattedDateTime.formattedTime }}</p>
-                                        <div class="h-full bg-black w-px"></div>
+                                        <div class="w-px h-full bg-black"></div>
                                         <p>{{ event.place }}</p>
                                 </div>
                                 <p>{{ event.date }}</p>
-                                <span class="flex flex-col items-start  gap-3 ">
+                                <span class="flex flex-col items-start gap-3 ">
                                         <div class="flex">
                                                 <Icon name="heroicons:currency-dollar-solid"
                                                         class="w-6 h-6 text-[#008000]" />
 
                                                 {{ event.price }}
                                         </div>
-                                        <p class="line-clamp-2 font-light text-neutral-800 text-sm dark:text-white">
+                                        <p class="text-sm font-light line-clamp-2 text-neutral-800 dark:text-white">
                                                 {{ event.description }}
                                         </p>
-                                        <div class="flex items-center gap-x-2 capitalize" v-if="event.user">
+                                        <div class="flex items-center capitalize gap-x-2" v-if="event.user">
                                                 <Icon name="heroicons:user-20-solid" class="w-4 h-4" />
                                                 {{ event.user?.first_name }} {{ event.user?.last_name }}
                                         </div>
