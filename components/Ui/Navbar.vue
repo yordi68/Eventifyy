@@ -24,20 +24,20 @@ const navigation = [
 <template>
 
 
-        <div class="fixed w-full left-0 top-0 z-50">
+        <div class="fixed top-0 left-0 z-50 w-full">
                 <Disclosure as="nav" class="bg-[#2D2C3C]" v-slot="{ open }">
-                        <div class="mx-auto w-full  md:h-20 px-4 sm:px-6 lg:px-32">
-                                <div class="flex h-full  items-center justify-evenly ">
+                        <div class="w-full px-4 mx-auto md:h-20 sm:px-6 lg:px-32">
+                                <div class="flex items-center h-full justify-evenly ">
 
                                         <div class="flex items-center justify-between w-full">
-                                                <div>
+                                                <div data-test="website-logo">
                                                         <NuxtLink to="/">
                                                                 <img src="/logo.png" alt="">
                                                         </NuxtLink>
                                                 </div>
 
 
-                                                <div class="hidden md:block  items-center space-x-12 text-white">
+                                                <div class="items-center hidden space-x-12 text-white md:block">
                                                         <NuxtLink v-for="item in navigation" :key="item.name"
                                                                 :to="item.to"
                                                                 exact-active-class="text-extrabold text-[#FFE047] w-20">
@@ -45,21 +45,21 @@ const navigation = [
                                                         </NuxtLink>
                                                 </div>
                                                 <div v-if="userStore.isAuthenticated"
-                                                        class="hidden md:flex justify-between items-center gap-x-3 ">
+                                                        class="items-center justify-between hidden md:flex gap-x-3 ">
                                                         <div v-if="!isDark" class="p-1 hover:bg-gray-100">
                                                                 <Icon name="material-symbols:light-mode"
                                                                         @click="toggleDark()"
-                                                                        class="text-white text-xl cursor-pointer hover:text-black" />
+                                                                        class="text-xl text-white cursor-pointer hover:text-black" />
                                                         </div>
                                                         <div v-else class="p-1 hover:bg-gray-600">
 
                                                                 <Icon name="circum:dark" @click="toggleDark()"
-                                                                        class="text-white text-xl cursor-pointer" />
+                                                                        class="text-xl text-white cursor-pointer" />
                                                         </div>
 
 
                                                         <NuxtLink to="/user"
-                                                                class="flex text-white items-center space-x-2 ">
+                                                                class="flex items-center space-x-2 text-white ">
                                                                 <div class="space-x-2">
 
                                                                         <span>{{ userStore.first_name }}</span>
@@ -71,7 +71,7 @@ const navigation = [
                                                         </NuxtLink>
                                                 </div>
 
-                                                <div v-else class="hidden md:flex justify-between items-center gap-x-3">
+                                                <div v-else class="items-center justify-between hidden md:flex gap-x-3">
                                                         <NuxtLink to="/login" class="text-white"
                                                                 exact-active-class="text-extrabold text-[#FFE047] w-20">
                                                                 <span>Login</span>
@@ -87,20 +87,20 @@ const navigation = [
                                         </div>
 
 
-                                        <div class="-mr-2 flex md:hidden">
+                                        <div class="flex -mr-2 md:hidden">
                                                 <!-- Mobile menu button -->
                                                 <DisclosureButton
-                                                        class="relative inline-flex items-center justify-center rounded-md bg-gray-800 p-2 text-gray-400 hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
+                                                        class="relative inline-flex items-center justify-center p-2 text-gray-400 bg-gray-800 rounded-md hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
                                                         <span class="absolute -inset-0.5" />
                                                         <span class="sr-only">Open main menu</span>
                                                         <IconifyIcon :icon="open ? 'ic:round-close' : 'ic:round-menu'"
-                                                                class="block h-6 w-6" aria-hidden="true" />
+                                                                class="block w-6 h-6" aria-hidden="true" />
                                                 </DisclosureButton>
                                         </div>
                                 </div>
                         </div>
 
-                        <DisclosurePanel class="sm:hidden p-8">
+                        <DisclosurePanel class="p-8 sm:hidden">
                                 <!-- new added -->
                                 <div v-if="userStore.isAuthenticated">
                                         <NuxtLink to="/user"
@@ -119,7 +119,7 @@ const navigation = [
                                 <!-- bg-gray-700 -->
 
 
-                                <div class="space-y-1 px-2 pb-3 pt-2">
+                                <div class="px-2 pt-2 pb-3 space-y-1">
                                         <NuxtLink v-for="item in navigation" :key="item?.name" :to="item?.to">
                                                 <DisclosureButton :key="item?.name"
                                                         class="block rounded-md px-3 py-2 text-base font-medium text-gray-300 hover:bg-[#FFE047] hover:text-white"
@@ -130,7 +130,7 @@ const navigation = [
 
                                 </div>
                                 <!-- hover:text-[#FFE047] -->
-                                <div v-if="!userStore.isAuthenticated" class="flex items-center gap-x-3 px-2">
+                                <div v-if="!userStore.isAuthenticated" class="flex items-center px-2 gap-x-3">
                                         <NuxtLink to="/login"
                                                 class="flex text-white rounded-md px-3 py-2 gap-x-4 hover:bg-[#FFE047]"
                                                 exact-active-class="text-extrabold text-[#FFE047] w-20">
