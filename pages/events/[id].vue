@@ -417,13 +417,13 @@ relatedEventError((error) => {
             </div>
         </Dialog>
     </TransitionRoot>
-    <div class="px-8 mb-6 space-y-12 mt-28 dark:bg-gray-800 dark:text-white" v-if="event">
-        <div class="grid grid-cols-2 gap-x-16 ">
+    <div class="px-8 pt-12 mt-8 mb-6 space-y-12 md:pt-8 md:mt-20 dark:bg-gray-800 dark:text-white" v-if="event">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-x-16 ">
             <div class="w-full ">
                 <img :src="selectedImage?.url" alt="Selected_Event_Image"
                     class="w-full rounded-lg shadow-lg max-h-[420px] object-cover " />
 
-                <div class="grid grid-cols-3 gap-x-4">
+                <div class="grid grid-cols-3 place-content-center lg:place-content-start gap-x-4">
                     <div class="py-4" v-for="image in images">
                         <img :src="image?.url" alt="image_of_an_event" :key="image?.url"
                             @click="selectImage(image?.url)" class="hover:cursor-pointer">
@@ -431,7 +431,7 @@ relatedEventError((error) => {
                 </div>
             </div>
             <div class="flex flex-col gap-y-6">
-                <div class="flex justify-between">
+                <div class="flex flex-col justify-between gap-y-4 lg:flex-row">
                     <h3 class="text-4xl font-bold">{{ event.title }}</h3>
                     <div class="flex items-center gap-x-2">
                         <span>
@@ -462,8 +462,8 @@ relatedEventError((error) => {
                     </div>
 
                 </div>
-                <div class="flex gap-x-12">
-                    <div class="space-y-1">
+                <div class="flex flex-col gap-y-8 md:gap-y-0 md:flex-row gap-x-12">
+                    <div class="space-y-2">
                         <h3 class="text-xl font-semibold">Date and Time</h3>
                         <div class="flex gap-x-6">
                             <div class="flex space-x-2">
@@ -508,7 +508,7 @@ relatedEventError((error) => {
                     </div>
 
                 </div>
-                <div class="flex items-center justify-between">
+                <div class="flex flex-col items-start justify-between gap-y-4 md:gap-y-0 md:items-center md:flex-row">
                     <div class="space-y-2">
                         <h3 class="text-xl font-semibold">Hosted by</h3>
                         <div v-if="event.user">
@@ -561,10 +561,10 @@ relatedEventError((error) => {
             <EventsLocation :event-location="event.location"></EventsLocation>
         </div>
 
-        <div class="md:py-16" v-if="relatedEvents && relatedEvents.length > 0">
+        <div class="md:py-16 xl:max-w-[1600px] mx-auto" v-if="relatedEvents && relatedEvents.length > 0">
             <h3 class="pr-32 my-4 text-3xl font-bold">Related Events</h3>
             <hr class="w-3/4 my-6 border-gray-200 ">
-            <div class="grid grid-cols-1 gap-y-8 md:grid-cols-3 md:gap-x-4 ">
+            <div class="grid grid-cols-1 gap-y-8 md:grid-cols-2 xl:grid-cols-3 md:gap-x-4 ">
                 <UiVerticalCard v-for="relatedEvent in relatedEvents" :key="relatedEvent.price" :event="relatedEvent" />
             </div>
         </div>
